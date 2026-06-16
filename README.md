@@ -94,9 +94,9 @@ Contributions should stay original and cite only public sources (arXiv, textbook
 
 ## 📜 License
 
-- **Notes & writing** (the tutorial prose, the reading-list annotations): [Creative Commons Attribution 4.0 (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
-- **Code** (any scripts or examples): [MIT License](https://opensource.org/license/mit/).
-- **Linked papers** remain under the copyright of their respective authors and publishers, they are referenced here, not redistributed.
+Everything in this repo (the tutorial writing, reading-list annotations, and the example code) is released under [**Creative Commons Attribution 4.0 (CC BY 4.0)**](https://creativecommons.org/licenses/by/4.0/). Reuse and adapt freely, just credit back. See [`LICENSE`](LICENSE).
+
+**Linked papers** remain under the copyright of their respective authors and publishers; they are referenced here, not redistributed.
 
 ---
 
