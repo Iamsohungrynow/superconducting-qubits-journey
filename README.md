@@ -37,6 +37,21 @@ Start with the index, then work through the chapters in order. Each one builds o
 
 ---
 
+## 🧪 Hands-on labs
+
+Reading is good, but doing sticks. The [**hands-on/**](hands-on/README.md) track lets you simulate the physics on your own laptop with [QuTiP](https://qutip.org), each lab paired with the chapter it brings to life:
+
+| Lab | You simulate | Theory |
+|---|---|---|
+| [Bloch sphere](hands-on/01-bloch-sphere/) | qubit states and a driven trajectory | ch07 |
+| [Rabi oscillations](hands-on/02-rabi/) | a qubit flipping under a drive | ch07 |
+| [T1 and T2](hands-on/03-t1-t2/) | relaxation and Ramsey dephasing | ch09 |
+| [Dispersive readout](hands-on/04-dispersive-readout/) | IQ separation of the qubit states | ch06 |
+
+Every script runs as-is after `pip install qutip matplotlib numpy scipy`. Running on real hardware with Qiskit and Qibocal is on the roadmap.
+
+---
+
 ## 🚀 Recommended papers / start here
 
 If you read nothing else, read these two. They're the reviews I recommend to every newcomer, and they pair naturally with the chapters above:
