@@ -1,0 +1,8 @@
+# Dependencies for the hands-on QuTiP simulation labs.
+# Verified with qutip 4.7.5 on Python 3.8. The labs use QuTiP's core API,
+# which is identical in QuTiP 4.7+ and 5.x, so newer versions work fine too.
+#   pip install -r hands-on/requirements.txt
+qutip>=4.7
+numpy>=1.20
+scipy>=1.6
+matplotlib>=3.3
