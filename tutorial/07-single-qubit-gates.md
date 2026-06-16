@@ -141,13 +141,23 @@ What about $z$-rotations? Often you need *no pulse at all*. Since every drive ax
 
 $$ Z(\lambda):\ \phi \to \phi+\lambda \ \text{ for every later pulse.} $$
 
-Commuting a $Z(\lambda)$ leftward through later gates is exactly subtracting $\lambda$ from each later pulse phase, so the $Z$ is never physically applied, it is absorbed into the final measurement basis. It is a **relabeling**: zero duration, *exact*, no calibration or coherence cost. (A physical alternative exists: $R_z(\lambda)=R_x(-\pi/2)R_x(\lambda)R_x(\pi/2)$, but why pay for it?)
+Commuting a $Z(\lambda)$ leftward through later gates is exactly subtracting $\lambda$ from each later pulse phase, so the $Z$ is never physically applied, it is absorbed into the final measurement basis. It is a **relabeling**: zero duration, *exact*, no calibration or coherence cost. (A physical alternative exists, built by conjugating a $Y$-rotation with two $X90$ pulses: $R_z(\lambda)=R_x(\pi/2)\,R_y(\lambda)\,R_x(-\pi/2)$, but why pay for three real pulses?)
 
 Combined with two physical X90 pulses, virtual-Z's synthesize any single-qubit unitary via Euler angles:
 
 $$ U = Z(c)\,X_{90}\,Z(b)\,X_{90}\,Z(a). $$
 
 For example a Hadamard is just a virtual $Z(\pi)$ followed by a Y90, the time of a *single* half-pulse, not three physical pulses.
+
+## Initialization and reset
+
+Every gate sequence assumes you *start* in a known state, almost always $|0\rangle$. Getting there is **initialization**; returning there on demand mid-circuit is **reset**. It is a control problem in its own right, and DiVincenzo's criterion 2 ([Chapter 1](01-introduction.md)) demands it. There are three common approaches, in increasing order of speed and sophistication:
+
+- **Passive (thermal) reset.** Just wait. Left alone, the qubit relaxes to its thermal ground state with time constant $T_1$. Waiting $\sim5\,T_1$ gives a clean $|0\rangle$, but at $T_1\sim100\,\mu$s that is hundreds of microseconds of dead time per shot, and the residual thermal population (a few percent at typical fridge/effective temperatures) sets a floor on the fidelity. Too slow for deep circuits.
+- **Measurement-based feedback reset.** Read the qubit dispersively ([Chapter 6](06-readout.md)); if the outcome is $|1\rangle$, apply a $\pi$ pulse to flip it to $|0\rangle$; if $|0\rangle$, do nothing. This **conditional reset** is fast (set by readout plus one gate, $\sim1\,\mu$s) but needs low-latency classical feedback wired into the control electronics. It is the workhorse for QEC ancillas, which must be reset every syndrome round.
+- **Driven (unconditional) reset.** Engineer an always-available decay path and *drive* the excited population out of the qubit, with no measurement. The standard trick maps $|1\rangle$ onto a fast-decaying mode, for example driving the $|1\rangle\!\to\!|2\rangle$ (or a $|1\rangle$-to-readout-resonator) transition so the energy leaves through the cavity's $\kappa$. Done well this reaches the ground state in hundreds of nanoseconds, deterministically.
+
+One subtlety the gate story already hinted at: a transmon can be excited *out* of the computational subspace into $|2\rangle$ and above (leakage, the reason DRAG exists). Ordinary reset to $|0\rangle$ does not necessarily empty those levels, so hardware that runs long algorithms or QEC adds explicit **leakage reset** to pump $|2\rangle$ population back down. We return to why this matters for error correction in [Chapter 12](12-error-correction.md).
 
 ## Calibration loop
 
