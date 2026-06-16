@@ -67,7 +67,7 @@ $$E = c_I\, I + c_X\, X + c_Y\, Y + c_Z\, Z.$$
 - The four Paulis $\{I,X,Y,Z\}$ are a complete basis for any $2\times2$ operator, so **every** single-qubit error's Kraus operators are linear combinations of them.
 - Apply $E$ to an encoded state, then measure the stabilizers. This is a *projective* operation onto syndrome subspaces.
 - Each Pauli branch carries a definite syndrome. The measurement **collapses** the superposition of branches onto *one* outcome, with the corresponding probability.
-- What's left is a single, *known* Pauli (up to a stabilizer) that the decoder removes. 
+- What's left is a single, *known* Pauli (up to a stabilizer) that the decoder removes.
 
 So the analog noise of the lab gets **digitized** into a discrete $\{X,Y,Z\}$ the moment we look at the syndrome. Correcting those three corrects *all* small errors. This is why a finite code can tame continuous noise.
 

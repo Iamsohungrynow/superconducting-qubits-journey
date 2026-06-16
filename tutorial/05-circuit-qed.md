@@ -109,7 +109,7 @@ Crucially $H_\text{disp}$ commutes with $\hat\sigma_z$: measuring the cavity doe
  cavity-probe
  freq (y)        dispersive            resonant            dispersive
                   wing                  center                wing
-  ω_r+χ  ──────────────  ·  ·                       
+  ω_r+χ  ──────────────  ·  ·
   ω_r     · · · · · · · ╲     avoided        ╱ · · · · · · ·   (bare cavity)
                           ╲   crossing      ╱
                            ╲   gap = 2g    ╱

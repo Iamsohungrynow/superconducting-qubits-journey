@@ -159,7 +159,7 @@ At a sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\omega_
    │   ●  SWEET    ●              ●   ●        ●   ●   ← asymmetric d>0:
    │  ●   SPOT      ●            ●     ●      ●     ●     min never reaches 0,
    │ ●  dω/dΦ=0,     ●          ●       ●    ●       ●    flatter / less tuning
-   │●   best T₂       ●●      ●●         ●●●●         
+   │●   best T₂       ●●      ●●         ●●●●
    │  steep flanks =    ●●●●●●
    │  high flux-noise sensitivity
    └────┼────────┼────────┼────────┼────────► Φ/Φ₀

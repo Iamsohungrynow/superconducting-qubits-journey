@@ -131,7 +131,7 @@ Two gates with identical $r$ can behave completely differently in a deep circuit
    INCOHERENT (depolarize)          COHERENT (over-rotation)
         . - .                            . - .
       / ↓ ↓ ↓ \                        /  ↻    \      rigid tilt
-     |  →• ← |  shrunk sphere         |  •—↗   |      by small angle
+     |  →• ← |  shrunk sphere         |  •-↗   |      by small angle
       \ ↑ ↑ ↑ /                        \       /
         ' - '                            ' - '
    error ~ LINEAR in depth          error ~ QUADRATIC, worst-case large
