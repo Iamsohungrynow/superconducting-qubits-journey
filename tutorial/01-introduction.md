@@ -69,7 +69,7 @@ Let's earn each term. The capacitor stores charge $Q = -2en$, where $n$ is the n
 The picture to hold in your head is a particle in a cosine (washboard) well:
 
 ```
- U(φ) = −E_J cos φ
+ U(φ) = -E_J cos φ
    \                                   /
     \      ___ |2⟩  (levels bend       /
      \    /   \    closer near the    /
@@ -136,7 +136,7 @@ You measure a transmon without touching it directly. Couple it to a microwave re
 
 $$\chi \approx \frac{g^2\,\alpha}{\Delta(\Delta+\alpha)}.$$
 
-The resonator frequency moves to $\omega_r \pm \chi$ depending on whether the qubit is in $|0\rangle$ or $|1\rangle$. You send a probe tone through a cavity of linewidth $\kappa$ and read which way it shifted, you measure the *cavity*, never the qubit, which is exactly why the measurement is **QND** (quantum non-demolition) and can be repeated. Good readout wants $\chi \sim \kappa/2$. But coupling too hard opens a **Purcell** channel: the qubit relaxes through the resonator at rate $\sim\kappa(g/\Delta)^2$. Purcell filters and large $\Delta$ tame it. (This satisfies criteria 4 and 5.)
+The resonator frequency moves to $\omega_r \pm \chi$ depending on whether the qubit is in $|0\rangle$ or $|1\rangle$. You send a probe tone through a cavity of linewidth $\kappa$ and read which way it shifted, you measure the *cavity*, never the qubit, which is exactly why the measurement is **QND** (quantum non-demolition) and can be repeated. Good readout wants $\chi \sim \kappa/2$. But coupling too hard opens a **Purcell** channel: the qubit relaxes through the resonator at rate $\sim\kappa(g/\Delta)^2$. Purcell filters and large $\Delta$ tame it. (This satisfies criterion 5, qubit-specific readout.)
 
 ## What makes them hard
 
