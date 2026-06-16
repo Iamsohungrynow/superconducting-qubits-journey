@@ -164,7 +164,7 @@ Single qubit, $n=1$, $d=2$. Fit $F(m)=A\,p^m+B$ → $A=0.49$, $B=0.50$, $p=0.999
 - **Per physical gate:** if the compiler averages ~1.5 native gates/Clifford, per-gate error $\approx r/1.5 = 3.3\times10^{-4}$.
 - **Coherence-limited?** Take $T_1=80\,\mu$s, $T_2=60\,\mu$s, $\tau_g=30$ ns: $r_{\lim}\approx\frac{30\text{ ns}}{6}\left(\frac{1}{80\,\mu s}+\frac{2}{60\,\mu s}\right)=(5.0\times10^{-9})(45833)=2.3\times10^{-4}$. Measured $r=5\times10^{-4}$ is only ~$2.2\times$ the floor, close to coherence-limited. Pushing the pulse harder buys little; longer $T_1/T_2$ is the lever.
 - **IRB add-on:** $p_{\text{ref}}=0.999$, interleaved $X$-gate $p_{\overline C}=0.9982$ → $r_{\text{gate}}=\frac12\left(1-\frac{0.9982}{0.999}\right)=\frac12(0.0008)=4.0\times10^{-4}$, quoted with the Magesan bound $E$.
-- **XEB sketch:** $n=20$, $2^n=1{,}048{,}576$. If $\langle P_{\text{ideal}}\rangle=1.9\times10^{-6}$, then $F_{\text{XEB}}=1{,}048{,}576\times1.9\times10^{-6}-1=1.99-1=0.99$. Uniform sampling ($\langle P\rangle=1/2^n$) gives exactly $0$.
+- **XEB sketch:** $n=20$, $2^n=1{,}048{,}576$. If $\langle P_{\text{ideal}}\rangle=1.9\times10^{-6}$, then $F_{\text{XEB}}=1{,}048{,}576\times1.9\times10^{-6}-1\approx1.992-1=0.992$. Uniform sampling ($\langle P\rangle=1/2^n$) gives exactly $0$.
 
 ## Disambiguating the fidelity zoo
 
@@ -173,7 +173,7 @@ Single qubit, $n=1$, $d=2$. Fit $F(m)=A\,p^m+B$ → $A=0.49$, $B=0.50$, $p=0.999
 | $p$ | depolarizing / decay parameter | fit of $A p^m+B$ | **SPAM-free**; this is what RB measures |
 | $F_{\text{avg}}$ | average gate fidelity | $p+(1-p)/d$ | $=1-r$ |
 | $r$ | avg error per **Clifford** | $(d-1)(1-p)/d$ | per Clifford, not per gate |
-| per-gate error | physical-gate error | $\approx r\,/\,1.5\text{–}2$ | divide by compiling factor |
+| per-gate error | physical-gate error | $\approx r\,/\,1.5\text{ to }2$ | divide by compiling factor |
 | $F_a$ | readout assignment fidelity | $1-\tfrac12[P(1|0)+P(0|1)]$ | reported **separately** from RB |
 | $F_{\text{XEB}}$ | full-circuit XEB fidelity | $2^n\langle P_{\text{ideal}}\rangle-1$ | needs classical simulation |
 

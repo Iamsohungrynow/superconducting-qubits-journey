@@ -35,7 +35,7 @@ Charge qubits live around $E_J/E_C \sim 1$; transmons deliberately push it to $E
 
 ## Why charge noise dies exponentially
 
-Think of the $-E_J\cos\hat{\varphi}$ term as a pendulum. When $E_J/E_C$ is large the "pendulum" is heavy and sits deep in its cosine well, barely swinging. The phase $\varphi$ is well-localized. Quantitatively, the ground-state phase spread in the harmonic well (derived below) is $\langle\varphi^2\rangle^{1/2} = (2E_C/E_J)^{1/4}$, which shrinks as the ratio grows. By the uncertainty relation $[\hat\varphi,\hat n]=i$, a tightly-localized $\varphi$ forces the conjugate charge $\hat n$ to spread over **many** charge eigenstates ($\langle n^2\rangle^{1/2} = \tfrac12(E_J/2E_C)^{1/4}$). A charge wavefunction smeared across dozens of $|n\rangle$ states simply cannot tell where the offset charge $n_g$ sits, shifting $n_g$ by a fraction of a Cooper pair barely overlaps with anything.
+Think of the $-E_J\cos\hat{\varphi}$ term as a pendulum. When $E_J/E_C$ is large the "pendulum" is heavy and sits deep in its cosine well, barely swinging. The phase $\varphi$ is well-localized. Quantitatively, the ground-state phase spread in the harmonic well (derived below) is $\langle\varphi^2\rangle^{1/2} = (2E_C/E_J)^{1/4}$, which shrinks as the ratio grows. By the uncertainty relation $[\hat\varphi,\hat n]=i$, a tightly-localized $\varphi$ forces the conjugate charge $\hat n$ to spread over **several** charge eigenstates ($\langle n^2\rangle^{1/2} = \tfrac12(E_J/2E_C)^{1/4}$, only about $1$ Cooper pair at $E_J/E_C\sim50$, with appreciable support out to $|n|$ of a few). A charge wavefunction spread over several $|n\rangle$ states simply cannot tell where the offset charge $n_g$ sits, shifting $n_g$ by a fraction of a Cooper pair barely overlaps with anything.
 
 The rigorous statement is a **Bloch-band** argument: $n_g$ enters exactly like a quasimomentum, and the qubit's residual $n_g$-dependence (the *charge dispersion* $\epsilon_m$, the peak-to-peak swing of $E_m$ as $n_g$ runs over one period) is the tunnelling bandwidth between adjacent cosine wells. A WKB / Mathieu analysis of that inter-well tunnelling gives
 
@@ -85,17 +85,17 @@ Here is the energy ladder, with the crucial detail that $E_{12}$ is *smaller* th
  energy
    │
    │   ┌──────────────  |3⟩
-   │   │   spacing ≈ √(8E_J E_C) − 3E_C   (smallest)
+   │   │   spacing ≈ √(8E_J E_C) - 3E_C   (smallest)
    │   ├──────────────  |2⟩
-   │   │   E_12 = √(8E_J E_C) − 2E_C
-   │   ├──────────────  |1⟩      ── α = E_12 − E_01 = −E_C
-   │   │   E_01 = √(8E_J E_C) − E_C
+   │   │   E_12 = √(8E_J E_C) - 2E_C
+   │   ├──────────────  |1⟩      ── α = E_12 - E_01 = -E_C
+   │   │   E_01 = √(8E_J E_C) - E_C
    │   └──────────────  |0⟩
    │
    │        \                              /
    │         \      dashed parabola       /   ← harmonic / Duffing approx
    │          \____________________ _____/
-   │            true −E_J cos φ well  (depth −E_J)
+   │            true -E_J cos φ well  (depth -E_J)
    └────────────────────────────────────────►  φ
 ```
 
@@ -163,7 +163,7 @@ At a sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\omega_
    │  steep flanks =    ●●●●●●
    │  high flux-noise sensitivity
    └────┼────────┼────────┼────────┼────────► Φ/Φ₀
-      −1.0     −0.5      0.0      0.5      1.0
+      -1.0     -0.5      0.0      0.5      1.0
 ```
 
 > **Misconception check.** A sweet spot removes only the *first-order* flux sensitivity (slope $=0$); the *curvature* still couples second-order flux noise. That is why tunable transmons generally trail fixed-frequency ones in $T_2$, and why a symmetric SQUID tunes $E_{J,\mathrm{eff}}$ to zero at $\Phi_0/2$ but an asymmetric one never does.
