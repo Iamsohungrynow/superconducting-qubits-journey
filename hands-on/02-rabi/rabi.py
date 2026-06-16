@@ -26,7 +26,7 @@ num(2) = |1><1| measures the excited-state population directly.
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from qutip import basis, num, sigmax, sesolve, expect
+from qutip import basis, num, sigmax, sesolve
 
 # ---------------------------------------------------------------------------
 # Parameters (illustrative, clearly labelled).

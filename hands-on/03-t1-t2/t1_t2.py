@@ -22,7 +22,7 @@ CONVENTION
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from qutip import basis, destroy, sigmax, sigmaz, mesolve, expect
+from qutip import basis, destroy, sigmax, sigmaz, mesolve
 
 # ---------------------------------------------------------------------------
 # Parameters (illustrative but realistic; times in microseconds, freqs in MHz)

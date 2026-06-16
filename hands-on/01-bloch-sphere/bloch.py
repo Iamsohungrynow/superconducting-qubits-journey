@@ -17,11 +17,7 @@ this ground/excited convention, so we avoid them for collapse operators.)
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from qutip import (
-    basis, destroy, num, qeye,
-    sigmax, sigmay, sigmaz,
-    tensor, sesolve, mesolve, expect, Bloch, ket2dm,
-)
+from qutip import basis, sigmax, sigmay, sigmaz, sesolve, expect, Bloch
 
 
 # ----------------------------------------------------------------------

@@ -24,7 +24,7 @@ Convention used throughout:
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from qutip import basis, destroy, qeye, sigmaz, tensor, mesolve, expect, ket2dm
+from qutip import basis, destroy, qeye, sigmaz, tensor, mesolve, ket2dm
 
 # ---------------------------------------------------------------------------
 # Parameters (illustrative but realistic; frequencies as 2*pi*MHz, time in us)
