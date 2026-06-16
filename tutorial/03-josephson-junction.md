@@ -8,15 +8,15 @@ Here is the causal story the rest of the chapter tells, end to end:
 
 ```mermaid
 flowchart TD
-    A["Cooper pairs tunnel<br/>(single condensate phase φ)"] --> B["I = I_c sin φ"]
-    B --> C["Nonlinear inductance L_J(φ)"]
-    C --> D["Cosine potential −E_J cos φ"]
-    D --> E["Quartic term flattens the well"]
-    E --> F["Unequal level spacing<br/>(anharmonicity α ≈ −E_C)"]
-    F --> G["Address a single 0→1 transition<br/>= a qubit!"]
-    H["Run at large E_J/E_C"] --> I["Charge dispersion ~ exp(−√(8 E_J/E_C))"]
-    I --> J["Charge-noise dephasing suppressed<br/>(long T₂)"]
-    G --> K["Transmon design sweet spot"]
+    A["Cooper pairs tunnel<br/>(condensate phase phi)"] --> B["First relation<br/>I = I_c sin phi"]
+    B --> C["Nonlinear<br/>inductance L_J(phi)"]
+    C --> D["Cosine potential<br/>-E_J cos phi"]
+    D --> E["Quartic term<br/>flattens the well"]
+    E --> F["Unequal level spacing<br/>alpha approx -E_C"]
+    F --> G["Address one<br/>0->1 transition<br/>= a qubit!"]
+    H["Run at large<br/>E_J/E_C"] --> I["Charge dispersion<br/>~ exp(-sqrt(8 E_J/E_C))"]
+    I --> J["Dephasing<br/>suppressed<br/>(long T2)"]
+    G --> K["Transmon<br/>sweet spot"]
     J --> K
 ```
 

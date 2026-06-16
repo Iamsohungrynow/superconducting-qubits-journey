@@ -85,11 +85,13 @@ Near the bottom the cosine looks like a parabola $(E_J/2)\varphi^2$, that's the 
 The ratio $E_J/E_C$ decides what kind of qubit you have.
 
 ```mermaid
-flowchart LR
-  H["H = 4E_C(n - n_g)² − E_J cos φ"] --> R{E_J/E_C ?}
-  R -->|"~ 1"| CPB["Cooper-pair box (charge qubit):<br/>large anharmonicity,<br/>charge-noise sensitive"]
-  R -->|">> 1"| TR["Transmon:<br/>weak anharmonicity ~ −E_C,<br/>charge dispersion ~ e^(−√(8E_J/E_C))"]
-  TR --> SS["Sweet spot E_J/E_C ~ 50–100 (illustrative)"]
+flowchart TD
+  H["One Hamiltonian<br/>E_C, E_J terms"] --> R{"Ratio<br/>E_J/E_C ?"}
+  R -->|"~ 1"| CPB["Cooper-pair box<br/>(charge qubit):<br/>large anharmonicity"]
+  CPB --> CPB2["But charge-noise<br/>sensitive"]
+  R -->|">> 1"| TR["Transmon:<br/>weak anharmonicity<br/>alpha ~ -E_C"]
+  TR --> TR2["Charge dispersion<br/>~ exp(-sqrt(8 E_J/E_C))"]
+  TR2 --> SS["Sweet spot<br/>E_J/E_C ~ 50-100<br/>(illustrative)"]
 ```
 
 Let's derive the transmon limit ($E_J/E_C\gg 1$) step by step.
@@ -156,11 +158,14 @@ Beyond coherence, **scaling is engineering physics**, not a solved consequence o
 
 ```mermaid
 flowchart TD
-  RT["Room temp ~300 K<br/>AWGs, microwave sources"] --> A["4 K plate<br/>HEMT amplifier"]
-  A --> B["still ~0.9 K"]
-  B --> C["mixing chamber ~10 mK<br/>attenuators, qubit chip"]
-  C -->|"dispersive readout signal"| A
-  C -. "each qubit: drive + flux line + shared readout;<br/>passive + active heat per coax;<br/>cooling power ~few hundred µW ⇒ wiring bottleneck" .- C
+  RT["Room temp ~300 K<br/>AWGs, mw sources"] --> A["4 K plate<br/>HEMT amplifier"]
+  A --> B["Still plate<br/>~0.9 K"]
+  B --> C["Mixing chamber<br/>~10 mK<br/>attenuators, chip"]
+  C -->|"readout signal"| A
+  C --> N1["Per qubit: drive +<br/>flux + readout line"]
+  N1 --> N2["Passive + active<br/>heat per coax"]
+  N2 --> N3["Cooling power<br/>~few hundred uW"]
+  N3 --> N4["-> wiring bottleneck"]
 ```
 
 ### How superconducting circuits score on the rubric

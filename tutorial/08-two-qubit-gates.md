@@ -107,15 +107,18 @@ $$g_\text{eff} = g_\text{direct} + \frac{g_1 g_2}{2}\!\left(\frac{1}{\Delta_1} +
 The indirect term's *sign* is set by the coupler frequency (via $\Delta_1,\Delta_2$, the qubit-coupler detunings), so flux-tuning the coupler can make the two paths cancel.
 
 ```mermaid
-graph LR
-  Q1 -- "g_direct" --> Q2
-  Q1 -- "g1" --> C[Coupler]
-  C -- "g2" --> Q2
-  subgraph ops [operating points]
-    OFF["flux A: g_eff = g_direct + g_indirect = 0"]
-    ON["flux B: g_eff large (gate on)"]
+flowchart TD
+  Q1["Qubit 1"] -->|"g_direct"| Q2["Qubit 2"]
+  Q1 -->|"g1"| C["Coupler<br/>(tunable)"]
+  C -->|"g2"| Q2
+  subgraph ops ["operating points"]
+    direction TD
+    OFF["flux A:<br/>g_eff = direct<br/>+ indirect = 0"]
+    ON["flux B:<br/>g_eff large<br/>(gate on)"]
   end
-  note["indirect path g1·g2·(1/Δ1+1/Δ2)/2<br/>tunable sign via coupler freq<br/>→ cancels direct path at OFF"]
+  C -.-> ops
+  note["indirect path<br/>g1*g2*(1/D1+1/D2)/2<br/>sign set by coupler"]
+  note -.->|"cancels direct<br/>at OFF"| OFF
 ```
 
 Crucially, $g_\text{eff}=0$ and $\zeta_{ZZ}=0$ occur at generally *different but engineerable* flux points. The real design problem is making **both** small at the operating point, a high on/off ratio with low idle crosstalk. (A common misconception: the coupler does *not* null $g_\text{eff}$ everywhere, and the $ZZ$ null is nearby but not identical.)

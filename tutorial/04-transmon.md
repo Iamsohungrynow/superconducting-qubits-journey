@@ -6,14 +6,14 @@ The whole trick is one design choice: **make the Josephson energy $E_J$ much lar
 
 ```mermaid
 flowchart TD
-  A["Big shunt capacitor → small E_C → large E_J/E_C (~50+)"] --> B["Phase φ localized in a deep cosine well"]
-  B --> C["Charge n delocalized over many charge states"]
-  C --> D["Charge dispersion ~ exp(−√(8 E_J/E_C)) : exponentially suppressed"]
-  D --> E["Long T₂, offset charge n_g ignorable"]
-  A --> F["Potential nearly harmonic (Duffing oscillator)"]
-  F --> G["Weak anharmonicity α ≈ −E_C"]
-  G --> H["Gate-speed limit / leakage to |2⟩ → DRAG"]
-  A --> I["ω_q = √(8 E_J E_C) − E_C : a few GHz"]
+  A["Big shunt cap<br/>small E_C<br/>large E_J/E_C (~50+)"] --> B["Phase phi localized<br/>in deep cosine well"]
+  B --> C["Charge n delocalized<br/>over many states"]
+  C --> D["Charge dispersion<br/>exp(-sqrt(8 E_J/E_C))<br/>exp. suppressed"]
+  D --> E["Long T2<br/>offset n_g ignorable"]
+  A --> F["Potential nearly<br/>harmonic (Duffing)"]
+  F --> G["Weak anharmonicity<br/>alpha approx -E_C"]
+  G --> H["Gate-speed limit<br/>leakage to |2><br/>-> DRAG"]
+  A --> I["w_q = sqrt(8 E_J E_C)<br/>- E_C : a few GHz"]
 ```
 
 ## The circuit and its energy scales

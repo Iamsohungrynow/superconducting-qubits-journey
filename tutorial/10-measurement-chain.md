@@ -115,34 +115,34 @@ $$T_{\text{sys}} = T_1 + \frac{T_2}{G_1} + \frac{T_3}{G_1 G_2} + \cdots$$
 Derivation in one breath: stage 2's own noise $T_2$ appears at the system output multiplied by $G_2$ but accompanied by $G_1 G_2 T_1$ from stage 1; dividing the total output noise by the total gain $G_1 G_2$ refers stage 2 back as $T_2/G_1$, stage 3 as $T_3/(G_1 G_2)$, and so on. **A large first-stage gain $G_1$ crushes every downstream contribution.**
 
 ```mermaid
-flowchart LR
-  S[readout signal<br/>~few photons] --> A1["TWPA @10 mK<br/>G1 = 20 dB, T1 ≈ 0.3 K"]
-  A1 --> A2["HEMT @4 K<br/>G2 = 40 dB, T2 ≈ 5 K"]
-  A2 --> A3["RT amp<br/>T3 ≈ 75 K"]
-  A3 --> D[digitizer]
-  A1 -.->|"contributes 0.30 K"| R[("T_sys ≈ 0.35 K")]
+flowchart TD
+  S["Readout signal<br/>~few photons"] --> A1["TWPA @10 mK<br/>G1 = 20 dB<br/>T1 ~ 0.3 K"]
+  A1 --> A2["HEMT @4 K<br/>G2 = 40 dB<br/>T2 ~ 5 K"]
+  A2 --> A3["RT amp<br/>T3 ~ 75 K"]
+  A3 --> D["Digitizer"]
+  A1 -.->|"adds 0.30 K"| R[("T_sys ~ 0.35 K")]
   A2 -.->|"T2/G1 = 0.05 K"| R
-  A3 -.->|"T3/(G1·G2) ≈ 7.5e-5 K"| R
+  A3 -.->|"~7.5e-5 K"| R
 ```
 
 ### Full chain, end to end
 
 ```mermaid
-flowchart TB
-  subgraph IN["Input line: thermal photons blocked"]
+flowchart TD
+  subgraph IN["Input line:<br/>block thermal noise"]
     direction TB
-    SRC["AWG / source @300 K<br/>n̄ ≈ 1250"] --> A50["ATT @50 K"]
-    A50 --> A4["ATT 20 dB @4 K"]
-    A4 --> AST["ATT @Still 0.8 K"]
-    AST --> AC["ATT @Cold 0.1 K"]
-    AC --> AM["ATT 20 dB @10 mK"]
-    AM --> LP["Low-pass + IR/Eccosorb filter"]
+    SRC["AWG / source<br/>@300 K<br/>n_avg ~ 1250"] --> A50["ATT @50 K"]
+    A50 --> A4["ATT 20 dB<br/>@4 K"]
+    A4 --> AST["ATT @Still<br/>0.8 K"]
+    AST --> AC["ATT @Cold<br/>0.1 K"]
+    AC --> AM["ATT 20 dB<br/>@10 mK"]
+    AM --> LP["Low-pass +<br/>IR/Eccosorb<br/>filter"]
   end
-  LP --> CHIP["CHIP @10 mK<br/>qubit ω_q + readout resonator κ"]
-  subgraph OUT["Output line: SNR built up"]
+  LP --> CHIP["CHIP @10 mK<br/>qubit w_q +<br/>resonator kappa"]
+  subgraph OUT["Output line:<br/>SNR built up"]
     direction TB
-    ISO["Isolator/Circulator @10 mK"] --> TWPA["TWPA @10 mK"]
-    TWPA --> HEMT["HEMT @4 K (~5 K)"]
+    ISO["Isolator /<br/>Circulator<br/>@10 mK"] --> TWPA["TWPA @10 mK"]
+    TWPA --> HEMT["HEMT @4 K<br/>(~5 K)"]
     HEMT --> RT["RT amp @300 K"]
     RT --> DIG["Digitizer"]
   end

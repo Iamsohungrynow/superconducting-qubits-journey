@@ -44,27 +44,27 @@ $$|n,\pm\rangle = \frac{|e,n\rangle \pm |g,n+1\rangle}{\sqrt2}, \qquad \text{spl
 The $n=0$ rung splits by $2g$, the **vacuum-Rabi splitting**. Higher rungs split by $2g\sqrt2,\,2g\sqrt3,\dots$: the ladder is **anharmonic in photon number**. That $\sqrt{n}$ nonlinearity is exactly what distinguishes a true two-level emitter from a linear oscillator (which would give an evenly-spaced ladder).
 
 ```mermaid
-graph BT
-    G["|g,0⟩  (ground)"]
+flowchart TD
+    G["|g,0> (ground)"]
     subgraph N1["N = 1 manifold"]
       direction LR
-      B1a["bare |e,0⟩"]:::bare
-      B1b["bare |g,1⟩"]:::bare
-      D1m["|0,−⟩"]:::dressed
-      D1p["|0,+⟩"]:::dressed
+      B1a["bare |e,0>"]:::bare
+      B1b["bare |g,1>"]:::bare
+      D1m["|0,-> dressed"]:::dressed
+      D1p["|0,+> dressed"]:::dressed
     end
     subgraph N2["N = 2 manifold"]
       direction LR
-      B2a["bare |e,1⟩"]:::bare
-      B2b["bare |g,2⟩"]:::bare
-      D2m["|1,−⟩"]:::dressed
-      D2p["|1,+⟩"]:::dressed
+      B2a["bare |e,1>"]:::bare
+      B2b["bare |g,2>"]:::bare
+      D2m["|1,-> dressed"]:::dressed
+      D2p["|1,+> dressed"]:::dressed
     end
     G --> N1 --> N2
     B1a -. "couple g" .- B1b
     D1m == "split 2g" === D1p
-    B2a -. "couple √2·g" .- B2b
-    D2m == "split 2g√2" === D2p
+    B2a -. "couple sqrt2 g" .- B2b
+    D2m == "split 2g sqrt2" === D2p
     classDef bare fill:#eee,stroke:#999,stroke-dasharray:4;
     classDef dressed fill:#cde,stroke:#369;
 ```
@@ -138,14 +138,14 @@ Two limiting checks make the physics vivid:
 ## Resonators as readout, and as buses
 
 ```mermaid
-flowchart LR
-    Q1["Qubit Q1"] -- g --> R["Readout resonator<br/>(linewidth κ)"]
-    R --> PF["Purcell filter<br/>(block ω_q, pass ω_r)"]
+flowchart TD
+    Q1["Qubit Q1"] -->|"g"| R["Readout resonator<br/>(linewidth kappa)"]
+    R --> PF["Purcell filter<br/>block w_q, pass w_r"]
     PF --> AMP["Amplifier / ADC"]
-    R -. "QND, target 2χ ≈ κ" .-> AMP
-    Q1 -- g₁ --> BUS["Bus resonator"]
-    Q2["Qubit Q2"] -- g₂ --> BUS
-    BUS -. "virtual photon<br/>J ≈ g₁g₂/Δ" .- BUS
+    R -.->|"QND<br/>target 2chi approx kappa"| AMP
+    Q1 -->|"g_1"| BUS["Bus resonator"]
+    Q2["Qubit Q2"] -->|"g_2"| BUS
+    BUS -.->|"virtual photon<br/>J approx g_1 g_2 / Delta"| BUS
 ```
 
 **Readout linewidth and the $2\chi\approx\kappa$ optimum.** The cavity linewidth $\kappa$ sets both how fast information leaves the cavity and its bandwidth. The two qubit-dependent peaks are separated by $2\chi$ and each is $\sim\kappa$ wide. Maximal distinguishability lives near $2\chi\approx\kappa$, a **matching** condition, *not* "make $\chi$ huge." Too large $2\chi/\kappa$ wastes contrast and worsens measurement-induced mixing; too small and the peaks overlap inside one linewidth. The enabling separation of timescales is **strong coupling**, $g\gg\kappa,\gamma$.

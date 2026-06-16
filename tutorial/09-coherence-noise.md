@@ -11,12 +11,12 @@ A qubit never decoheres on its own. It decoheres because it is weakly coupled to
 
 ```mermaid
 flowchart TD
-    P["Prepared state<br/>(superposition on Bloch sphere)"]
-    P --> A["Energy loss<br/>|1⟩→|0⟩, emits photon<br/>(longitudinal bath coupling)"]
-    P --> B["Phase scramble<br/>ω_q jitter, no energy exchange<br/>(σ_z bath coupling)"]
-    A --> A1["T₁ relaxation<br/>P₁ = exp(−t/T₁)<br/>measured: inversion recovery"]
-    B --> B1["T_φ pure dephasing<br/>measured: Ramsey (T₂*) / echo (T₂ᴱ)"]
-    A1 --> C["1/T₂ = 1/2T₁ + 1/T_φ<br/>bound: T₂ ≤ 2T₁"]
+    P["Prepared state<br/>(Bloch sphere<br/>superposition)"]
+    P --> A["Energy loss<br/>|1>-> |0>, photon<br/>(longitudinal bath)"]
+    P --> B["Phase scramble<br/>w_q jitter, no energy<br/>(sigma_z bath)"]
+    A --> A1["T1 relaxation<br/>P1 = exp(-t/T1)<br/>inversion recovery"]
+    B --> B1["T_phi dephasing<br/>Ramsey (T2*)<br/>or echo (T2E)"]
+    A1 --> C["1/T2 =<br/>1/2T1 + 1/T_phi<br/>bound: T2 <= 2T1"]
     B1 --> C
 ```
 

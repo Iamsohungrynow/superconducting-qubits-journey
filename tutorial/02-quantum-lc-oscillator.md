@@ -5,16 +5,16 @@ Before we build a qubit, we need to understand the simplest quantum circuit: the
 Here's the whole arc of this chapter at a glance:
 
 ```mermaid
-flowchart LR
-    A[LC circuit: L and C in a loop] --> B[Choose node flux Φ as coordinate]
-    B --> C[Lagrangian: capacitive minus inductive energy]
-    C --> D[Conjugate momentum Q = C·Φ̇]
-    D --> E[Hamiltonian Q²/2C + Φ²/2L]
-    E --> F["Quantize: [Φ,Q] = iℏ"]
-    F --> G[Ladder operators a, a†]
-    G --> H[Evenly spaced spectrum Eₙ]
-    H --> I{Anharmonicity α = 0}
-    I --> J[Not a usable qubit → need Josephson junction, Ch. 03]
+flowchart TD
+    A["LC circuit<br/>(L and C in a loop)"] --> B["Node flux Phi<br/>as coordinate"]
+    B --> C["Lagrangian:<br/>cap - ind energy"]
+    C --> D["Momentum<br/>Q = C*dPhi/dt"]
+    D --> E["Hamiltonian<br/>Q^2/2C + Phi^2/2L"]
+    E --> F["Quantize<br/>[Phi,Q] = i*hbar"]
+    F --> G["Ladder ops<br/>a, a-dagger"]
+    G --> H["Even spectrum<br/>E_n"]
+    H --> I{"Anharmonicity<br/>alpha = 0"}
+    I --> J["Not a qubit<br/>need Josephson<br/>junction (Ch.03)"]
 ```
 
 ## From circuit to Lagrangian

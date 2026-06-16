@@ -26,12 +26,12 @@ Read that last expression carefully: it is a *single entangled state*, **not** t
 - **Check.** The output is entangled, not a product $|\psi\rangle^{\otimes 3}$, so no cloning occurred. We "copied" only basis labels, never the amplitudes.
 
 ```mermaid
-flowchart LR
-    A["q1: α|0⟩+β|1⟩"] -->|CNOT 1→2| B(("⊕"))
-    Z2["q2: |0⟩"] --> B
-    B -->|CNOT 1→3| C(("⊕"))
-    Z3["q3: |0⟩"] --> C
-    C --> OUT["α|000⟩ + β|111⟩  (entangled, no clone)"]
+flowchart TD
+    A["q1: alpha|0><br/>+ beta|1>"] -->|"CNOT 1->2"| B(("CNOT"))
+    Z2["q2: |0>"] --> B
+    B -->|"CNOT 1->3"| C(("CNOT"))
+    Z3["q3: |0>"] --> C
+    C --> OUT["alpha|000><br/>+ beta|111><br/>entangled, no clone"]
 ```
 
 ### Stabilizers: asking "did an error happen?" without asking "what's the state?"
@@ -124,10 +124,10 @@ A **logical operator** is a chain of single-qubit Paulis stretching all the way 
 One honest complication the toy story hides: **syndrome extraction is itself noisy.** Each weight-4 check is read by *one* ancilla through a sequence of ~4 CNOT/CZ gates, plus ancilla reset and readout, every one of which can fail. So we cannot trust a single round's syndrome. The fix: repeat the measurement for *many* rounds and decode the whole **$(2{+}1)$D spacetime volume** at once (two space dimensions plus time).
 
 ```mermaid
-flowchart LR
-    A["Encode logical qubit"] --> B["Measure stabilizers<br/>(syndrome, noisy)"]
+flowchart TD
+    A["Encode<br/>logical qubit"] --> B["Measure stabilizers<br/>(syndrome, noisy)"]
     B --> C["Decode<br/>(MWPM / neural)"]
-    C --> D["Apply or track correction"]
+    C --> D["Apply or track<br/>correction"]
     D --> B
     B -.-> R["Logical readout"]
 ```

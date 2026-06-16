@@ -51,12 +51,12 @@ Two things fell out at once. The $\chi\,\sigma_z\,a^\dagger a$ term is a **cross
 That single cross-Kerr term $\chi\,\sigma_z\,a^\dagger a$ is symmetric, you can group the operators two ways, and each grouping is a physical "picture."
 
 ```mermaid
-flowchart TB
-    H["cross-Kerr term:<br/>χ · σ_z · a†a"]
-    H --> A["Resonator picture:<br/>ω_r ± χ depending on qubit"]
-    H --> B["Qubit picture:<br/>ω_q + 2χ·n̄ (ac-Stark shift)"]
-    A --> C["IQ separation → SNR → readout"]
-    B --> D["measurement-induced<br/>dephasing & number splitting"]
+flowchart TD
+    H["cross-Kerr term<br/>chi*sigma_z*a-dag a"]
+    H --> A["Resonator picture<br/>w_r +/- chi<br/>set by qubit"]
+    H --> B["Qubit picture<br/>w_q + 2 chi n_avg<br/>(ac-Stark shift)"]
+    A --> C["IQ separation<br/>-> SNR -> readout"]
+    B --> D["measurement-induced<br/>dephasing and<br/>number splitting"]
 ```
 
 - **Resonator picture**: group as $(\chi\sigma_z)\,a^\dagger a$: the resonator frequency is $\omega_r + \chi$ if the qubit is in $|0\rangle$ (where $\sigma_z=+1$) and $\omega_r - \chi$ if in $|1\rangle$. The two frequencies are split by $2\chi$. **This is what we read.**
@@ -164,14 +164,14 @@ $$
 A quantum-limited first stage with gain $G_1 \sim 100$ divides the HEMT's contribution by 100, making it negligible. So we place a JPA or TWPA *first*, it sets the system noise near the quantum limit. Order matters more than individual quality.
 
 ```mermaid
-flowchart LR
-    Q[Qubit] -- g --> R[Readout resonator]
-    R -- κ --> PF[Purcell filter]
-    PF --> ISO[Isolators / circulator]
-    ISO --> PA["TWPA or JPA<br/>~quantum limited (FIRST)"]
-    PA --> HEMT["HEMT ~4 K<br/>adds 10–20 photons"]
-    HEMT --> RT[Room-temp amp + IQ demod]
-    RT --> ADC[Digitizer → I, Q]
+flowchart TD
+    Q["Qubit"] -->|"g"| R["Readout<br/>resonator"]
+    R -->|"kappa"| PF["Purcell filter"]
+    PF --> ISO["Isolators /<br/>circulator"]
+    ISO --> PA["TWPA or JPA<br/>~quantum limited<br/>(FIRST)"]
+    PA --> HEMT["HEMT ~4 K<br/>adds 10-20<br/>photons"]
+    HEMT --> RT["Room-temp amp<br/>+ IQ demod"]
+    RT --> ADC["Digitizer<br/>-> I, Q"]
 ```
 
 | Amplifier | Type | Gain | Bandwidth | Added noise* | Saturation | Role |

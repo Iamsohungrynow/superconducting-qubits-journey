@@ -5,14 +5,14 @@ So far we have a transmon sitting at frequency $\omega_q$ with a weak anharmonic
 Here is the whole pipeline at a glance:
 
 ```mermaid
-flowchart LR
-    A["Microwave envelope<br/>Ω(t), φ"] --> B["Lab-frame drive<br/>Ω cos(ω_d t+φ) σ_x"]
+flowchart TD
+    A["Microwave envelope<br/>omega(t), phi"] --> B["Lab-frame drive<br/>cos(w_d t+phi) s_x"]
     B --> C["Rotating frame<br/>+ RWA"]
-    C --> D["Static H_rot<br/>(Δ/2)σ_z + (Ω/2)(...)"]
-    D --> E["Bloch rotation<br/>axis = φ, angle = area"]
+    C --> D["Static H_rot<br/>detuning + drive"]
+    D --> E["Bloch rotation<br/>axis = phi<br/>angle = area"]
     E --> F["Gate<br/>X / Y / X90"]
-    D --> G{"Leakage<br/>to |2⟩?"}
-    G -->|yes| H["DRAG quadrature<br/>Ω_y = -Ω̇_x/α"]
+    D --> G{"Leakage<br/>to |2>?"}
+    G -->|"yes"| H["DRAG quadrature<br/>omega_y = -dI/dt /a"]
     H --> F
     D -. "Z rotation" .-> I["Virtual-Z<br/>phase bookkeeping<br/>(no pulse)"]
 ```
@@ -103,9 +103,9 @@ P1
 Now the transmon's weakness bites. It is **not** a true two-level system. With $\alpha<0$ (typically a couple hundred MHz, illustrative), the $|1\rangle\!\to\!|2\rangle$ transition sits *below* the qubit transition:
 
 ```mermaid
-flowchart TB
-    L2["state |2⟩"] --- E12["1→2 transition = ω_q + α  (leakage)"] --- L1["state |1⟩"]
-    L1 --- E01["0→1 transition = ω_q  (computational)"] --- L0["state |0⟩"]
+flowchart TD
+    L2["state |2>"] --- E12["1->2 transition<br/>w_q + alpha<br/>(leakage)"] --- L1["state |1>"]
+    L1 --- E01["0->1 transition<br/>w_q<br/>(computational)"] --- L0["state |0>"]
 ```
 
 | Transition | Frequency (illustrative) | Note |

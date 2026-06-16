@@ -8,14 +8,14 @@ Every gate depends on a handful of physical parameters, each found by a dedicate
 
 ```mermaid
 flowchart TD
-    A["Spectroscopy<br/>coarse ω_q (~MHz)"] --> B["Ramsey<br/>fine ω_q + T2* (~kHz)"]
-    B --> C["Rabi<br/>π amplitude"]
-    C --> D["DRAG / AllXY<br/>drive phase, leakage"]
-    D --> E["Readout cal<br/>χ, freq, power, IQ"]
+    A["Spectroscopy<br/>coarse w_q (~MHz)"] --> B["Ramsey<br/>fine w_q + T2*<br/>(~kHz)"]
+    B --> C["Rabi<br/>pi amplitude"]
+    C --> D["DRAG / AllXY<br/>drive phase,<br/>leakage"]
+    D --> E["Readout cal<br/>chi, freq,<br/>power, IQ"]
     E --> F["RB / IRB<br/>grade the gates"]
-    F --> G{"r within target<br/>& near coherence floor?"}
-    G -- "NO: drift / re-tune" --> B
-    G -- "YES" --> H["Run circuits"]
+    F --> G{"r within target<br/>and near<br/>coherence floor?"}
+    G -->|"NO: drift<br/>re-tune"| B
+    G -->|"YES"| H["Run circuits"]
 ```
 
 The individual steps:
