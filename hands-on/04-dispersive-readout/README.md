@@ -43,10 +43,14 @@ vacuum. Note the convention: `destroy(2)` is the qubit lowering operator that
 sends `|1> -> |0>`.
 
 **Solve and measure.** Two `mesolve` calls evolve each initial state while
-tracking the expectation `<a>` through `e_ops=[a]`. Because `<a>` is complex, its
-real part is the I quadrature and its imaginary part is the Q quadrature. We take
-the last time point as the steady state and report the distance between the two
-landing points.
+tracking the expectation `<a>` through `e_ops=[a]`, which gives the field
+trajectory we plot. Because `<a>` is complex, its real part is the I quadrature
+and its imaginary part is the Q quadrature. For the reported landing points we do
+**not** read off the last time sample (which would still carry whatever transient
+survives at `t_final`); we solve the exact steady state with `steadystate()`. Each
+qubit state simply fixes the cavity detuning to `+chi` or `-chi`, so the steady
+field is that of a single driven, damped cavity mode, and we report the distance
+between the two landing points.
 
 **Plot.** The script traces both `<a>(t)` curves in the IQ plane, marks the two
 steady-state points, and draws the separation arrow between them.
@@ -56,12 +60,13 @@ steady-state points, and draws the separation arrow between them.
 The script prints the chosen `chi`, `kappa`, and `drive`, then the steady-state
 field for each qubit state as `(I, Q)` coordinates and their magnitudes `|<a>|`,
 and finally the **IQ separation** between the two qubit states. With the default
-parameters the two states land at mirror-image points near `I = +/-0.84`,
-`Q = -0.32`, each with `|<a>|` about `0.90`, giving an IQ separation of roughly
-`1.68`. A larger separation means the two states are easier to distinguish in a
-single shot. Because the cavity settles on a timescale of about `1/kappa` (tens of
-microseconds here), the time grid is run out to several cavity lifetimes so the
-field truly reaches steady state.
+parameters the two states land at mirror-image points `I = +/-0.80`,
+`Q = -0.40`, each with `|<a>|` about `0.89`, giving an IQ separation of exactly
+`1.60`. A larger separation means the two states are easier to distinguish in a
+single shot. The coherent field amplitude relaxes as `exp(-(kappa/2) t)`, so its
+envelope settles on a timescale `2/kappa` (about `64` microseconds here, not
+`1/kappa`); the trajectory grid is run out to several of those settling times so
+the plotted field visibly spirals in and lands on the steady-state points.
 
 ![Dispersive readout (qubit-state-dependent cavity)](figures/dispersive.png)
 

@@ -24,7 +24,8 @@ Convention used throughout:
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from qutip import basis, destroy, qeye, sigmaz, tensor, mesolve, ket2dm
+from qutip import (basis, destroy, qeye, sigmaz, tensor, mesolve, ket2dm,
+                   steadystate, expect)
 
 # ---------------------------------------------------------------------------
 # Parameters (illustrative but realistic; frequencies as 2*pi*MHz, time in us)
@@ -41,10 +42,13 @@ kappa = 2 * np.pi * 0.005    # cavity decay rate, 5 MHz
 # opposite sides of the IQ plane and are maximally separated.
 delta = 0.0                  # bare cavity detuning at the symmetric point
 
-# Time grid: long enough for the cavity field to reach steady state. The cavity
-# settles on a timescale ~1/kappa, so we integrate over several such lifetimes
-# (times in microseconds).
-tlist = np.linspace(0, 150.0, 600)
+# Time grid for the trajectory plot. The coherent field amplitude relaxes as
+# exp(-(kappa/2) t), so its envelope settles on a timescale 2/kappa (here
+# 2/kappa ~ 64 us), NOT 1/kappa. We integrate well past that (several settling
+# times) so the trajectory visibly spirals in and lands on the steady state.
+# The reported landing points themselves come from the exact steady state
+# (steadystate(), below), not from the last transient sample.
+tlist = np.linspace(0, 400.0, 800)
 
 # ---------------------------------------------------------------------------
 # Operators on the joint qubit (x) cavity Hilbert space
@@ -79,10 +83,28 @@ a_g = np.asarray(res_g.expect[0])   # complex <a>(t) for qubit |0>
 a_e = np.asarray(res_e.expect[0])   # complex <a>(t) for qubit |1>
 
 # ---------------------------------------------------------------------------
-# Quantitative results: steady-state field points and their separation
+# Quantitative results: steady-state field points and their separation.
+#
+# We get the landing points from the EXACT steady state, not from a_g[-1]/
+# a_e[-1] (which would be biased by whatever transient survives at t_final).
+# Because the Hamiltonian commutes with the qubit sigmaz and the qubit has no
+# dissipation, each qubit state |0>/|1> just fixes the cavity detuning to
+# +chi/-chi. So the steady-state field is that of a single driven, damped
+# cavity mode with detuning +/- chi, which steadystate() solves directly.
 # ---------------------------------------------------------------------------
-ss_g = a_g[-1]
-ss_e = a_e[-1]
+ac = destroy(N)   # single-mode cavity operator (qubit factored out)
+
+
+def cavity_steady_field(sz_value):
+    """Exact steady-state <a> for the cavity when sigmaz = sz_value (+1 -> |0>,
+    -1 -> |1>), i.e. effective cavity detuning delta + sz_value*chi."""
+    H_cav = (delta + sz_value * chi) * ac.dag() * ac + drive * (ac + ac.dag())
+    rho_ss = steadystate(H_cav, [np.sqrt(kappa) * ac])
+    return expect(ac, rho_ss)
+
+
+ss_g = cavity_steady_field(+1.0)   # qubit |0>  (sigmaz = +1)
+ss_e = cavity_steady_field(-1.0)   # qubit |1>  (sigmaz = -1)
 separation = np.abs(ss_e - ss_g)
 
 print("Dispersive readout simulation")
