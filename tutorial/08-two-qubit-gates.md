@@ -25,7 +25,7 @@ The catch: direct capacitive coupling is *always on*. You engineer gates around 
 
 Let $\Delta = \omega_1 - \omega_2$ be the qubit-qubit detuning. The exchange term behaves completely differently depending on $\Delta$ versus $g$:
 
-- **Resonant ($|\Delta| \lesssim g$):** energy is exchanged on resonance, excitations swap. This is the iSWAP regime (and, at the $|11\rangle$-$|02\rangle$ resonance, the CZ regime).
+- **Resonant ($|\Delta| \lesssim g$):** energy is exchanged on resonance, the singly-excited states $|01\rangle$ and $|10\rangle$ swap. This is the iSWAP regime (it lives near $\Delta \approx 0$). The CZ gate uses a *different* resonance, the $|11\rangle$-$|02\rangle$ avoided crossing at $\Delta \approx \alpha_2$ (set by the anharmonicity, $|\alpha| \gg g$), covered below, so do not conflate it with this $\Delta \approx 0$ point.
 - **Dispersive ($|\Delta| \gg g$):** direct energy exchange is suppressed; coupling acts only at second order through *virtual* excitations. What survives is a static **residual $ZZ$ shift**, a conditional phase that accrues even while you do nothing.
 
 ## Residual $ZZ$, the gate resource *and* the dominant idle error
@@ -94,7 +94,7 @@ Two flux-tunable transmons, $g/2\pi = 12$ MHz, $\alpha/2\pi = -300$ MHz each, $T
 | 2, conditional shift at dwell | $\zeta/2\pi \approx (\sqrt 2 g)^2/\delta$, $\delta/2\pi=50$ MHz | $(16.97)^2/50 \approx 5.8$ MHz |
 | 3, gate time for $\pi$ phase | $t_\text{gate}\approx 1/(2\,\zeta_\text{Hz})$ | $1/(2\cdot 5.8\times10^6) \approx 86$ ns |
 | 4, leakage (Landau-Zener) | $P_\text{LZ}\sim e^{-2\pi \Delta_\text{gap}^2/(4|d\varepsilon/dt|)}$ | $<10^{-3}$ *only if shaped* |
-| 5, decoherence floor | $\varepsilon_\text{dec}\sim t_\text{gate}(1/T_1+1/T_2)\cdot O(1)$ | $86\text{e-}9\cdot 25000\cdot 0.5 \approx 1.1\times10^{-3}$ |
+| 5, decoherence floor | $\varepsilon_\text{dec}\sim \frac{t_\text{gate}}{2}(1/T_1+1/T_2)$ | $86\text{e-}9\cdot 25000/2 \approx 1.1\times10^{-3}$ |
 
 **Takeaway:** the *same* $g$ sets the gap (1), the conditional shift that powers the gate (2), the gate time (3), and the leakage risk (4); and coherence (5) puts a hard $\sim10^{-3}$ floor under all of it. That is why two-qubit gates dominate the error budget and sit near the surface-code threshold.
 
@@ -172,14 +172,16 @@ This is the **same** $g$ as the CZ avoided crossing. iSWAP and CZ are two corner
 
 Frame the two-qubit error as a sum of channels, $\varepsilon_\text{2Q}\approx \varepsilon_\text{coh}+\varepsilon_\text{leak}+\varepsilon_\text{dec}$, with the decoherence floor scaling as
 
-$$\varepsilon_\text{dec}\sim \frac{t_\text{gate}}{3}\!\left(\frac{1}{T_1}+\frac{1}{T_\phi}\right)\times O(1).$$
+$$\varepsilon_\text{dec}\sim \frac{t_\text{gate}}{2}\left(\frac{1}{T_1}+\frac{1}{T_2}\right).$$
+
+The leading prefactor (here $1/2$) is an order-unity number that depends on the fidelity convention (process vs average) and on the number of qubits involved; we keep it explicit and fixed so the same expression reproduces the worked estimate above and the table below.
 
 | Error channel | Scaling | Illustrative size | Mitigation |
 |---|---|---|---|
-| Decoherence | $t_\text{gate}(1/T_1+1/T_2)$ | $\sim 1\text{–}3\times10^{-3}$ | shorter gates, better $T_1/T_2$ |
-| Leakage to $|02\rangle$ | adiabaticity | $\sim 10^{-4}\text{–}10^{-3}$ | fast-adiabatic / DRAG pulses |
+| Decoherence | $\frac{t_\text{gate}}{2}(1/T_1+1/T_2)$ | $\sim 1\text{ to }3\times10^{-3}$ | shorter gates, better $T_1/T_2$ |
+| Leakage to $|02\rangle$ | adiabaticity | $\sim 10^{-4}\text{ to }10^{-3}$ | fast-adiabatic / DRAG pulses |
 | Residual $ZZ$ | $\zeta\cdot t_\text{gate}$ | variable | tunable coupler / echo |
-| Coherent miscalibration |, | $\sim 10^{-4}$ | interleaved RB tune-up |
+| Coherent miscalibration | amplitude/phase error | $\sim 10^{-4}$ | interleaved RB tune-up |
 
 *(All numbers illustrative and hardware-dependent.)* Because $t_\text{gate}$ (tens of ns) is a non-negligible fraction of $T_1,T_2$ (tens-to-hundreds of $\mu$s), the decoherence floor alone is already $\sim10^{-3}$, which is why two-qubit errors dominate the budget and set the QEC threshold.
 
