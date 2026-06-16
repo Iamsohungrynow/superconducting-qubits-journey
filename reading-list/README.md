@@ -105,7 +105,7 @@ clever measurement scheme (dispersive readout) and near-quantum-limited
 amplifiers.
 
 - **Approaching Unit Visibility for Control of a Superconducting Qubit with
-  Dispersive Readout**, Wallraff, Schuster, Blais, Frunzio, Majer, Devoret,
+  Dispersive Readout**, Wallraff, Schuster, Blais, Frunzio, Majer,
   Girvin, Schoelkopf (2005), An early, high-fidelity demonstration of
   dispersive readout, where the qubit state pulls the resonator frequency and is
   inferred from the transmitted microwave signal. https://arxiv.org/abs/cond-mat/0502645
@@ -126,7 +126,7 @@ How single- and two-qubit operations are actually implemented on transmons.
   all-microwave two-qubit entangling gate widely used on fixed-frequency
   architectures. https://arxiv.org/abs/1106.0553
 
-- **Tunable Coupling Scheme for Implementing High-Fidelity Two-Qubit Gates**, Yan, Krantz, Sung, Kjaergaard, Campbell, Orlando, Gustavsson, Oliver (2018), Describes a tunable coupler that can turn qubit-qubit interactions on and off,
+- **Tunable Coupling Scheme for Implementing High-Fidelity Two-Qubit Gates**, Yan, Krantz, Sung, Kjaergaard, Campbell, Wang, Orlando, Gustavsson, Oliver (2018), Describes a tunable coupler that can turn qubit-qubit interactions on and off,
   suppressing residual coupling and enabling fast, high-fidelity two-qubit
   gates. https://arxiv.org/abs/1803.09813
 
@@ -144,7 +144,7 @@ this thread covers how those are characterized and improved.
 - **New Material Platform for Superconducting Transmon Qubits with Coherence
   Times Exceeding 0.3 Milliseconds**, Place, Rodgers, Mundada, Smitham,
   Fitzpatrick, Leng, Premkumar, Bryon, Vrajitoarea, Sussman, Cheng, Madhavan,
-  Babla, Le, Gang, Jäck, Gyenis, Yao, Cava, de Leon, Houck (2021), Demonstrates
+  Babla, Jäck, Gyenis, Yao, Cava, de Leon, Houck (2021), Demonstrates
   tantalum-based transmons reaching markedly longer coherence than the
   then-standard niobium/aluminum devices, kicking off the "tantalum transmon"
   materials direction. https://arxiv.org/abs/2003.00024
@@ -173,7 +173,7 @@ threshold logical-qubit milestones.
   repeated stabilizer-style error detection on a superconducting chip, an
   important proof of principle on the road to the surface code. https://arxiv.org/abs/1411.7403
 
-- **Exponential Suppression of Bit or Phase Errors with Cyclic Error
+- **Exponential Suppression of Bit or Phase Errors with Repetitive Error
   Correction**, Google Quantum AI (2021), Shows that error rates can be
   suppressed exponentially as a repetition code is made larger, a key scaling
   signature on the path to fault tolerance. https://arxiv.org/abs/2102.06132
