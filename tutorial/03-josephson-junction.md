@@ -67,7 +67,7 @@ The $\varphi^2$ term reproduces a harmonic oscillator (matching $\tfrac12 L_{J0}
    │             `-._ -E_Jcosφ _.-'        = anharmonicity
    │                  `-._____.-'  ← min at φ=0, depth E_J
    └──────────────┴───────┴──────────── φ
-                 −π/2     0    +π/2
+                 -π/2     0    +π/2
 ```
 
 The cosine (solid) hugs the parabola (the steeper arms) only at the bottom; the levels $E_0, E_1, E_2$ live in the flatter cosine, so $\hbar\omega_{12} < \hbar\omega_{01}$.
@@ -79,7 +79,7 @@ The cosine (solid) hugs the parabola (the steeper arms) only at the bottom; the 
          |\                                          /  \/  \/  \
          | \  angle = phase φ                       running "washboard":
          |  \                                       phase slips when I→I_c
-         |   ● bob   gravity well = −E_J cos φ
+         |   ● bob   gravity well = -E_J cos φ
 ```
 
 ## The Hamiltonian in the charge basis
@@ -103,7 +103,7 @@ Everything about the device follows from one ratio. It interpolates a whole cont
 | Regime | $E_J/E_C$ | Eigenstate character | Charge dispersion | Anharmonicity | Trade-off |
 |---|---|---|---|---|---|
 | Cooper-pair box / charge qubit | $\lesssim 1$ | charge (number) states | large (strong $n_g$ sensitivity) | large | very charge-noise sensitive |
-| Intermediate | $\sim 1$-$10$ | mixed | moderate | moderate |, |
+| Intermediate | $\sim 1$-$10$ | mixed | moderate | moderate | partially charge-protected, larger anharmonicity |
 | Transmon | $\gg 1$ ($\sim 20$-$100$) | phase-localized | exponentially suppressed | weak (power-law) | charge-insensitive, modest anharmonicity |
 
 with dispersion $\sim e^{-\sqrt{8E_J/E_C}}$ and relative anharmonicity $\alpha_r \sim -(8E_J/E_C)^{-1/2}$. The transmon is just *one limit* of this family, not the only option.
@@ -149,7 +149,7 @@ The physics: making the band depend on $n_g$ requires the phase to *tunnel* betw
    │ \    /\  /    /\  /                │  ────────────────────  m=1
    │  \__/  \/    /  \/      m=1        │
    │   /\    /\    /\                   │  ────────────────────  m=0
-   │  /  \  /  \  /  \       m=0        │   ε_m shrinks ~ e^(−√(8E_J/E_C))
+   │  /  \  /  \  /  \       m=0        │   ε_m shrinks ~ e^(-√(8E_J/E_C))
    └──┴────┴────┴──── n_g               └────────────────────── n_g
       0   0.5    1                          0        0.5        1
    strongly curved bands              nearly flat ⇒ df_q/dn_g ≈ 0
@@ -171,11 +171,11 @@ Pick two energy scales (round teaching values, *illustrative*, not any real devi
 
 **Step 3: anharmonicity.** Absolute: $\alpha/2\pi \approx -E_C/h = -250\ \text{MHz}$, so $\omega_{12}/2\pi \approx 4.50\ \text{GHz}$, the $1\to2$ transition sits $250\ \text{MHz}$ *below* the $0\to1$. Relative: $\alpha_r \approx -(8\cdot 50)^{-1/2} = -1/\sqrt{400} = -0.05$, i.e. $-5\%$.
 
-**Step 4: charge dispersion (the payoff).** Exponent $\sqrt{8\cdot 50} = 20$, so $e^{-20}\approx 2.06\times10^{-9}$. Then $\epsilon_0/h \approx (250\,\text{MHz})\cdot 32\cdot 0.798\cdot 25^{0.75}\cdot 2.06\times10^{-9} \approx 150\ \text{Hz}$. The whole $0$-$1$ frequency wiggles by only $\sim 150\ \text{Hz}$ across a full $n_g$ period, about one part in $3\times10^7$ of $4.75\ \text{GHz}$. *That* is why the transmon barely feels charge noise.
+**Step 4: charge dispersion (the payoff).** Exponent $\sqrt{8\cdot 50} = 20$, so $e^{-20}\approx 2.06\times10^{-9}$. The ground level barely moves: $\epsilon_0/h \approx (250\,\text{MHz})\cdot 32\cdot 0.798\cdot 25^{0.75}\cdot 2.06\times10^{-9} \approx 150\ \text{Hz}$. But the quantity you actually *measure* is the $0\to1$ transition, and its dispersion is set by the **upper** level: $\epsilon_m$ grows fast with $m$ (the $2^{4m+5}$ prefactor), so evaluating the formula at $m=1$ gives $\epsilon_1/h \approx 10\ \text{kHz}$, about $70\times$ larger than $\epsilon_0$. Because $\epsilon_0$ and $\epsilon_1$ alternate in sign (the $(-1)^m$), the $0\to1$ frequency wiggles peak-to-peak by $\approx |\epsilon_0|+|\epsilon_1|\approx 10\ \text{kHz}$ across a full $n_g$ period, about one part in $5\times10^5$ of $4.75\ \text{GHz}$. *That* is why the transmon barely feels charge noise. (Diagonalizing the Mathieu problem directly confirms the $\sim 10\ \text{kHz}$ transition swing.)
 
 **Step 5: gate-speed sanity check.** With $|\alpha|/2\pi = 250\ \text{MHz}$, a plain resonant pulse must keep its spectral width $\sim 1/\tau$ well under $250\ \text{MHz}$, so $\tau\gtrsim$ a few ns; DRAG relaxes this.
 
-**Takeaways (all illustrative):** $\omega_q/2\pi\approx 4.75\ \text{GHz}$, $\alpha/2\pi\approx -250\ \text{MHz}$, dispersion $\approx 150\ \text{Hz}$, $C\approx 78\ \text{fF}$, $I_c\approx 25\ \text{nA}$, $L_{J0}\approx 13\ \text{nH}$.
+**Takeaways (all illustrative):** $\omega_q/2\pi\approx 4.75\ \text{GHz}$, $\alpha/2\pi\approx -250\ \text{MHz}$, $0\to1$ charge dispersion $\approx 10\ \text{kHz}$ (level-0 dispersion $\epsilon_0\approx 150\ \text{Hz}$), $C\approx 78\ \text{fF}$, $I_c\approx 25\ \text{nA}$, $L_{J0}\approx 13\ \text{nH}$.
 
 ## Common pitfalls
 
