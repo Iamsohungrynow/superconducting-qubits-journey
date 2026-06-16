@@ -72,7 +72,7 @@ $$
 \boxed{\;\chi = \frac{g^2}{\Delta}\,\frac{\alpha}{\Delta + \alpha}, \qquad \alpha < 0\;}
 $$
 
-Because $\alpha<0$, the factor $\alpha/(\Delta+\alpha)$ is less than one: **the third level partially cancels the dispersive shift.** Using the bare two-level formula overestimates $\chi$, a common and costly mistake when designing a chip. A typical illustrative value is $\chi/2\pi \sim 0.5\text{–}1$ MHz.
+Because $\alpha<0$, the factor $\alpha/(\Delta+\alpha)$ is less than one: **the third level partially cancels the dispersive shift.** Using the bare two-level formula overestimates $\chi$, a common and costly mistake when designing a chip. A typical illustrative value is $\chi/2\pi \sim 0.5\text{ to }1$ MHz.
 
 ## 4. Where it breaks: the critical photon number
 
@@ -98,7 +98,7 @@ We probe the resonator with a microwave tone near $\omega_r$ and measure the ref
         |        '     :   ( ### )
         |              :      '
         +--------------------------------> I
-         <-- separation = |α0 − α1| -->
+         <-- separation = |α0 - α1| -->
          (grows with χ, n̄, integration T)
 
    blob WIDTH  = noise σ  (vacuum 1/2 + amplifier n_add, ÷ efficiency η)
@@ -188,7 +188,7 @@ Maximize integrated SNR per unit time at fixed photon number. The phase separati
 
 ```
  amplitude/phase
-     |        |1>: ω_r − χ       |0>: ω_r + χ
+     |        |1>: ω_r - χ       |0>: ω_r + χ
      |          _                  _
      |        /   \              /   \
      |       /     \            /     \      each peak width ≈ κ

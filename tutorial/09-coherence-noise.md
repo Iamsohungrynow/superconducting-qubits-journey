@@ -179,9 +179,9 @@ Since $46\,\mu$s sits well below the ceiling $2T_1 = 200\,\mu$s, this qubit is *
 
 **Step 4: move to the sweet spot.** With $\partial f_q/\partial\Phi = 0$ the linear term vanishes; the residual quadratic coupling shrinks $\sigma_f$ by orders of magnitude, so $T_2^*$ climbs from $\sim10\,\mu$s toward the $T_1$-limited ceiling. This is the single biggest lever for tunable qubits.
 
-**Step 5: echo gain.** Hahn echo zeroes the $f\to0$ part of the spectrum, so for $\alpha\approx1$ noise $T_2^*\sim11\,\mu\text{s} \to T_2^E \sim 40\text{–}60\,\mu$s. CPMG with $N$ pulses pushes the passband to $\sim N/(2t)$ and extends it further, the basis of the ~50× improvement Bylander *et al.* demonstrated.
+**Step 5: echo gain.** Hahn echo zeroes the $f\to0$ part of the spectrum, so for $\alpha\approx1$ noise $T_2^*\sim11\,\mu\text{s} \to T_2^E \sim 40\text{ to }60\,\mu$s. CPMG with $N$ pulses pushes the passband to $\sim N/(2t)$ and extends it further, the basis of the ~50x improvement Bylander *et al.* demonstrated.
 
-**Step 6: Purcell sanity check.** With $\kappa/2\pi = 5\,$MHz, $g/2\pi = 100\,$MHz, $\Delta/2\pi = 1\,$GHz: $\Gamma_{\text{Purcell}} = 2\pi(5\times10^6)(0.1)^2 = 2\pi\times5\times10^4\,\text{s}^{-1}$, i.e. $T_{\text{Purcell}} \approx 3.2\,\mu$s, *far below* our assumed $T_1 = 100\,\mu$s. Without a Purcell filter, this readout choice alone would dominate $T_1$. A filter cutting effective $\kappa$ at $\omega_q$ by ~100× restores $T_{\text{Purcell}}\sim300\,\mu$s, comfortably above target. *(All numbers illustrative.)*
+**Step 6: Purcell sanity check.** With $\kappa/2\pi = 5\,$MHz, $g/2\pi = 100\,$MHz, $\Delta/2\pi = 1\,$GHz: $\Gamma_{\text{Purcell}} = 2\pi(5\times10^6)(0.1)^2 = 2\pi\times5\times10^4\,\text{s}^{-1}$, i.e. $T_{\text{Purcell}} \approx 3.2\,\mu$s, *far below* our assumed $T_1 = 100\,\mu$s. Without a Purcell filter, this readout choice alone would dominate $T_1$. A filter cutting effective $\kappa$ at $\omega_q$ by ~100x restores $T_{\text{Purcell}}\sim300\,\mu$s, comfortably above target. *(All numbers illustrative.)*
 
 ## Materials progress
 
@@ -218,7 +218,7 @@ The lesson: the qubit Hamiltonian was solved long ago; the frontier is the dirty
 ## Go deeper
 
 - P. Krantz *et al.*, "A Quantum Engineer's Guide to Superconducting Qubits," Appl. Phys. Rev. **6**, 021318 (2019), [arXiv:1904.06560](https://arxiv.org/abs/1904.06560), canonical treatment of Bloch-Redfield rates, the PSD/filter-function formalism, $W_R$/$W_E$, $1/f$ noise, sweet spots, and Purcell.
-- J. Bylander *et al.*, "Noise spectroscopy through dynamical decoupling with a superconducting flux qubit," Nat. Phys. **7**, 565 (2011), [arXiv:1101.4707](https://arxiv.org/abs/1101.4707), CPMG-as-spectrometer and the ~50× dynamical-decoupling improvement.
+- J. Bylander *et al.*, "Noise spectroscopy through dynamical decoupling with a superconducting flux qubit," Nat. Phys. **7**, 565 (2011), [arXiv:1101.4707](https://arxiv.org/abs/1101.4707), CPMG-as-spectrometer and the ~50x dynamical-decoupling improvement.
 - G. Ithier *et al.*, "Decoherence in a superconducting quantum bit circuit," Phys. Rev. B **72**, 134519 (2005), [arXiv:cond-mat/0508588](https://arxiv.org/abs/cond-mat/0508588), free-induction vs echo under $1/f$ noise, sweet spots, and the Gaussian-vs-exponential distinction.
 - A. P. M. Place *et al.*, "New material platform for superconducting transmon qubits with coherence times exceeding 0.3 milliseconds," Nat. Commun. **12**, 1779 (2021), [arXiv:2003.00024](https://arxiv.org/abs/2003.00024), the tantalum-transmon materials result.
 - C. Wang *et al.*, "Transmon qubit with relaxation time exceeding 0.5 milliseconds," npj Quantum Inf. **8**, 3 (2022), [arXiv:2105.09890](https://arxiv.org/abs/2105.09890), tantalum transmon, $T_1$ approaching 0.5 ms.
