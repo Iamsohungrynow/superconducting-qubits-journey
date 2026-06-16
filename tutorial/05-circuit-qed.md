@@ -113,7 +113,7 @@ Crucially $H_\text{disp}$ commutes with $\hat\sigma_z$: measuring the cavity doe
   ω_r     · · · · · · · ╲     avoided        ╱ · · · · · · ·   (bare cavity)
                           ╲   crossing      ╱
                            ╲   gap = 2g    ╱
-  ω_r−χ                     ╲· · · · · · ·╱ ────────────────
+  ω_r-χ                     ╲· · · · · · ·╱ ────────────────
         ───────────────────────┼──────────────────────────►  ω_q (or flux)
                               ω_q = ω_r
    far-detuned: cavity at ω_r ± χ      |      on resonance: 2g split
@@ -123,10 +123,10 @@ Crucially $H_\text{disp}$ commutes with $\hat\sigma_z$: measuring the cavity doe
 
 The two-level $\chi=g^2/\Delta$ is **wrong for a transmon**. A transmon is a weakly anharmonic ladder $|g\rangle,|e\rangle,|f\rangle,\dots$, and the $|e\rangle\!\to\!|f\rangle$ transition also couples to the cavity (with matrix element $g_{ef}\approx\sqrt2\,g$). Summing the second-order SW contributions:
 
-- the $|g\rangle\!-\!|e\rangle$ transition pulls the cavity by $+g^2/\Delta$,
-- the $|e\rangle\!-\!|f\rangle$ transition pulls it the **opposite** way by $-g_{ef}^2/(\Delta+\alpha)\approx -2g^2/(\Delta+\alpha)$.
+- the $|g\rangle\!-\!|e\rangle$ coupling contributes $+g^2/\Delta$ to $\chi$,
+- the $|e\rangle\!-\!|f\rangle$ coupling contributes the **opposite** sign, $-g_{ef}^2/[2(\Delta+\alpha)]\approx -g^2/(\Delta+\alpha)$ (the factor $\tfrac12$ is how the *upper* transition enters the qubit's cavity shift, since it pulls the cavity only in $|e\rangle$, not $|g\rangle$).
 
-Combining the matrix elements, the half-difference of cavity frequencies between $|g\rangle$ and $|e\rangle$ factors neatly into
+Adding the two contributions, $\chi = g^2/\Delta - g^2/(\Delta+\alpha)$, factors neatly into
 
 $$\boxed{\ \chi = \frac{g^2}{\Delta}\cdot\frac{\alpha}{\Delta+\alpha}\ }, \qquad \alpha<0.$$
 
@@ -183,7 +183,7 @@ All values chosen for teaching, not from any device.
 
 **Step 2: two-level shift.** $\chi_\text{2lvl}/2\pi = g^2/\Delta = (0.1)^2/(-2.0) = -0.005$ GHz $= -5.0$ MHz. Naively the two cavity peaks differ by $2|\chi|=10$ MHz.
 
-**Step 3: transmon correction.** Factor $\alpha/(\Delta+\alpha) = -0.3/(-2.3) = 0.130$. So $\chi_\text{transmon}/2\pi = -5.0\times0.130 = -0.65$ MHz, about **8× smaller** than the two-level estimate. (Had $\alpha/2\pi=-2.0$ GHz, the factor would be $0.5$ and $\chi=-2.5$ MHz, the result is *very* sensitive to $\alpha/\Delta$.)
+**Step 3: transmon correction.** Factor $\alpha/(\Delta+\alpha) = -0.3/(-2.3) = 0.130$. So $\chi_\text{transmon}/2\pi = -5.0\times0.130 = -0.65$ MHz, about **8x smaller** than the two-level estimate. (Had $\alpha/2\pi=-2.0$ GHz, the factor would be $0.5$ and $\chi=-2.5$ MHz, the result is *very* sensitive to $\alpha/\Delta$.)
 
 **Step 4: readout matching.** $2|\chi_\text{transmon}|/2\pi = 1.3$ MHz vs $\kappa/2\pi=5$ MHz. Here $2\chi<\kappa$: the peaks sit inside one linewidth and are only marginally resolvable, a $\kappa$-limited corner. Fixes: raise $g$, reduce $|\Delta|$, or reduce $\kappa$ toward $2\chi\approx\kappa$. (Trusting the two-level $\chi=5$ MHz you'd wrongly conclude $2\chi=10\text{ MHz}\gg\kappa$, comfortable readout, which is *false*. This is why the multilevel formula matters.)
 
@@ -191,7 +191,7 @@ All values chosen for teaching, not from any device.
 
 **Step 6: resonant contrast.** If instead $\omega_q=\omega_r$ ($\Delta=0$), a full swap takes $T_\text{swap}=\pi/(2g)=\pi/(2\cdot2\pi\cdot100\text{ MHz})=2.5$ ns, fast, but now the qubit decays at $\kappa$.
 
-**Takeaway:** the *same* $g=100$ MHz gives a $\sim2.5$ ns swap on resonance but only a sub-MHz dispersive pull at $2$ GHz detuning, and the transmon factor cuts that pull $\sim8×$.
+**Takeaway:** the *same* $g=100$ MHz gives a $\sim2.5$ ns swap on resonance but only a sub-MHz dispersive pull at $2$ GHz detuning, and the transmon factor cuts that pull $\sim8\times$.
 
 ## Resonant vs dispersive at a glance
 
@@ -207,7 +207,7 @@ All values chosen for teaching, not from any device.
 
 ## Common pitfalls
 
-- **"$\chi=g^2/\Delta$ for transmons."** No, that's the two-level result. Use $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$; the factor can shrink $\chi$ several-fold (8× above).
+- **"$\chi=g^2/\Delta$ for transmons."** No, that's the two-level result. Use $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$; the factor can shrink $\chi$ several-fold (8x above).
 - **"A linear resonator could be read out dispersively too."** No, for a harmonic mode the $|g\rangle\!-\!|e\rangle$ and $|e\rangle\!-\!|f\rangle$ contributions cancel and $\chi=0$. Anharmonicity is essential.
 - **"The RWA is always fine."** Only for $g\ll\omega_q,\omega_r$. Near $g/\omega_r\sim0.1$ (ultrastrong) counter-rotating terms matter.
 - **"In the dispersive regime the cavity exchanges energy / stores the bus photon."** Real exchange is suppressed; shifts are virtual. The bus resonator stays in its ground state.
