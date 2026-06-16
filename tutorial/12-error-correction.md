@@ -6,7 +6,7 @@ By now you've met the transmon, learned how it decoheres with timescales $T_1$ a
 
 Classical computers fight errors by redundancy: store a bit three times, take a majority vote. Quantum mechanics forbids the naive version of this for two independent reasons:
 
-1. **No-cloning theorem.** There is no unitary that maps $|\psi\rangle|00\rangle \to |\psi\rangle|\psi\rangle|\psi\rangle$ for an *arbitrary unknown* $|\psi\rangle$. (Linearity of $U$ is incompatible with cloning a general superposition, try it on $|0\rangle$ and $|1\rangle$, then on $\tfrac{1}{\sqrt2}(|0\rangle+|1\rangle)$, and the two predictions disagree.)
+1. **No-cloning theorem.** There is no unitary that maps $|\psi\rangle|0\rangle \to |\psi\rangle|\psi\rangle$ for an *arbitrary unknown* $|\psi\rangle$. (Linearity of $U$ is incompatible with cloning a general superposition, try it on $|0\rangle$ and $|1\rangle$, then on $\tfrac{1}{\sqrt2}(|0\rangle+|1\rangle)$, and the two predictions disagree.)
 2. **Measurement back-action.** Even if you *could* copy, directly *measuring* a qubit to check it collapses its superposition and destroys the amplitude information you were trying to protect.
 
 The escape: encode one **logical** qubit across many physical qubits, and measure only *correlations between qubits*, never the qubits themselves. These correlation measurements are called **stabilizers**.
@@ -71,6 +71,8 @@ $$E = c_I\, I + c_X\, X + c_Y\, Y + c_Z\, Z.$$
 
 So the analog noise of the lab gets **digitized** into a discrete $\{X,Y,Z\}$ the moment we look at the syndrome. Correcting those three corrects *all* small errors. This is why a finite code can tame continuous noise.
 
+> **The exception: leakage.** Digitization assumes every error stays inside the computational $\{|0\rangle,|1\rangle\}$ subspace, where the Paulis are a complete basis. A transmon can instead **leak** to $|2\rangle$ and higher (recall the weak anharmonicity of [Chapter 4](04-transmon.md) and the DRAG story of [Chapter 7](07-single-qubit-gates.md)). A leaked state is *not* any combination of $\{I,X,Y,Z\}$, so it escapes the Pauli-digitization argument and corrupts every stabilizer it touches. Real QEC stacks therefore add **leakage-reduction units** or explicit **reset** to pump population back into the qubit subspace, on top of the Pauli correction.
+
 ## A genuine code: phase-flips, then Shor's nine
 
 The bit-flip code is blind to **phase** errors ($Z$). Its **Hadamard dual**, the phase-flip code, fixes that by working in the $\pm$ basis:
@@ -91,6 +93,8 @@ arbitrary errors, the quantum analogue of classical sphere-packing: errors of we
 | phase-flip | $[[3,1,3]]$ | $X_1X_2,\ X_2X_3$ | one $Z$ | toy (Hadamard dual) |
 | Shor | $[[9,1,3]]$ | 8 checks | any single error | first full code |
 | surface | $[[d^2+(d-1)^2,\,1,\,d]]$ | weight-4 $X$ & $Z$ | up to $t$ | 2D nearest-neighbour |
+
+A caveat on the two repetition rows: the $d=3$ there is the distance against the *one* error type each code handles (three $X$'s flip the bit-flip code's logical state). As a *full quantum* code each has distance $1$, since a single $Z$ on the bit-flip code (or a single $X$ on the phase-flip code) is an undetected logical operator of weight $1$ by the definition above. That is exactly why neither protects a general qubit, and why Shor's $[[9,1,3]]$, which concatenates the two, is the first code with genuine quantum distance $3$.
 
 ## The surface code
 
@@ -121,7 +125,7 @@ A **logical operator** is a chain of single-qubit Paulis stretching all the way 
 
 ### Syndromes live in spacetime
 
-One honest complication the toy story hides: **syndrome extraction is itself noisy.** Each weight-4 check is read by *one* ancilla through a sequence of ~4 CNOT/CZ gates, plus ancilla reset and readout, every one of which can fail. So we cannot trust a single round's syndrome. The fix: repeat the measurement for *many* rounds and decode the whole **$(2{+}1)$D spacetime volume** at once (two space dimensions plus time).
+One honest complication the toy story hides: **syndrome extraction is itself noisy.** Each weight-4 check is read by *one* ancilla through a sequence of 4 CNOT/CZ gates (one per data qubit in the stabilizer), plus ancilla reset and readout, every one of which can fail. So we cannot trust a single round's syndrome. The fix: repeat the measurement for *many* rounds and decode the whole **$(2{+}1)$D spacetime volume** at once (two space dimensions plus time).
 
 ```mermaid
 flowchart TD
