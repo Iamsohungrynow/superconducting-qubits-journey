@@ -37,10 +37,10 @@ A dilution refrigerator gives you a ladder of plates, each colder than the last,
 | Stage | Temp (illustrative) | Cooling power (order, illustrative) | Input-line attenuation here | Output-line component | Coax material |
 |---|---|---|---|---|---|
 | Room | 300 K | (plant) | source / AWG | digitizer | Cu |
-| 50 K | 50 K | $\sim 1$ W |, |, | stainless |
+| 50 K | 50 K | $\sim 30$ W | 0-20 dB | (none) | stainless |
 | 4 K | 4 K | $\sim 1$ W | 20 dB | HEMT amp | stainless |
-| Still | ~0.8 K | $\sim 10$ mW | 10-20 dB |, | NbTi |
-| Cold | ~0.1 K | $\sim 100\ \mu$W | (light) |, | NbTi |
+| Still | ~0.8 K | $\sim 10$ mW | 10-20 dB | (none) | NbTi |
+| Cold | ~0.1 K | $\sim 100\ \mu$W | (light) | (none) | NbTi |
 | MXC | ~10 mK | $\sim 10$-$50\ \mu$W | 20 dB | TWPA, isolators, **chip** | NbTi |
 
 There are **two distinct heat loads** on every coax line, and they pull cable design in opposite directions:
@@ -62,7 +62,7 @@ Model a matched attenuator of power-attenuation factor $A$ (so 20 dB $\Rightarro
 
 $$T_{\text{noise}}^{\text{out}} = \frac{T_{\text{noise}}^{\text{in}}}{A_i} + \left(1 - \frac{1}{A_i}\right) T_i, \qquad \bar n_{\text{out}} = \frac{\bar n_{\text{in}}}{A_i} + \left(1 - \frac{1}{A_i}\right)\bar n(\omega, T_i).$$
 
-This is the **rigorous version** of the heuristic $\bar n_{\text{eff}} \approx \sum_i \bar n(\omega,T_i)/A_i^{\text{cum}}$. Cascade it: feed each stage's output into the next, colder attenuator. The residual warm contribution is suppressed by the *product* of all subsequent attenuations, so **the line leaves each attenuator carrying that attenuator's temperature, and the coldest, last one wins.**
+This is the **rigorous version** of the heuristic $\bar n_{\text{eff}} \approx \sum_i \bar n(\omega,T_i)/A_i^{\text{cum}}$. Cascade it: feed each stage's **full** output (not just its transmitted fraction) into the next, colder attenuator. Each attenuator re-emits at its own temperature, while any warmer residual is suppressed only by the product of the attenuations that *follow* it, so enough total cold attenuation drives the occupation down toward the base-temperature floor.
 
 ```
 input noise ~16 photons (from 4 K)
@@ -71,12 +71,14 @@ input noise ~16 photons (from 4 K)
    │ATT 20dB │        │ATT 10dB │        │ATT 20dB │
    │  @4 K   │──────▶│ @100 mK │──────▶│ @10 mK  │────▶ to chip
    └─────────┘        └─────────┘        └─────────┘
- n_out = 16/100        n_out≈0.16/10       n_out≈0.016/100
-   + (1-1/100)·16        + ~0.99·0.09         + ~0.99·4e-11
-   ≈ 0.16 + ~16          ≈ 0.016 + ~0.089     ≈ 1.6e-4 + ~4e-11
-   (carries 4 K)         (carries 100 mK)     ≈ 1.6e-4  (carries 10 mK)
+ n = 16/100           n = 16/10           n = 1.7/100
+   + 0.99·16            + 0.9·0.09           + 0.99·4e-11
+   ≈ 0.16 + 16          ≈ 1.6 + 0.08         ≈ 0.017 + 4e-11
+   ≈ 16                 ≈ 1.7                ≈ 0.017
+ (resets to 4 K)      (4 K leak through     (4 K leak through the
+                       only 10 dB dominates) last 20 dB still dominates)
 ```
-*Each attenuator resets the line to its own temperature; numbers illustrative.*
+*Each attenuator re-emits at its own temperature, but the surviving 4 K residual is suppressed only by the attenuation downstream of it. Here 50 dB total still leaves $\sim 0.017$ photon, set by residual 4 K leakage rather than the 10 mK stage's own $\sim 4\times10^{-11}$ emission, which is exactly why real input lines pile on 40-60 dB. Numbers illustrative.*
 
 Total staged input attenuation is typically 40-60 dB (illustrative), and the choice per stage is bounded **below by noise** (you need enough *cold* attenuation to reach the floor) and **above by heat** (each dB dumps power on a cold plate). That is why you can't just put 60 dB at one place.
 
@@ -159,7 +161,7 @@ The TWPA's 0.30 K **dominates**; the 5 K HEMT shrinks to 0.05 K once divided by 
 
 $$\eta = \frac{0.5}{1.54} \approx 0.32 \quad (\sim 32\%, \text{ illustrative}).$$
 
-**Now delete the TWPA.** With the HEMT first, $T_{\text{sys}} = 5 + 75/10^4 = 5.0075\,$K $\Rightarrow n_{\text{add}} = 14.9$ photons, $\eta = 0.5/15.4 \approx 3\%$. The TWPA improves input-referred added noise by **~14×** and efficiency by **~10×**. Since the integration time to reach a fixed single-shot SNR scales roughly with added-noise power, that ~14× cut shortens the readout time by a similar factor, *that* is why a good first amplifier "transforms readout fidelity."
+**Now delete the TWPA.** With the HEMT first, $T_{\text{sys}} = 5 + 75/10^4 = 5.0075\,$K $\Rightarrow n_{\text{add}} = 14.9$ photons, $\eta = 0.5/15.4 \approx 3\%$. The TWPA improves input-referred added noise by **~14x** and efficiency by **~10x**. Since the integration time to reach a fixed single-shot SNR scales roughly with added-noise power, that ~14x cut shortens the readout time by a similar factor, *that* is why a good first amplifier "transforms readout fidelity."
 
 **Input-side sanity check.** A 7 GHz tone entering at 300 K carries $\bar n(7\text{ GHz}, 300\text{ K}) = 1/(e^{0.336/300}-1) \approx 892$ photons. To push this below ~0.01 at the chip you need $\sim 892/0.01 \approx 10^5 = 50\,$dB of cold attenuation, exactly the standard 40-60 dB staged budget, with the **last 20 dB at the MXC** so the residual line temperature is the MXC attenuator's, not 300 K.
 
