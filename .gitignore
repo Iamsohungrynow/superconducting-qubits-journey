@@ -1,0 +1,27 @@
+# ─────────────────────────────────────────────────────────────────────────
+# SAFETY DEFAULT: this repo publishes NO PDFs. It ships as Markdown only.
+#
+# Decision: the only papers being shared are the two reviews below, and they
+# are shared as arXiv LINKS in the README (the free, legitimate versions) —
+# NOT by hosting their copyrighted publisher PDFs:
+#     • Krantz et al.,  A Quantum Engineer's Guide…    → arXiv:1904.06560
+#     • Kjaergaard et al.,  Current State of Play       → arXiv:1905.13641
+#
+# Everything else in this folder is confidential (IQM report, vendor
+# datasheets), copyrighted, internal lab setup, or personal (thesis / QE
+# report) — so every PDF is blocked. Add a curated link to the README to
+# "share" a paper; never commit the file.
+# ─────────────────────────────────────────────────────────────────────────
+
+# Block every PDF + the standalone HTML so nothing sensitive is ever committed
+*.pdf
+*.html
+
+# Your private "quantum hardware tutorial" slide deck — block the WHOLE folder,
+# not just its PDFs, so images/pptx/etc. added there later can't leak either
+quantum hardware tutorial/
+
+# OS / editor cruft
+.DS_Store
+.vscode/
+*.swp
