@@ -25,3 +25,7 @@ quantum hardware tutorial/
 .DS_Store
 .vscode/
 *.swp
+
+# Python run artifacts from the hands-on labs
+__pycache__/
+*.pyc
