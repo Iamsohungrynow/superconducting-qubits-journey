@@ -5,7 +5,7 @@ We use the Lindblad master equation (mesolve) to model:
   1. T1 inversion recovery: an excited qubit relaxes to the ground state.
   2. Pure dephasing + Ramsey: a superposition loses phase coherence and the
      Ramsey signal <sx> oscillates (because of a detuning) under a decaying
-     envelope set by T2*.
+     envelope set by the Markovian Ramsey T2.
 
 We then numerically verify the standard coherence relation:
       1/T2 = 1/(2*T1) + 1/Tphi
@@ -84,13 +84,13 @@ peak_idx = [i for i in range(1, len(abs_Sx) - 1)
 peak_t = t2_times[peak_idx]
 peak_v = abs_Sx[peak_idx]
 slope = np.polyfit(peak_t, np.log(peak_v), 1)[0]
-T2star_fit = -1.0 / slope
+T2_fit = -1.0 / slope
 
 # ---------------------------------------------------------------------------
 # Consistency check: measured T2 vs predicted 1/(1/(2 T1) + 1/Tphi)
 # ---------------------------------------------------------------------------
 inv_T2_from_parts = 1.0 / (2.0 * T1) + 1.0 / Tphi
-inv_T2_measured = 1.0 / T2star_fit
+inv_T2_measured = 1.0 / T2_fit
 
 print("=== T1 relaxation ===")
 print(f"  input  T1            = {T1:.2f} us")
@@ -98,7 +98,7 @@ print(f"  fitted T1            = {T1_fit:.2f} us")
 print()
 print("=== T2 Ramsey (dephasing) ===")
 print(f"  predicted T2         = {T2_pred:.2f} us")
-print(f"  fitted    T2*        = {T2star_fit:.2f} us")
+print(f"  fitted    T2         = {T2_fit:.2f} us")
 print()
 print("=== Consistency: 1/T2 = 1/(2 T1) + 1/Tphi ===")
 print(f"  1/(2 T1) + 1/Tphi    = {inv_T2_from_parts:.5f} 1/us")
@@ -119,11 +119,11 @@ ax1.legend()
 ax1.grid(alpha=0.3)
 
 ax2.plot(t2_times, Sx, lw=1, label="<sx>(t)")
-ax2.plot(t2_times, np.exp(-t2_times / T2star_fit), "r--", lw=1.5, label="+envelope")
-ax2.plot(t2_times, -np.exp(-t2_times / T2star_fit), "r--", lw=1.5)
+ax2.plot(t2_times, np.exp(-t2_times / T2_fit), "r--", lw=1.5, label="+envelope")
+ax2.plot(t2_times, -np.exp(-t2_times / T2_fit), "r--", lw=1.5)
 ax2.set_xlabel("time [us]")
 ax2.set_ylabel("<sx>")
-ax2.set_title(f"Ramsey fringes  (fit T2* = {T2star_fit:.1f} us)")
+ax2.set_title(f"Ramsey fringes  (fit T2 = {T2_fit:.1f} us)")
 ax2.legend()
 ax2.grid(alpha=0.3)
 
