@@ -41,9 +41,9 @@ Start with the simplest superconducting circuit: an inductor and a capacitor, an
 ```
   LC oscillator (harmonic)            Transmon (anharmonic)
   ───────────────── |3⟩               ───────────────── |3⟩
-        ↕ ħω                                ↕ ħω₀₁ + 2α
+        ↕ ħω                                ↕ ħ(ω₀₁ + 2α)
   ───────────────── |2⟩               ───────────────── |2⟩
-        ↕ ħω                                ↕ ħω₀₁ + α   (smaller, α<0)
+        ↕ ħω                                ↕ ħ(ω₀₁ + α)   (smaller, α<0)
   ───────────────── |1⟩               ───────────────── |1⟩
         ↕ ħω                                ↕ ħω₀₁
   ───────────────── |0⟩               ───────────────── |0⟩
@@ -89,7 +89,7 @@ flowchart TD
   H["One Hamiltonian<br/>E_C, E_J terms"] --> R{"Ratio<br/>E_J/E_C ?"}
   R -->|"~ 1"| CPB["Cooper-pair box<br/>(charge qubit):<br/>large anharmonicity"]
   CPB --> CPB2["But charge-noise<br/>sensitive"]
-  R -->|">> 1"| TR["Transmon:<br/>weak anharmonicity<br/>alpha ~ -E_C"]
+  R -->|">> 1"| TR["Transmon:<br/>weak anharmonicity<br/>alpha/2pi ~ -E_C/h"]
   TR --> TR2["Charge dispersion<br/>~ exp(-sqrt(8 E_J/E_C))"]
   TR2 --> SS["Sweet spot<br/>E_J/E_C ~ 50-100<br/>(illustrative)"]
 ```
@@ -101,9 +101,9 @@ Let's derive the transmon limit ($E_J/E_C\gg 1$) step by step.
 3. Introduce ladder operators; the quartic term becomes a Duffing perturbation $-\tfrac{E_C}{12}(b+b^\dagger)^4$.
 4. First-order perturbation theory on each level gives the transition frequencies, and hence
 
-$$\boxed{\;\hbar\omega_q \approx \sqrt{8E_JE_C} - E_C, \qquad \alpha \approx -E_C.\;}$$
+$$\boxed{\;\omega_{01} \approx \frac{\sqrt{8E_JE_C}-E_C}{\hbar}, \qquad \alpha \equiv \omega_{12}-\omega_{01} \approx -\frac{E_C}{\hbar}.\;}$$
 
-So $E_C$ alone sets the anharmonicity, and the geometric mean of $E_J$ and $E_C$ sets the frequency. *You choose the atom* with two numbers.
+So $E_C/\hbar$ sets the angular anharmonicity, and the geometric mean of $E_J$ and $E_C$ sets the frequency. *You choose the atom* with two numbers.
 
 ### Why push $E_J/E_C$ large? The trade-off that created the transmon
 
@@ -120,23 +120,23 @@ That asymmetry is the *entire justification* for the transmon: you pay a small, 
 
 > **Worked example: designing a transmon (all numbers illustrative).**
 > **Goal:** $\omega_q/2\pi = 5.0$ GHz with $\alpha/2\pi = -300$ MHz.
-> 1. **$E_C$ from $\alpha$.** Since $\alpha \approx -E_C/h$, we need $E_C/h = 300$ MHz.
+> 1. **$E_C$ from $\alpha$.** Since $\alpha/2\pi \approx -E_C/h$, we need $E_C/h = 300$ MHz.
 > 2. **The capacitor.** $E_C = e^2/2C \Rightarrow C = e^2/2E_C = (1.602\times10^{-19})^2 / (2\cdot 6.626\times10^{-34}\cdot 3.0\times10^{8}) \approx 65$ fF, a realistic shunt capacitance.
 > 3. **$E_J$ from $\omega_q$.** Invert $\sqrt{8E_JE_C} = h(5.0+0.30)$ GHz $\Rightarrow E_J = (5.30)^2/(8\cdot0.30)\,h$ GHz $\approx h\cdot 11.7$ GHz.
 > 4. **Check the regime.** $E_J/E_C = 11.7/0.30 \approx 39 \gg 1$, the perturbative formulas are self-consistent.
 > 5. **Relative anharmonicity.** $-300/5000 = -6\%$, matching $-(8\cdot39)^{-1/2}\approx-5.7\%$.
-> 6. **Charge-noise check.** $\epsilon \sim e^{-\sqrt{8\cdot39}} = e^{-17.7}\approx 2\times10^{-8}$ of $E_C$, utterly negligible.
+> 6. **Charge-noise check.** The exponential alone is $e^{-\sqrt{8\cdot39}}\approx2\times10^{-8}$, but Koch's prefactor matters. The same asymptotic formula gives $\epsilon_0/E_C\sim5\times10^{-6}$ and $\epsilon_1/E_C\sim-3.5\times10^{-4}$, so the $0\to1$ charge dispersion is of order $10^5$ Hz for $E_C/h=300$ MHz: small next to a 5 GHz qubit, but not the bare exponential by itself.
 > 7. **The junction.** $E_J = I_c\Phi_0/2\pi \Rightarrow I_c = 2\pi(h\cdot11.7\times10^9)/(2.07\times10^{-15}) \approx 23$ nA, a typical Al/AlOₓ junction.
 >
-> **Takeaway:** two target numbers (frequency, anharmonicity) fix two circuit elements ($C\approx65$ fF, $I_c\approx23$ nA), and the design lands self-consistently deep in the charge-insensitive regime.
+> **Takeaway:** two target numbers (frequency, anharmonicity) fix two circuit elements ($C\approx65$ fF, $I_c\approx23$ nA), and the design lands in the transmon regime with strongly reduced, though not literally exponent-only, charge dispersion.
 
 ## Reading the qubit: circuit QED
 
-You measure a transmon without touching it directly. Couple it to a microwave resonator (coupling strength $g$). In the **dispersive limit**, qubit and resonator far detuned, $|g/\Delta|\ll1$ with $\Delta = \omega_q-\omega_r$, a Schrieffer-Wolff transformation of the Jaynes-Cummings Hamiltonian removes the direct photon exchange and leaves a state-dependent cavity pull. For a *two-level* system this would be $\chi_0 = g^2/\Delta$, but a transmon has a $|2\rangle$ state nearby, and including it gives the correct multilevel shift:
+You measure a transmon without touching it directly. Couple it to a microwave resonator (coupling strength $g$). In the **dispersive limit**, qubit and resonator far detuned, $|g/\Delta|\ll1$ with $\Delta = \omega_q-\omega_r$, a Schrieffer-Wolff transformation of the Jaynes-Cummings Hamiltonian removes the direct photon exchange and leaves a state-dependent cavity pull. Here $g,\Delta,\alpha,\chi,\kappa$ are angular-frequency quantities. For a *two-level* system this would be $\chi_0 = g^2/\Delta$, but a transmon has a $|2\rangle$ state nearby, and including it gives the correct multilevel shift:
 
 $$\chi \approx \frac{g^2\,\alpha}{\Delta(\Delta+\alpha)}.$$
 
-The resonator frequency moves to $\omega_r \pm \chi$ depending on whether the qubit is in $|0\rangle$ or $|1\rangle$. You send a probe tone through a cavity of linewidth $\kappa$ and read which way it shifted, you measure the *cavity*, never the qubit, which is exactly why the measurement is **QND** (quantum non-demolition) and can be repeated. Good readout wants $\chi \sim \kappa/2$. But coupling too hard opens a **Purcell** channel: the qubit relaxes through the resonator at rate $\sim\kappa(g/\Delta)^2$. Purcell filters and large $\Delta$ tame it. (This satisfies criterion 5, qubit-specific readout.)
+The two dressed resonator frequencies are separated by $2|\chi|$; after absorbing the common Lamb shift into $\omega_r$, this is often written as $\omega_r\pm\chi$. You send a probe tone through a cavity of linewidth $\kappa$ and read which way it shifted. In the dispersive approximation the leading interaction is a cross-Kerr term proportional to $a^\dagger a\,\sigma_z$, which commutes with $\sigma_z$; that is why the measurement is approximately **QND** (quantum non-demolition) and can be repeated, so long as Purcell decay, leakage, and measurement-induced transitions remain small. Good readout wants $\chi \sim \kappa/2$. But coupling too hard opens a **Purcell** channel: the qubit relaxes through the resonator at rate $\sim\kappa(g/\Delta)^2$. Purcell filters and large $\Delta$ tame it. (This satisfies criterion 5, qubit-specific readout.)
 
 ## What makes them hard
 
@@ -191,8 +191,8 @@ flowchart TD
 
 - Superconducting qubits are *engineerable artificial atoms*: you set $\omega_q$, $\alpha$, $g$ by circuit design, not by nature.
 - One Hamiltonian, $H = 4E_C(\hat n-n_g)^2 - E_J\cos\hat\varphi$, generates everything; the ratio $E_J/E_C$ chooses between Cooper-pair box and transmon.
-- The transmon won because charge dispersion dies *exponentially* in $\sqrt{8E_J/E_C}$ while anharmonicity only weakens as a power law: $\hbar\omega_q\approx\sqrt{8E_JE_C}-E_C$, $\alpha\approx-E_C$.
-- Readout is dispersive cQED: $\chi = g^2\alpha/[\Delta(\Delta+\alpha)]$, a QND cavity pull of $\pm\chi$ against linewidth $\kappa$, traded against Purcell decay.
+- The transmon won because charge dispersion dies *exponentially* in $\sqrt{8E_J/E_C}$ while anharmonicity only weakens as a power law: $\omega_{01}\approx(\sqrt{8E_JE_C}-E_C)/\hbar$, $\alpha\approx-E_C/\hbar$.
+- Readout is dispersive cQED: $\chi = g^2\alpha/[\Delta(\Delta+\alpha)]$, an approximately QND dressed-cavity pull with separation $2|\chi|$ against linewidth $\kappa$, traded against Purcell decay.
 - Coherence obeys $1/T_2 = 1/2T_1 + 1/T_\phi$, fought against TLS defects, quasiparticles, flux and photon noise.
 - The millikelvin fridge enforces $k_BT\ll\hbar\omega_q$ (initialization), a *different* requirement from superconducting $T_c$.
 - Hard problems map to the DiVincenzo rubric: coherence, crosstalk/frequency collisions, and cryogenic wiring/heat load.
