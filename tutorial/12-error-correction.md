@@ -9,7 +9,7 @@ Classical computers fight errors by redundancy: store a bit three times, take a 
 1. **No-cloning theorem.** There is no unitary that maps $|\psi\rangle|0\rangle \to |\psi\rangle|\psi\rangle$ for an *arbitrary unknown* $|\psi\rangle$. (Linearity of $U$ is incompatible with cloning a general superposition, try it on $|0\rangle$ and $|1\rangle$, then on $\tfrac{1}{\sqrt2}(|0\rangle+|1\rangle)$, and the two predictions disagree.)
 2. **Measurement back-action.** Even if you *could* copy, directly *measuring* a qubit to check it collapses its superposition and destroys the amplitude information you were trying to protect.
 
-The escape: encode one **logical** qubit across many physical qubits, and measure only *correlations between qubits*, never the qubits themselves. These correlation measurements are called **stabilizers**.
+The escape: encode one **logical** qubit across many physical qubits, and measure only *correlations between qubits*, never the qubits themselves. The Pauli correlation operators are **stabilizers**; their measured eigenvalues are the **syndrome**.
 
 ## The three-qubit bit-flip code, built honestly
 
@@ -36,7 +36,7 @@ flowchart TD
 
 ### Stabilizers: asking "did an error happen?" without asking "what's the state?"
 
-Instead of measuring any qubit, we measure two **parity-check stabilizers**:
+Instead of measuring any data qubit directly, we measure the eigenvalues of two **parity-check stabilizer operators**:
 
 $$S_1 = Z_1 Z_2, \qquad S_2 = Z_2 Z_3, \qquad [S_1, S_2] = 0.$$
 
@@ -64,12 +64,12 @@ A real superconducting qubit doesn't suffer tidy discrete flips; it drifts under
 
 $$E = c_I\, I + c_X\, X + c_Y\, Y + c_Z\, Z.$$
 
-- The four Paulis $\{I,X,Y,Z\}$ are a complete basis for any $2\times2$ operator, so **every** single-qubit error's Kraus operators are linear combinations of them.
+- Within the computational subspace, the four Paulis $\{I,X,Y,Z\}$ are a complete basis for any $2\times2$ operator, so **every** single-qubit error's Kraus operators are linear combinations of them.
 - Apply $E$ to an encoded state, then measure the stabilizers. This is a *projective* operation onto syndrome subspaces.
 - Each Pauli branch carries a definite syndrome. The measurement **collapses** the superposition of branches onto *one* outcome, with the corresponding probability.
-- What's left is a single, *known* Pauli (up to a stabilizer) that the decoder removes.
+- For a code whose recovery corrects that Pauli set, what's left is a single, *known* Pauli (up to a stabilizer) that the decoder removes.
 
-So the analog noise of the lab gets **digitized** into a discrete $\{X,Y,Z\}$ the moment we look at the syndrome. Correcting those three corrects *all* small errors. This is why a finite code can tame continuous noise.
+So the analog noise of the lab gets **digitized** into a discrete $\{X,Y,Z\}$ the moment we look at the syndrome. In a full single-qubit-error-correcting code, correcting those three corrects arbitrary single-qubit errors. This is why a finite code can tame continuous noise.
 
 > **The exception: leakage.** Digitization assumes every error stays inside the computational $\{|0\rangle,|1\rangle\}$ subspace, where the Paulis are a complete basis. A transmon can instead **leak** to $|2\rangle$ and higher (recall the weak anharmonicity of [Chapter 4](04-transmon.md) and the DRAG story of [Chapter 7](07-single-qubit-gates.md)). A leaked state is *not* any combination of $\{I,X,Y,Z\}$, so it escapes the Pauli-digitization argument and corrupts every stabilizer it touches. Real QEC stacks therefore add **leakage-reduction units** or explicit **reset** to pump population back into the qubit subspace, on top of the Pauli correction.
 
@@ -87,27 +87,27 @@ $$t = \left\lfloor \tfrac{d-1}{2} \right\rfloor$$
 
 arbitrary errors, the quantum analogue of classical sphere-packing: errors of weight $\le t$ live in disjoint "syndrome spheres." So $d=3$ corrects one error, $d=5$ corrects two, $d=7$ corrects three.
 
-| Code | $[[n,k,d]]$ | Stabilizers | Corrects | Hardware note |
+| Code | Formal quantum distance | Stabilizers | Corrects | Hardware note |
 |------|:---:|---|---|---|
-| bit-flip | $[[3,1,3]]$ | $Z_1Z_2,\ Z_2Z_3$ | one $X$ | toy |
-| phase-flip | $[[3,1,3]]$ | $X_1X_2,\ X_2X_3$ | one $Z$ | toy (Hadamard dual) |
+| bit-flip repetition | $[[3,1,1]]$; biased $X$-distance 3 | $Z_1Z_2,\ Z_2Z_3$ | one $X$ only | toy |
+| phase-flip repetition | $[[3,1,1]]$; biased $Z$-distance 3 | $X_1X_2,\ X_2X_3$ | one $Z$ only | toy (Hadamard dual) |
 | Shor | $[[9,1,3]]$ | 8 checks | any single error | first full code |
-| surface | $[[d^2+(d-1)^2,\,1,\,d]]$ | weight-4 $X$ & $Z$ | up to $t$ | 2D nearest-neighbour |
+| surface | $[[d^2+(d-1)^2,\,1,\,d]]$ data qubits for one planar layout | local $X$ & $Z$ checks | up to $t$ | 2D nearest-neighbour |
 
-A caveat on the two repetition rows: the $d=3$ there is the distance against the *one* error type each code handles (three $X$'s flip the bit-flip code's logical state). As a *full quantum* code each has distance $1$, since a single $Z$ on the bit-flip code (or a single $X$ on the phase-flip code) is an undetected logical operator of weight $1$ by the definition above. That is exactly why neither protects a general qubit, and why Shor's $[[9,1,3]]$, which concatenates the two, is the first code with genuine quantum distance $3$.
+The repetition rows are deliberately biased codes: their distance is 3 only against the one error type each code is designed to correct (three $X$'s flip the bit-flip code's logical state). As a *full quantum* code each has distance $1$, since a single $Z$ on the bit-flip code (or a single $X$ on the phase-flip code) is an undetected logical operator of weight $1$ by the definition above. That is exactly why neither protects a general qubit, and why Shor's $[[9,1,3]]$, which concatenates the two, is the first code with genuine quantum distance $3$.
 
 ## The surface code
 
-The surface code is today's front-runner for superconducting hardware, and the reason is mundane but decisive: it only needs **nearest-neighbour** couplings on a 2D grid, exactly what fixed-layout chips provide. **Data** qubits ($D$) sit on a lattice; interleaved **measure** (ancilla) qubits each repeatedly measure a local four-body stabilizer:
+The surface code is today's front-runner for superconducting hardware, and the reason is mundane but decisive: it only needs **nearest-neighbour** couplings on a 2D grid, exactly what fixed-layout chips provide. **Data** qubits ($D$) sit on a lattice; interleaved **measure** (ancilla) qubits repeatedly measure local stabilizers. Bulk checks are four-body, while boundary checks have lower weight:
 
 $$S_X = X_a X_b X_c X_d, \qquad S_Z = Z_a Z_b Z_c Z_d, \qquad [S_X, S_Z] = 0.$$
 
-Why do these commute (so they can run in parallel)? Step by step:
+Why do these commute (so their eigenvalues can be extracted in the same QEC round)? Step by step:
 
 - On any *single* shared qubit, $X$ and $Z$ anticommute ($XZ = -ZX$), contributing a $-1$ when you slide one stabilizer past the other.
 - The geometry forces every $X$-plaquette and $Z$-plaquette to share **0 or 2** data qubits.
 - Sliding $S_X$ past $S_Z$ gives $(-1)^{\text{shared}} = (-1)^{\text{even}} = +1$, so $[S_X,S_Z]=0$.
-- Commuting stabilizers share an eigenbasis → a well-defined code space, measurable in parallel every round.
+- Commuting stabilizers share an eigenbasis → a well-defined code space; hardware still schedules the shared-qubit gates inside each round.
 
 ```
    X     X     X         D = data qubit
@@ -125,7 +125,7 @@ A **logical operator** is a chain of single-qubit Paulis stretching all the way 
 
 ### Syndromes live in spacetime
 
-One honest complication the toy story hides: **syndrome extraction is itself noisy.** Each weight-4 check is read by *one* ancilla through a sequence of 4 CNOT/CZ gates (one per data qubit in the stabilizer), plus ancilla reset and readout, every one of which can fail. So we cannot trust a single round's syndrome. The fix: repeat the measurement for *many* rounds and decode the whole **$(2{+}1)$D spacetime volume** at once (two space dimensions plus time).
+One honest complication the toy story hides: **syndrome extraction is itself noisy.** Each bulk weight-4 check is read by *one* ancilla through a sequence of 4 CNOT/CZ gates (one per data qubit in the stabilizer), plus ancilla reset and readout, every one of which can fail. So we cannot trust a single round's syndrome. The fix: repeat the measurement for *many* rounds and decode the whole **$(2{+}1)$D spacetime volume** at once (two space dimensions plus time).
 
 ```mermaid
 flowchart TD
@@ -150,9 +150,9 @@ defect pair (harmless, local):     spanning chain (logical FAILURE):
 
 The obvious worry: more qubits means more places to fail, and the correction circuitry is itself faulty. Does scaling help or hurt? The **threshold theorem** answers: if the physical error rate $p$ per operation is below a code-specific critical value $p_{\text{th}}$, then the **logical** error rate falls fast as you scale up:
 
-$$p_L \;\sim\; A\left(\frac{p}{p_{\text{th}}}\right)^{\lfloor (d+1)/2 \rfloor}, \qquad \Lambda \equiv \frac{p_L(d)}{p_L(d+2)} \approx \frac{p_{\text{th}}}{p}.$$
+$$p_L(d) \;\approx\; A_d\left(\frac{p}{p_{\text{th}}}\right)^{\lfloor (d+1)/2 \rfloor}, \qquad \Lambda \equiv \frac{p_L(d)}{p_L(d+2)} \approx \frac{A_d}{A_{d+2}}\frac{p_{\text{th}}}{p}.$$
 
-The reasoning: a logical failure needs roughly $(d{+}1)/2$ *simultaneous* physical errors to bridge the distance undetected; a specific weight-$m$ chain has probability $\sim p^m$, and counting $\sim A$ configurations gives the scaling above. Take the ratio for consecutive odd distances and the prefactors cancel, leaving $\Lambda \approx p_{\text{th}}/p$. **$\Lambda > 1$ is the operational signature of being below threshold:** every step $d \to d{+}2$ divides logical error by $\Lambda$.
+The reasoning: a logical failure needs roughly $(d{+}1)/2$ *simultaneous* physical errors to bridge the distance undetected; a specific weight-$m$ chain has probability $\sim p^m$, and counting distance-dependent configurations gives the scaling above. Take the ratio for consecutive odd distances and $\Lambda$ is roughly $p_{\text{th}}/p$ when prefactors vary slowly, with the more general prefactor ratio shown above. **$\Lambda > 1$ is the operational signature of being below threshold:** every step $d \to d{+}2$ divides logical error by $\Lambda$.
 
 > **Note.** The threshold is *not* one universal number, it depends on the code, the noise model, **and** the decoder. The surface code's $\sim 1\%$ (illustrative) assumes common conditions.
 
@@ -163,7 +163,7 @@ Numbers chosen for clean arithmetic, **not** measured values. Take $p_{\text{th}
 - **Step 1: ratio per step.** $p/p_{\text{th}} = 0.001/0.01 = 0.1$, so each factor contributes $\times 10$ suppression.
 - **Step 2: evaluate by distance:**
 
-| $d$ | exponent $(d{+}1)/2$ | $p_L \sim (0.1)^{\text{exp}}$ | vs. $d{=}3$ | physical qubits $d^2+(d-1)^2$ |
+| $d$ | exponent $(d{+}1)/2$ | $p_L \sim (0.1)^{\text{exp}}$ | vs. $d{=}3$ | data qubits $d^2+(d-1)^2$ |
 |:---:|:---:|:---:|:---:|:---:|
 | 3 | 2 | $1\times10^{-2}$ | $1$ | 13 |
 | 5 | 3 | $1\times10^{-3}$ | $\div10$ | 41 |
@@ -171,10 +171,10 @@ Numbers chosen for clean arithmetic, **not** measured values. Take $p_{\text{th}
 | 9 | 5 | $1\times10^{-5}$ | $\div1000$ | 145 |
 
 - **Step 3: read off $\Lambda$.** $\Lambda = p_{\text{th}}/p = 0.01/0.001 = 10 > 1$ → below threshold; scaling wins.
-- **Step 4: qubit cost.** Reaching $p_L \sim 10^{-5}$ costs $\sim145$ physical qubits for *one* logical qubit, the steep overhead of fault tolerance.
-- **Step 5: contrast above threshold.** If instead $p = 2\% > p_{\text{th}}$, then $p/p_{\text{th}} = 2$ and $p_L \sim 2^{(d+1)/2}$ *grows*: $d{=}3 \to 4$, $d{=}5 \to 8$. Adding qubits now makes things **worse**, the qualitative meaning of being above threshold.
+- **Step 4: qubit cost.** Reaching $p_L \sim 10^{-5}$ costs $\sim145$ data qubits in this planar layout; measurement ancillas and control hardware add comparable overhead.
+- **Step 5: contrast above threshold.** If instead $p = 2\% > p_{\text{th}}$, the below-threshold scaling no longer gives a valid probability; its formal growth signals that larger distance no longer provides exponential suppression, so logical errors approach order-one rather than improving. Adding qubits now makes things **worse**, the qualitative meaning of being above threshold.
 
-The same formula explains both why below-threshold scaling wins exponentially and why above-threshold scaling loses, and it converts a target $p_L$ into a concrete qubit budget.
+The same scaling picture explains why below-threshold operation wins exponentially and why above-threshold operation loses; within its valid domain it converts a target $p_L$ into a concrete qubit budget.
 
 ## From memory to computation
 
@@ -198,10 +198,10 @@ A recent superconducting milestone (2024-2025) demonstrated $\Lambda > 1$, an il
 ## Key takeaways
 
 - No-cloning + measurement collapse forbid classical-style redundancy; QEC instead measures **stabilizers**, parity checks that detect errors without revealing the encoded state.
-- Stabilizer measurement **digitizes** continuous noise: expanding any error in $\{I,X,Y,Z\}$ and collapsing onto one Pauli means correcting $\{X,Y,Z\}$ suffices.
-- A **stabilizer code** protects the joint $+1$ eigenspace of commuting Paulis; the progression bit-flip → phase-flip → Shor $[[9,1,3]]$ → surface code introduces $[[n,k,d]]$ and $t=\lfloor(d-1)/2\rfloor$.
-- The **surface code** uses only 2D nearest-neighbour weight-4 checks; noisy syndromes force $(2{+}1)$D spacetime decoding (MWPM / neural).
-- The **threshold theorem**: below $p_{\text{th}}$, $p_L$ drops exponentially with $d$; $\Lambda = p_{\text{th}}/p > 1$ is the operational proof that scaling wins.
+- Stabilizer measurement **digitizes** continuous noise: for a code that corrects the full single-qubit Pauli set, expanding errors in $\{I,X,Y,Z\}$ and projecting onto a syndrome makes finite recovery possible.
+- A **stabilizer code** protects the joint $+1$ eigenspace of commuting Paulis; biased repetition codes lead to Shor $[[9,1,3]]$ and then surface codes, where formal $[[n,k,d]]$ distance gives $t=\lfloor(d-1)/2\rfloor$.
+- The **surface code** uses 2D nearest-neighbour local checks, weight-4 in the bulk and lower weight at boundaries; noisy syndromes force $(2{+}1)$D spacetime decoding.
+- The **threshold theorem**: below $p_{\text{th}}$, $p_L$ drops exponentially with $d$; empirically $\Lambda>1$ is the operational proof that scaling wins.
 - A **logical qubit** is the protected subspace; reaching computation needs lattice surgery and magic-state distillation, the dominant fault-tolerance cost.
 
 ## Go deeper
