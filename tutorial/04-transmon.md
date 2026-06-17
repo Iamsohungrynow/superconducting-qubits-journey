@@ -11,9 +11,9 @@ flowchart TD
   C --> D["Charge dispersion<br/>exp(-sqrt(8 E_J/E_C))<br/>exp. suppressed"]
   D --> E["Long T2<br/>offset n_g ignorable"]
   A --> F["Potential nearly<br/>harmonic (Duffing)"]
-  F --> G["Weak anharmonicity<br/>alpha approx -E_C"]
+  F --> G["Weak anharmonicity<br/>alpha_E approx -E_C"]
   G --> H["Gate-speed limit<br/>leakage to |2><br/>-> DRAG"]
-  A --> I["w_q = sqrt(8 E_J E_C)<br/>- E_C : a few GHz"]
+  A --> I["f_01 = (sqrt(8 E_J E_C)<br/>- E_C)/h : a few GHz"]
 ```
 
 ## The circuit and its energy scales
@@ -24,12 +24,12 @@ $$H = 4 E_C\,(\hat{n} - n_g)^2 - E_J \cos\hat{\varphi}$$
 
 Here $\hat{n}$ counts excess Cooper pairs on the island, $\hat{\varphi}$ is the superconducting phase difference across the junction (conjugate to $\hat{n}$, with $[\hat\varphi,\hat n]=i$), and $n_g$ is the offset charge, the gremlin we want to defeat.
 
-Where does the factor of $4$ come from? Start from the circuit. The electrostatic energy of an island holding charge $Q$ with gate-induced offset $Q_g$ is $(Q-Q_g)^2/2C$. Charge moves in units of Cooper pairs, so write $Q = 2e\,\hat n$ and $Q_g = 2e\,n_g$. Then
+Where does the factor of $4$ come from? Start from the circuit. The electrostatic energy of the island mode is $(Q-Q_g)^2/2C_\Sigma$, where $C_\Sigma$ is the total capacitance seen by that mode. Charge moves in units of Cooper pairs, so write $Q = 2e\,\hat n$ and $Q_g = 2e\,n_g$. Then
 
-$$\frac{(2e)^2}{2C}(\hat n - n_g)^2 = \frac{2e^2}{C}(\hat n - n_g)^2 = 4E_C\,(\hat n - n_g)^2,
-\qquad E_C \equiv \frac{e^2}{2C}.$$
+$$\frac{(2e)^2}{2C_\Sigma}(\hat n - n_g)^2 = \frac{2e^2}{C_\Sigma}(\hat n - n_g)^2 = 4E_C\,(\hat n - n_g)^2,
+\qquad E_C \equiv \frac{e^2}{2C_\Sigma}.$$
 
-The convention $E_C = e^2/2C$ is the charging energy *per single electron*, and the $(2e)^2$ from pairing produces the factor $4$. The junction contributes its Josephson potential $-E_J\cos\hat\varphi$. Promote $\hat n,\hat\varphi$ to conjugate operators and you have the Hamiltonian above.
+The convention $E_C = e^2/2C_\Sigma$ is the charging energy *per single electron*, and the $(2e)^2$ from pairing produces the factor $4$. The junction contributes its Josephson potential $-E_J\cos\hat\varphi$. Promote $\hat n,\hat\varphi$ to conjugate operators and you have the Hamiltonian above.
 
 Charge qubits live around $E_J/E_C \sim 1$; transmons deliberately push it to $E_J/E_C \gtrsim 50$.
 
@@ -76,8 +76,8 @@ Now read off the observables:
 - **Qubit frequency.** $\hbar\omega_{01} = E_1-E_0 = \sqrt{8E_JE_C}\,[(1+\tfrac12)-(0+\tfrac12)] - \tfrac{E_C}{12}[(6{+}6{+}3)-(0{+}0{+}3)]$
 $= \sqrt{8E_JE_C} - \tfrac{E_C}{12}(12) = \sqrt{8E_JE_C} - E_C.$
 - **Absolute anharmonicity.** $E_{12}=E_2-E_1=\sqrt{8E_JE_C}-2E_C$, and $E_{01}=\sqrt{8E_JE_C}-E_C$, so
-$$\alpha \equiv E_{12}-E_{01} \simeq -E_C.$$
-- **Relative anharmonicity.** $\displaystyle \alpha_r \equiv \frac{\alpha}{\omega_{01}} \simeq \frac{-E_C}{\sqrt{8E_JE_C}} = -\sqrt{\frac{E_C}{8E_J}} = -\left(\frac{8E_J}{E_C}\right)^{-1/2}.$
+$$\alpha_E \equiv E_{12}-E_{01} \simeq -E_C.$$
+- **Relative anharmonicity.** $\displaystyle \alpha_r \equiv \frac{\alpha_E}{E_{01}}=\frac{\omega_{12}-\omega_{01}}{\omega_{01}} \simeq \frac{-E_C}{\sqrt{8E_JE_C}} = -\sqrt{\frac{E_C}{8E_J}} = -\left(\frac{8E_J}{E_C}\right)^{-1/2}.$
 
 Here is the energy ladder, with the crucial detail that $E_{12}$ is *smaller* than $E_{01}$ by exactly $E_C$:
 
@@ -101,7 +101,7 @@ Here is the energy ladder, with the crucial detail that $E_{12}$ is *smaller* th
 
 **The central trade-off.** Distinguish the two anharmonicities carefully:
 
-- **Absolute** $\alpha\approx -E_C$ is *roughly constant*, it sets a fixed, ns-scale gate-speed limit.
+- **Absolute** $\alpha_E\approx -E_C$ is set mainly by $E_C$: at fixed $E_C$ it is nearly independent of $E_J$, but designs that lower $E_C$ also lower $|\alpha_E|$.
 - **Relative** $\alpha_r = -(8E_J/E_C)^{-1/2}$ is the quantity that *slowly shrinks* as we push the ratio up.
 
 And $\alpha_r$ falls only as a **power law**, while charge dispersion falls **exponentially**. Exponential beats power law, so there is a wide window where the qubit is essentially charge-insensitive yet still usefully anharmonic:
@@ -122,15 +122,15 @@ And $\alpha_r$ falls only as a **power law**, while charge dispersion falls **ex
 
 Pick generic teaching values: $E_C/h = 0.25$ GHz and $E_J/h = 15$ GHz, so $E_J/E_C = 60$, comfortably in the transmon regime. *(All numbers illustrative, not from any specific device.)*
 
-**1 · Qubit frequency.** $\sqrt{8E_JE_C}/h = \sqrt{8\times15\times0.25}\ \text{GHz} = \sqrt{30}\approx 5.48$ GHz. Then $\omega_q/2\pi = 5.48 - 0.25 = \mathbf{5.23\ GHz}$, squarely in the microwave band.
+**1 · Qubit frequency.** $\sqrt{8E_JE_C}/h = \sqrt{8\times15\times0.25}\ \text{GHz} = \sqrt{30}\approx 5.48$ GHz. Then $f_{01}=\omega_{01}/2\pi=E_{01}/h=5.48 - 0.25 = \mathbf{5.23\ GHz}$, squarely in the microwave band.
 
-**2 · Anharmonicity.** Absolute: $\alpha/h = -E_C/h = \mathbf{-250\ MHz}$. Relative: $\alpha_r = -(8\times60)^{-1/2} = -(480)^{-1/2} \approx \mathbf{-4.6\%}$. Cross-check: $\alpha/\omega_q = -250/5230 = -4.8\%$, consistent to leading order.
+**2 · Anharmonicity.** Absolute: $\alpha_E/h = -E_C/h = \mathbf{-250\ MHz}$. Relative: $\alpha_r = -(8\times60)^{-1/2} = -(480)^{-1/2} \approx \mathbf{-4.6\%}$. Cross-check: $(\alpha_E/h)/f_{01} = -250/5230 = -4.8\%$, consistent to leading order.
 
-**3 · Gate-speed intuition.** A square pulse of duration $\tau$ has spectral width $\sim 1/\tau$. To avoid driving $|1\rangle\to|2\rangle$ (detuned by $|\alpha|=250$ MHz) we need $1/\tau \ll 250$ MHz, i.e. $\tau \gg 4$ ns. That is exactly why few-ns single-qubit gates need pulse shaping (e.g. **DRAG**, covered later) to suppress leakage into $|2\rangle$.
+**3 · Gate-speed intuition.** A square pulse of duration $\tau$ has spectral width $\sim 1/\tau$. To avoid driving $|1\rangle\to|2\rangle$ (detuned by $|\alpha_E|/h=250$ MHz) we need $1/\tau \ll 250$ MHz, i.e. $\tau \gg 4$ ns. That is exactly why few-ns single-qubit gates need pulse shaping (e.g. **DRAG**, covered later) to suppress leakage into $|2\rangle$.
 
-**4 · Charge dispersion.** Exponent $-\sqrt{8\times60} = -\sqrt{480}\approx -21.9$, so $e^{-21.9}\approx 3\times10^{-10}$. Even with the algebraic prefactor (tens-to-hundreds for the lowest level), $\epsilon_0$ lands in the sub-kHz range, negligible next to a 5 GHz qubit.
+**4 · Charge dispersion.** Exponent $-\sqrt{8\times60} = -\sqrt{480}\approx -21.9$, so $e^{-21.9}\approx 3\times10^{-10}$. For the ground level, $\epsilon_0/h\approx25$ Hz. The qubit transition dispersion is dominated by the first excited level; here $|\epsilon_1-\epsilon_0|/h\approx2.2$ kHz, still negligible next to a 5 GHz qubit.
 
-**The quantitative heart of the chapter.** At $E_J/E_C=60$, $\alpha_r\approx-4.6\%$ (healthy) while dispersion $\sim10^{-10}$. Double the ratio to 120: $\alpha_r$ only improves to $\sim-3.2\%$ (power law), but the exponent becomes $-\sqrt{960}\approx-31$, so dispersion $\sim e^{-31}\sim 3\times10^{-14}$, **four more orders of magnitude** for a tiny anharmonicity cost. That asymmetry *is* the transmon.
+**The quantitative heart of the chapter.** At $E_J/E_C=60$, $\alpha_r\approx-4.6\%$ (healthy) while dispersion $\sim10^{-10}$. Double the ratio to 120: $\alpha_r$ only shrinks to $\sim-3.2\%$ (power law), but the exponent becomes $-\sqrt{960}\approx-31$, so dispersion $\sim e^{-31}\sim 3\times10^{-14}$, **four more orders of magnitude** for a tiny anharmonicity cost. That asymmetry *is* the transmon.
 
 ## Making it tunable: the SQUID transmon
 
@@ -138,16 +138,18 @@ A fixed junction gives a fixed $\omega_q$. Replace the single junction with two 
 
 Two junctions in parallel give $-E_{J1}\cos\varphi_1 - E_{J2}\cos\varphi_2$ subject to the fluxoid constraint $\varphi_1-\varphi_2 = 2\pi\Phi/\Phi_0$. Combining the cosines into a single cosine of an average phase yields an amplitude $E_{J,\Sigma}\sqrt{\cos^2(\pi\Phi/\Phi_0)+d^2\sin^2(\pi\Phi/\Phi_0)}$, which rearranges to
 
-$$E_{J,\mathrm{eff}}(\Phi) = E_{J,\Sigma}\,\big|\cos(\pi\Phi/\Phi_0)\big|\,\sqrt{1 + d^2\tan^2(\pi\Phi/\Phi_0)},
+$$E_{J,\mathrm{eff}}(\Phi) = E_{J,\Sigma}\sqrt{\cos^2(\pi\Phi/\Phi_0)+d^2\sin^2(\pi\Phi/\Phi_0)},
 \qquad d=\frac{E_{J2}-E_{J1}}{E_{J1}+E_{J2}},$$
 
-with $\Phi_0=h/2e$, $E_{J,\Sigma}=E_{J1}+E_{J2}$, and **asymmetry** $d$. For $d=0$ this reduces to the symmetric $E_{J,\Sigma}|\cos(\pi\Phi/\Phi_0)|$. Substitute $E_{J,\mathrm{eff}}(\Phi)$ into $\omega_q(\Phi)=\sqrt{8E_{J,\mathrm{eff}}(\Phi)E_C}-E_C$ and flux now tunes the frequency in real time, how we bring qubits in and out of resonance for two-qubit gates.
+with $\Phi_0=h/2e$, $E_{J,\Sigma}=E_{J1}+E_{J2}$, and **asymmetry** $d$. For $d=0$ this reduces to the symmetric $E_{J,\Sigma}|\cos(\pi\Phi/\Phi_0)|$. Substitute $E_{J,\mathrm{eff}}(\Phi)$ into $\hbar\omega_{01}(\Phi)\simeq\sqrt{8E_{J,\mathrm{eff}}(\Phi)E_C}-E_C$ and flux now tunes the frequency in real time, how we bring qubits in and out of resonance for two-qubit gates.
 
 **Why asymmetry on purpose?** Real junctions are never perfectly matched, so $d\neq0$ always. But designers often *deliberately* make $d$ large: a nonzero $d$ raises the minimum of $E_{J,\mathrm{eff}}$ (it no longer reaches zero), shrinking the tuning range but flattening the curve, which reduces flux-noise sensitivity over the operating band.
 
-**Sweet spots.** Since $\omega_q\propto\sqrt{E_{J,\mathrm{eff}}}$, the slope $\partial\omega_q/\partial\Phi$ vanishes wherever $\partial E_{J,\mathrm{eff}}/\partial\Phi=0$. For the symmetric case $|\cos(\pi\Phi/\Phi_0)|$ has zero slope at $\Phi=0$ and $\Phi=\Phi_0/2$:
+**Sweet spots.** Since $\omega_q\propto\sqrt{E_{J,\mathrm{eff}}}$, the slope $\partial\omega_q/\partial\Phi$ vanishes wherever $\partial E_{J,\mathrm{eff}}/\partial\Phi=0$. For the symmetric case, the smooth flux sweet spots are at integer flux, $\Phi=k\Phi_0$. At $\Phi=\Phi_0/2$, $|\cos(\pi\Phi/\Phi_0)|$ has a cusp and $E_{J,\mathrm{eff}}=0$, so the transmon approximation no longer applies:
 
-$$\left.\frac{\partial\omega_q}{\partial\Phi}\right|_{\Phi=0}=0.$$
+$$\left.\frac{\partial\omega_q}{\partial\Phi}\right|_{\Phi=k\Phi_0}=0.$$
+
+For $d\neq0$, the nonsingular asymmetric expression also has a smooth extremum at $\Phi=(k+\tfrac12)\Phi_0$.
 
 At a sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\omega_q/\partial\Phi^2)\,\delta\Phi^2$, only **second order** in flux noise, so dephasing is strongly suppressed and $T_2$ is maximized. This is the flux-domain analogue of the transmon's charge insensitivity.
 
@@ -174,14 +176,14 @@ At a sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\omega_
 - **"Maximize $E_J/E_C$."** No, there's an optimum window (~50-100); beyond it you only lose anharmonicity and gate speed.
 - **"$\alpha<0$ is a defect."** No, it just means upper levels are more closely spaced; the sign matters for choosing DRAG parameters.
 - **"$n_g$ vanishes."** No, only its *effect* on the frequency is exponentially suppressed.
-- **"These formulas are exact."** No, $\omega_q=\sqrt{8E_JE_C}-E_C$ and $\alpha=-E_C$ are leading-order teaching approximations; for design you diagonalize the full Hamiltonian (Mathieu functions / numerics).
+- **"These formulas are exact."** No, $\hbar\omega_{01}=\sqrt{8E_JE_C}-E_C$ and $\alpha_E=-E_C$ are leading-order teaching approximations; for design you diagonalize the full Hamiltonian (Mathieu functions / numerics).
 
 ## Key takeaways
 
 - The transmon is a Cooper-pair box run at large $E_J/E_C$ ($\gtrsim50$), achieved with a big shunt capacitor, same circuit, one ratio changed.
-- One perturbative line, $E_m\simeq -E_J+\sqrt{8E_CE_J}(m+\tfrac12)-\tfrac{E_C}{12}(6m^2+6m+3)$, yields $\omega_q$, $\alpha$, and the level crowding.
+- One perturbative line, $E_m\simeq -E_J+\sqrt{8E_CE_J}(m+\tfrac12)-\tfrac{E_C}{12}(6m^2+6m+3)$, yields $\omega_{01}$, $\alpha_E$, and the level crowding.
 - Charge dispersion is suppressed **exponentially** as $e^{-\sqrt{8E_J/E_C}}$; anharmonicity falls only as a **power law** $\alpha_r=-(8E_J/E_C)^{-1/2}$, exponential beats power law, opening a wide usable window.
-- **Absolute** $\alpha\approx-E_C$ (fixed, sets the ns gate-speed limit) differs from **relative** $\alpha_r$ (slowly shrinks). Finite $\alpha$ ⇒ leakage to $|2\rangle$ ⇒ DRAG.
+- **Absolute** $\alpha_E\approx-E_C$ (set by the charging energy) differs from **relative** $\alpha_r$ (slowly shrinks with $E_J/E_C$). Finite anharmonicity limits leakage to $|2\rangle$ and motivates DRAG.
 - A SQUID makes $E_{J,\mathrm{eff}}(\Phi)$ flux-tunable; junction asymmetry $d$ trades tuning range for flux-noise robustness; operate at a sweet spot where $\partial\omega_q/\partial\Phi=0$ for best $T_2$.
 
 ## Go deeper
