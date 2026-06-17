@@ -5,7 +5,7 @@ Theory: [chapter](../../tutorial/06-readout.md)
 ## What you simulate
 
 A qubit coupled to a microwave cavity in the **dispersive regime**, where the
-interaction reduces to `chi * sigmaz * a.dag() * a`. The cavity frequency is
+interaction reduces to `-chi * sigmaz * a.dag() * a`. The cavity frequency is
 pulled one way when the qubit is in `|0>` and the other way when it is in `|1>`.
 Driving the cavity therefore parks its steady-state coherent field `<a>` at two
 distinct points in the IQ plane, one per qubit state. That separation is exactly
@@ -29,12 +29,12 @@ rotating at the drive frequency, the Hamiltonian is a bare cavity detuning, the
 dispersive pull, and a coherent drive:
 
 ```python
-H = delta * a.dag() * a + chi * sz * a.dag() * a + drive * (a + a.dag())
+H = delta * a.dag() * a - chi * sz * a.dag() * a + drive * (a + a.dag())
 ```
 
 We place the drive at the symmetric point (`delta = 0`) halfway between the two
-qubit-pulled resonances, so each qubit state sees an effective cavity detuning of
-`+chi` or `-chi` and the two fields are pushed to opposite sides of the IQ plane.
+qubit-pulled resonances, so `|0>` sees effective detuning `-chi` and `|1>` sees
+`+chi`; the two fields are pushed to opposite sides of the IQ plane.
 
 **Dissipation and initial states.** The cavity leaks photons at rate `kappa`, so
 the single collapse operator is `c_op = sqrt(kappa) * a`. The qubit starts in
@@ -48,7 +48,7 @@ trajectory we plot. Because `<a>` is complex, its real part is the I quadrature
 and its imaginary part is the Q quadrature. For the reported landing points we do
 **not** read off the last time sample (which would still carry whatever transient
 survives at `t_final`); we solve the exact steady state with `steadystate()`. Each
-qubit state simply fixes the cavity detuning to `+chi` or `-chi`, so the steady
+qubit state simply fixes the cavity detuning to `-chi` or `+chi`, so the steady
 field is that of a single driven, damped cavity mode, and we report the distance
 between the two landing points.
 
@@ -64,7 +64,7 @@ parameters the two states land at mirror-image points `I = +/-0.80`,
 `Q = -0.40`, each with `|<a>|` about `0.89`, giving an IQ separation of exactly
 `1.60`. A larger separation means the two states are easier to distinguish in a
 single shot. The coherent field amplitude relaxes as `exp(-(kappa/2) t)`, so its
-envelope settles on a timescale `2/kappa` (about `64` microseconds here, not
+envelope settles on a timescale `2/kappa` (about `64` ns here, not
 `1/kappa`); the trajectory grid is run out to several of those settling times so
 the plotted field visibly spirals in and lands on the steady-state points.
 

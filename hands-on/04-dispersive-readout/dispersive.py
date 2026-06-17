@@ -4,9 +4,9 @@ Dispersive readout: the cavity field encodes the qubit state.
 In circuit QED a qubit is coupled to a microwave cavity. When the qubit and
 cavity are far detuned, the interaction reduces to a dispersive coupling:
 
-    H_disp = chi * sigmaz * a.dag() * a
+    H_disp = -chi * sigmaz * a.dag() * a
 
-The cavity frequency is pulled by +chi or -chi depending on whether the qubit
+The cavity frequency is pulled by -chi or +chi depending on whether the qubit
 is in |0> (ground) or |1> (excited). If we drive the cavity on resonance, the
 steady-state coherent field <a> lands at a DIFFERENT point in the IQ plane for
 each qubit state. Measuring that field IS the qubit readout.
@@ -31,24 +31,24 @@ from qutip import (basis, destroy, qeye, sigmaz, tensor, mesolve, ket2dm,
 # Parameters (illustrative but realistic; frequencies as 2*pi*MHz, time in us)
 # ---------------------------------------------------------------------------
 N = 20                       # cavity Fock-space truncation
-chi = 2 * np.pi * 0.005      # dispersive shift, 5 MHz
-drive = 2 * np.pi * 0.005    # cavity drive amplitude, 5 MHz
-kappa = 2 * np.pi * 0.005    # cavity decay rate, 5 MHz
+chi = 2 * np.pi * 5.0        # dispersive shift, 5 MHz
+drive = 2 * np.pi * 5.0      # cavity drive amplitude, 5 MHz
+kappa = 2 * np.pi * 5.0      # cavity decay rate, 5 MHz
 
 # Drive detuning. We work in the frame rotating at the DRIVE frequency, which
 # we place exactly halfway between the two qubit-pulled cavity resonances (the
 # symmetric readout point). In that frame each qubit state sees an effective
-# cavity detuning of +chi or -chi, so the two steady-state fields land on
+# cavity detuning of -chi or +chi, so the two steady-state fields land on
 # opposite sides of the IQ plane and are maximally separated.
 delta = 0.0                  # bare cavity detuning at the symmetric point
 
 # Time grid for the trajectory plot. The coherent field amplitude relaxes as
 # exp(-(kappa/2) t), so its envelope settles on a timescale 2/kappa (here
-# 2/kappa ~ 64 us), NOT 1/kappa. We integrate well past that (several settling
+# 2/kappa ~ 0.064 us = 64 ns), NOT 1/kappa. We integrate well past that (several settling
 # times) so the trajectory visibly spirals in and lands on the steady state.
 # The reported landing points themselves come from the exact steady state
 # (steadystate(), below), not from the last transient sample.
-tlist = np.linspace(0, 400.0, 800)
+tlist = np.linspace(0, 0.4, 800)
 
 # ---------------------------------------------------------------------------
 # Operators on the joint qubit (x) cavity Hilbert space
@@ -58,12 +58,12 @@ sz = tensor(sigmaz(), qeye(N))    # qubit sigmaz
 
 # Hamiltonian in the frame rotating at the drive frequency:
 #   H = delta * a.dag() a          (bare cavity detuning from the drive)
-#       + chi * sigmaz * a.dag() a (qubit-state-dependent cavity pull)
+#       - chi * sigmaz * a.dag() a (qubit-state-dependent cavity pull)
 #       + drive * (a + a.dag())    (coherent cavity drive)
 # For each qubit state sigmaz = +/-1, so the cavity sees an effective detuning
-# (delta +/- chi); driving at the symmetric point (delta = 0) gives the two
-# states opposite +chi / -chi detunings and maximal IQ separation.
-H = delta * a.dag() * a + chi * sz * a.dag() * a + drive * (a + a.dag())
+# (delta -/+ chi); driving at the symmetric point (delta = 0) gives the two
+# states opposite -chi / +chi detunings and maximal IQ separation.
+H = delta * a.dag() * a - chi * sz * a.dag() * a + drive * (a + a.dag())
 
 # Cavity decay is the only dissipation we model here.
 c_ops = [np.sqrt(kappa) * a]
@@ -89,7 +89,7 @@ a_e = np.asarray(res_e.expect[0])   # complex <a>(t) for qubit |1>
 # a_e[-1] (which would be biased by whatever transient survives at t_final).
 # Because the Hamiltonian commutes with the qubit sigmaz and the qubit has no
 # dissipation, each qubit state |0>/|1> just fixes the cavity detuning to
-# +chi/-chi. So the steady-state field is that of a single driven, damped
+# -chi/+chi. So the steady-state field is that of a single driven, damped
 # cavity mode with detuning +/- chi, which steadystate() solves directly.
 # ---------------------------------------------------------------------------
 ac = destroy(N)   # single-mode cavity operator (qubit factored out)
@@ -97,8 +97,8 @@ ac = destroy(N)   # single-mode cavity operator (qubit factored out)
 
 def cavity_steady_field(sz_value):
     """Exact steady-state <a> for the cavity when sigmaz = sz_value (+1 -> |0>,
-    -1 -> |1>), i.e. effective cavity detuning delta + sz_value*chi."""
-    H_cav = (delta + sz_value * chi) * ac.dag() * ac + drive * (ac + ac.dag())
+    -1 -> |1>), i.e. effective cavity detuning delta - sz_value*chi."""
+    H_cav = (delta - sz_value * chi) * ac.dag() * ac + drive * (ac + ac.dag())
     rho_ss = steadystate(H_cav, [np.sqrt(kappa) * ac])
     return expect(ac, rho_ss)
 
@@ -109,9 +109,9 @@ separation = np.abs(ss_e - ss_g)
 
 print("Dispersive readout simulation")
 print("-----------------------------")
-print(f"chi/2pi   = {chi / (2 * np.pi) * 1e3:.1f} MHz")
-print(f"kappa/2pi = {kappa / (2 * np.pi) * 1e3:.1f} MHz")
-print(f"drive/2pi = {drive / (2 * np.pi) * 1e3:.1f} MHz")
+print(f"chi/2pi   = {chi / (2 * np.pi):.1f} MHz")
+print(f"kappa/2pi = {kappa / (2 * np.pi):.1f} MHz")
+print(f"drive/2pi = {drive / (2 * np.pi):.1f} MHz")
 print()
 print(f"Steady-state field, qubit |0>: I = {ss_g.real:+.4f}, Q = {ss_g.imag:+.4f}")
 print(f"Steady-state field, qubit |1>: I = {ss_e.real:+.4f}, Q = {ss_e.imag:+.4f}")
