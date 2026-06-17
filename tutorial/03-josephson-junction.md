@@ -2,7 +2,9 @@
 
 In the previous chapter we built an LC oscillator out of superconducting circuit elements. It has a beautiful, clean problem: it is *harmonic*. Its energy levels are perfectly evenly spaced, like rungs on a ladder where every step is the same height. That sounds nice, but for a qubit it is fatal. If you send in a microwave pulse tuned to drive the $0 \to 1$ transition, the exact same photon also drives $1 \to 2$, $2 \to 3$, and so on. You cannot isolate a clean two-level system. You need one circuit element that breaks this even spacing, and that element is the Josephson junction.
 
-A junction is almost embarrassingly simple to picture: two superconductors separated by a thin (~1 nm) insulating barrier. Classically nothing should flow. But the superconducting condensate on each side is described by a *single macroscopic wavefunction* $\psi = \sqrt{n_s}\,e^{i\theta}$ with a well-defined phase $\theta$. Only the **gauge-invariant phase difference** $\varphi = \theta_L - \theta_R$ across the barrier matters, and through it Cooper pairs *tunnel* coherently across the gap. The junction is the one circuit element that is simultaneously **nonlinear** and **non-dissipative**, and you cannot build a good qubit without both.
+A junction is almost embarrassingly simple to picture: two superconductors separated by a thin (~1 nm) insulating barrier. Classically nothing should flow. But the superconducting condensate on each side is described by a *single macroscopic wavefunction* $\psi = \sqrt{n_s}\,e^{i\theta}$ with a well-defined phase $\theta$. Only the **gauge-invariant phase difference**
+$$ \varphi = \theta_L-\theta_R-\frac{2\pi}{\Phi_0}\int_R^L \mathbf A\cdot d\mathbf l $$
+across the barrier matters. In a gauge with negligible vector potential across the barrier this reduces to $\theta_L-\theta_R$, and through it Cooper pairs *tunnel* coherently across the gap. The junction is the one circuit element that is simultaneously **nonlinear** and **non-dissipative**, and you cannot build a good qubit without both.
 
 Here is the causal story the rest of the chapter tells, end to end:
 
@@ -12,7 +14,7 @@ flowchart TD
     B --> C["Nonlinear<br/>inductance L_J(phi)"]
     C --> D["Cosine potential<br/>-E_J cos phi"]
     D --> E["Quartic term<br/>flattens the well"]
-    E --> F["Unequal level spacing<br/>alpha approx -E_C"]
+    E --> F["Unequal level spacing<br/>E12-E01 approx -E_C"]
     F --> G["Address one<br/>0->1 transition<br/>= a qubit!"]
     H["Run at large<br/>E_J/E_C"] --> I["Charge dispersion<br/>~ exp(-sqrt(8 E_J/E_C))"]
     I --> J["Dephasing<br/>suppressed<br/>(long T2)"]
@@ -22,7 +24,7 @@ flowchart TD
 
 ## The two Josephson relations
 
-Let $\varphi$ be the gauge-invariant phase difference across the junction. The entire device is governed by two relations:
+Let $\varphi$ be the gauge-invariant phase difference across the junction, and define the branch flux $\Phi=(\Phi_0/2\pi)\varphi$ so that $V=\dot\Phi$. The entire device is governed by two relations:
 
 $$ I = I_c \sin\varphi \qquad\text{(DC / first relation)} $$
 $$ \frac{d\varphi}{dt} = \frac{2e}{\hbar}\,V \qquad\text{(AC / second relation)} $$
@@ -39,9 +41,9 @@ An inductor obeys $V = L\,dI/dt$, so $L = V/(dI/dt)$, giving
 
 $$ L_J(\varphi) = \frac{\hbar}{2e\,I_c\cos\varphi} = \frac{\Phi_0}{2\pi I_c\cos\varphi}, \qquad \Phi_0 = \frac{h}{2e}. $$
 
-A linear inductor has constant $L$; here $L_J$ stiffens and softens with $\varphi$, *diverges* and turns *negative* at $\varphi = \pi/2$. That phase-dependence is exactly the ingredient the bare LC circuit was missing.
+A linear inductor has constant $L$; here $L_J$ stiffens and softens with $\varphi$, *diverges* at $\varphi=\pi/2+k\pi$, and has negative incremental sign where $\cos\varphi<0$. That phase-dependence is exactly the ingredient the bare LC circuit was missing.
 
-> **Pitfall.** $L_J$ is only a literal lumped inductor in the small-oscillation linearisation around an operating point. Near $\varphi=\pi/2$ it blows up, don't read it as a real component at all phases.
+> **Pitfall.** $L_J$ is only a literal lumped inductor in the small-oscillation linearisation around an operating point. Near $\varphi=\pi/2+k\pi$ it blows up; where $\cos\varphi<0$ it describes negative curvature of the cosine potential, not a stable standalone inductor.
 
 ## The cosine potential
 
@@ -53,7 +55,7 @@ $E_J$ is the **Josephson energy**, the depth of the potential well. Taylor-expan
 
 $$ -E_J\cos\varphi \approx -E_J + \tfrac{1}{2}E_J\varphi^2 - \tfrac{1}{24}E_J\varphi^4 + \dots $$
 
-The $\varphi^2$ term reproduces a harmonic oscillator (matching $\tfrac12 L_{J0}^{-1}\Phi^2$ identifies the linear inductance). The $\varphi^4$ term is the crucial correction: it is **negative**, so the cosine well is *flatter* than a parabola away from the bottom. A flatter well means the energy rungs get closer together as you climb, the ladder is no longer evenly spaced.
+Using $\Phi=(\Phi_0/2\pi)\varphi$, the $\varphi^2$ term reproduces a harmonic oscillator: $\tfrac12E_J\varphi^2=\Phi^2/(2L_{J0})$, so $L_{J0}=(\Phi_0/2\pi)^2/E_J=\Phi_0/(2\pi I_c)$. The $\varphi^4$ term is the crucial correction: it is **negative**, so the cosine well is *flatter* than a parabola away from the bottom. A flatter well means the energy rungs get closer together as you climb, the ladder is no longer evenly spaced.
 
 ```
  U(φ)
@@ -84,17 +86,17 @@ The cosine (solid) hugs the parabola (the steeper arms) only at the bottom; the 
 
 ## The Hamiltonian in the charge basis
 
-Pair the cosine potential with the electrostatic (charging) energy of the junction capacitance. The charge on the island is $Q = 2e(\hat n - n_g)$, so its electrostatic energy $Q^2/2C$ gives the full Hamiltonian:
+Pair the cosine potential with the electrostatic charging energy of the island's effective capacitance $C_\Sigma$ (junction plus gate/shunt/network capacitances). The island charge is $Q = 2e(\hat n - n_g)$, so $Q^2/(2C_\Sigma)$ gives the full Hamiltonian:
 
-$$ H = 4E_C\,(\hat n - n_g)^2 - E_J\cos\hat\varphi, \qquad E_C = \frac{e^2}{2C}, \qquad [\hat\varphi,\hat n] = i. $$
+$$ H = 4E_C\,(\hat n - n_g)^2 - E_J\cos\hat\varphi, \qquad E_C = \frac{e^2}{2C_\Sigma}, \qquad [\hat\varphi,\hat n] = i. $$
 
-Here $\hat n$ counts excess Cooper pairs, $n_g$ is the dimensionless **offset (gate) charge**, and $E_C$ is the **charging energy**, the single-electron scale $e^2/2C$ that sets the cost of moving charge onto the island (one full Cooper pair costs $4E_C$). The $4E_C(\hat n - n_g)^2$ term is the "kinetic" energy; $-E_J\cos\hat\varphi$ is the "potential." Their ratio $E_J/E_C$ governs everything.
+Here $\hat n$ counts excess Cooper pairs, $n_g$ is the dimensionless **offset (gate) charge**, and $E_C$ is the **charging energy**, the single-electron scale $e^2/2C_\Sigma$ that sets the cost of moving charge onto the island (one full Cooper pair costs $4E_C$ at $n_g=0$). The $4E_C(\hat n - n_g)^2$ term is the "kinetic" energy; $-E_J\cos\hat\varphi$ is the "potential." Their ratio $E_J/E_C$ governs everything.
 
 The chapter title promised "in the charge basis," so let's make it concrete. Because $\hat\varphi$ and $\hat n$ are conjugate, $\cos\hat\varphi$ is a *shift operator* on Cooper-pair number:
 
 $$ \cos\hat\varphi = \tfrac{1}{2}\sum_n \big(|n\rangle\langle n{+}1| + |n{+}1\rangle\langle n|\big). $$
 
-It hops between adjacent charge states $n \leftrightarrow n\pm 1$, literally one Cooper pair tunnelling. In this basis $H$ is **tridiagonal**: diagonal entries $4E_C(n-n_g)^2$, off-diagonal entries $-E_J/2$. You could type that matrix into NumPy, truncate at $|n|\le 10$, and `eigh` it to get the spectrum, that is exactly how the figures below are produced.
+It hops between adjacent charge states $n \leftrightarrow n\pm 1$, literally one Cooper pair tunnelling. In this basis $H$ is **tridiagonal**: diagonal entries $4E_C(n-n_g)^2$, off-diagonal entries $-E_J/2$. You could type that matrix into NumPy, truncate at $|n|\le 10$, and use `eigh` to get the spectrum; that is the standard numerical route for plots of the CPB/transmon spectrum. The sketches below are schematic, not generated data.
 
 ## $E_J/E_C$: the master control knob
 
@@ -117,7 +119,7 @@ Contrast the two oscillators a newcomer might confuse:
 | Level spacing | equal ($\hbar\omega$) | unequal (shrinks with $m$) |
 | Usable as a qubit? | No (cannot address one transition) | Yes |
 | Key parameter | $\omega = 1/\sqrt{LC}$ | ratio $E_J/E_C$ |
-| Dissipation | resistive losses | non-dissipative (ideal) |
+| Dissipation | non-dissipative if built from ideal superconducting $L,C$ | non-dissipative in the ideal junction model |
 
 ## Energy levels and anharmonicity
 
@@ -127,15 +129,16 @@ $$ E_m \simeq -E_J + \sqrt{8E_J E_C}\,\big(m+\tfrac12\big) - \frac{E_C}{12}\big(
 
 The first two terms are a harmonic ladder at the **plasma frequency** $\omega_p = \sqrt{8E_J E_C}/\hbar$; the $m^2$ term bends the ladder. Subtracting levels:
 
-$$ \hbar\omega_q = E_1 - E_0 \simeq \sqrt{8E_J E_C} - E_C, \qquad \alpha \equiv \omega_{12}-\omega_{01} \simeq -\frac{E_C}{\hbar}, \qquad \alpha_r \equiv \frac{\alpha}{\omega_{01}} \simeq -\Big(\frac{8E_J}{E_C}\Big)^{-1/2}. $$
+$$ \hbar\omega_q = E_1 - E_0 \simeq \sqrt{8E_J E_C} - E_C, \qquad \alpha_E \equiv (E_2-E_1)-(E_1-E_0) \simeq -E_C, $$
+$$ \alpha_\omega \equiv \omega_{12}-\omega_{01} = \frac{\alpha_E}{\hbar} \simeq -\frac{E_C}{\hbar}, \qquad \alpha_r \equiv \frac{\alpha_\omega}{\omega_{01}} \simeq -\Big(\frac{8E_J}{E_C}\Big)^{-1/2}. $$
 
-So the **absolute anharmonicity** is $\approx -E_C$ (a few hundred MHz), and the **relative anharmonicity** shrinks only as a *weak power law* of $E_J/E_C$. Why does this finally give a qubit? The $0\to1$ and $1\to2$ transitions now sit at *different* frequencies, detuned by $\alpha$. A pulse resonant with $\omega_{01}$ is off-resonant from $\omega_{12}$, so it leaves higher levels alone, provided its bandwidth $\sim 1/\tau$ stays below $|\alpha|$. That is a hard gate-speed limit: too-fast pulses leak population into level $2$. Pulse-shaping (e.g. **DRAG**) is the practical fix.
+So the **energy anharmonicity** is $\alpha_E\approx -E_C$; quoted as a cyclic frequency, $\alpha_E/h$ is typically a few hundred MHz, and the **relative anharmonicity** shrinks only as a *weak power law* of $E_J/E_C$. Why does this finally give a qubit? The $0\to1$ and $1\to2$ transitions now sit at *different* frequencies, detuned by $\alpha_\omega$. A pulse resonant with $\omega_{01}$ is off-resonant from $\omega_{12}$, so it leaves higher levels alone, provided its bandwidth $\sim 1/\tau$ stays below $|\alpha_\omega|/2\pi$. That is a hard gate-speed limit: too-fast pulses leak population into level $2$. Pulse-shaping (e.g. **DRAG**) is the practical fix.
 
-> **Pitfall.** A transmon is *not* a true two-level system, it is a weakly anharmonic *multi-level* oscillator. Levels $2, 3, \dots$ are always there, which is exactly why $|\alpha|$ and DRAG matter. And the nonlinearity comes **entirely** from the cosine; $E_C$ only sets the oscillator scale and the *size* of $\alpha$, the charging term itself is not nonlinear.
+> **Pitfall.** A transmon is *not* a true two-level system, it is a weakly anharmonic *multi-level* oscillator. Levels $2, 3, \dots$ are always there, which is exactly why $|\alpha_\omega|$ and DRAG matter. And the nonlinearity comes **entirely** from the cosine; $E_C$ only sets the oscillator scale and the *size* of the anharmonicity, the charging term itself is not nonlinear.
 
 ## Charge dispersion: the whole point of the transmon
 
-Each level's energy depends on the gate charge $n_g$. The peak-to-peak band width as $n_g$ sweeps $0\to1$ is the **charge dispersion** $\epsilon_m$, and it is suppressed *exponentially* (Koch *et al.* 2007):
+Each level's energy depends on the gate charge $n_g$. Define the signed **charge dispersion** $\epsilon_m \equiv E_m(n_g=1/2)-E_m(n_g=0)$; the peak-to-peak width is $|\epsilon_m|$, and it is suppressed *exponentially* (Koch *et al.* 2007):
 
 $$ \epsilon_m \simeq (-1)^m\,E_C\,\frac{2^{4m+5}}{m!}\sqrt{\frac{2}{\pi}}\Big(\frac{E_J}{2E_C}\Big)^{\frac{m}{2}+\frac34} e^{-\sqrt{8E_J/E_C}}. $$
 
@@ -163,34 +166,34 @@ The physics: making the band depend on $n_g$ requires the phase to *tunnel* betw
 Pick two energy scales (round teaching values, *illustrative*, not any real device): $E_C/h = 250\ \text{MHz}$ and $E_J/E_C = 50$, so $E_J/h = 12.5\ \text{GHz}$. All energies are quoted as frequencies by dividing by $h$.
 
 **Step 1: back out the hardware.**
-- Capacitance: $C = e^2/(2E_C) = e^2/(2h\cdot 250\,\text{MHz}) \approx 78\ \text{fF}$ (a large pad, how you *reach* big $E_J/E_C$).
+- Total island capacitance: $C_\Sigma = e^2/(2E_C) = e^2/(2h\cdot 250\,\text{MHz}) \approx 78\ \text{fF}$ (a large pad, how you *reach* big $E_J/E_C$).
 - Critical current: $I_c = 2eE_J/\hbar = 2e\,(h\cdot 12.5\,\text{GHz})/\hbar \approx 25\ \text{nA}$.
 - Zero-phase inductance: $L_{J0} = \hbar/(2eI_c) \approx 13\ \text{nH}$.
 
 **Step 2: qubit frequency.** $\omega_q/2\pi \approx \sqrt{8E_JE_C}/h - E_C/h = \sqrt{8\cdot 12.5\cdot 0.25} - 0.25 = \sqrt{25} - 0.25 = 5.000 - 0.250 = 4.75\ \text{GHz}$ (plasma frequency $\omega_p/2\pi = 5.00\ \text{GHz}$).
 
-**Step 3: anharmonicity.** Absolute: $\alpha/2\pi \approx -E_C/h = -250\ \text{MHz}$, so $\omega_{12}/2\pi \approx 4.50\ \text{GHz}$, the $1\to2$ transition sits $250\ \text{MHz}$ *below* the $0\to1$. Relative: $\alpha_r \approx -(8\cdot 50)^{-1/2} = -1/\sqrt{400} = -0.05$, i.e. $-5\%$.
+**Step 3: anharmonicity.** Angular-frequency anharmonicity: $\alpha_\omega/2\pi \approx -E_C/h = -250\ \text{MHz}$, so $\omega_{12}/2\pi \approx 4.50\ \text{GHz}$, the $1\to2$ transition sits $250\ \text{MHz}$ *below* the $0\to1$. Relative: $\alpha_r \approx -(8\cdot 50)^{-1/2} = -1/\sqrt{400} = -0.05$, i.e. $-5\%$.
 
-**Step 4: charge dispersion (the payoff).** Exponent $\sqrt{8\cdot 50} = 20$, so $e^{-20}\approx 2.06\times10^{-9}$. The ground level barely moves: $\epsilon_0/h \approx (250\,\text{MHz})\cdot 32\cdot 0.798\cdot 25^{0.75}\cdot 2.06\times10^{-9} \approx 150\ \text{Hz}$. But the quantity you actually *measure* is the $0\to1$ transition, and its dispersion is set by the **upper** level: $\epsilon_m$ grows fast with $m$ (the $2^{4m+5}$ prefactor), so evaluating the formula at $m=1$ gives $\epsilon_1/h \approx 10\ \text{kHz}$, about $70\times$ larger than $\epsilon_0$. Because $\epsilon_0$ and $\epsilon_1$ alternate in sign (the $(-1)^m$), the $0\to1$ frequency wiggles peak-to-peak by $\approx |\epsilon_0|+|\epsilon_1|\approx 10\ \text{kHz}$ across a full $n_g$ period, about one part in $5\times10^5$ of $4.75\ \text{GHz}$. *That* is why the transmon barely feels charge noise. (Diagonalizing the Mathieu problem directly confirms the $\sim 10\ \text{kHz}$ transition swing.)
+**Step 4: charge dispersion (the payoff).** Exponent $\sqrt{8\cdot 50} = 20$, so $e^{-20}\approx 2.06\times10^{-9}$. The ground level barely moves: $\epsilon_0/h \approx (250\,\text{MHz})\cdot 32\cdot 0.798\cdot 25^{0.75}\cdot 2.06\times10^{-9} \approx 150\ \text{Hz}$. But the quantity you actually *measure* is the $0\to1$ transition, and its dispersion is set by the **upper** level: $\epsilon_m$ grows fast with $m$ (the $2^{4m+5}$ prefactor), so evaluating the formula at $m=1$ gives $|\epsilon_1|/h \approx 11.8\ \text{kHz}$, about $80\times$ larger than $\epsilon_0$. Because $\epsilon_0$ and $\epsilon_1$ alternate in sign (the $(-1)^m$), the $0\to1$ frequency wiggles peak-to-peak by $|\epsilon_1-\epsilon_0|/h \approx |\epsilon_0|/h+|\epsilon_1|/h \approx 11.9\ \text{kHz}$ across a full $n_g$ period, about one part in $5\times10^5$ of $4.75\ \text{GHz}$. *That* is why the transmon barely feels charge noise. (Diagonalizing the Mathieu problem directly confirms the $\sim 12\ \text{kHz}$ transition swing.)
 
-**Step 5: gate-speed sanity check.** With $|\alpha|/2\pi = 250\ \text{MHz}$, a plain resonant pulse must keep its spectral width $\sim 1/\tau$ well under $250\ \text{MHz}$, so $\tau\gtrsim$ a few ns; DRAG relaxes this.
+**Step 5: gate-speed sanity check.** With $|\alpha_\omega|/2\pi = 250\ \text{MHz}$, a plain resonant pulse must keep its spectral width $\sim 1/\tau$ well under $250\ \text{MHz}$, so $\tau\gtrsim$ a few ns; DRAG relaxes this.
 
-**Takeaways (all illustrative):** $\omega_q/2\pi\approx 4.75\ \text{GHz}$, $\alpha/2\pi\approx -250\ \text{MHz}$, $0\to1$ charge dispersion $\approx 10\ \text{kHz}$ (level-0 dispersion $\epsilon_0\approx 150\ \text{Hz}$), $C\approx 78\ \text{fF}$, $I_c\approx 25\ \text{nA}$, $L_{J0}\approx 13\ \text{nH}$.
+**Takeaways (all illustrative):** $\omega_q/2\pi\approx 4.75\ \text{GHz}$, $\alpha_\omega/2\pi\approx -250\ \text{MHz}$, $0\to1$ charge dispersion $\approx 12\ \text{kHz}$ (level-0 dispersion $\epsilon_0\approx 150\ \text{Hz}$), $C_\Sigma\approx 78\ \text{fF}$, $I_c\approx 25\ \text{nA}$, $L_{J0}\approx 13\ \text{nH}$.
 
 ## Common pitfalls
 
 - **It's $2e$, not $e$.** Both Josephson relations and $\Phi_0 = h/2e$ carry the Cooper-pair charge. The factor-of-two error is everywhere.
-- **Bigger $E_J/E_C$ is not strictly better.** It suppresses charge dispersion *exponentially* but preserves anharmonicity only *as a power law*; too little $|\alpha|$ means leakage. The transmon is a deliberate compromise.
-- **Two anharmonicities.** $\alpha$ (absolute, $\approx -E_C$, in Hz) sets the $1\!\to\!2$ detuning; $\alpha_r$ (relative, $\approx -5\%$, dimensionless) measures fractional unevenness.
+- **Bigger $E_J/E_C$ is not strictly better.** It suppresses charge dispersion *exponentially* but preserves anharmonicity only *as a power law*; too little $|\alpha_\omega|$ means leakage. The transmon is a deliberate compromise.
+- **Two anharmonicities.** $\alpha_E$ is an energy ($\approx -E_C$), while $\alpha_\omega=\alpha_E/\hbar$ is angular frequency and $\alpha_E/h$ is the value quoted in Hz; $\alpha_r$ (relative, $\approx -5\%$, dimensionless) measures fractional unevenness.
 - **The cosine is flatter, not steeper.** The *negative* quartic term lowers upper levels and shrinks spacings, that is what "negative anharmonicity" means.
 
 ## Key takeaways
 
-- The Josephson junction is the unique **nonlinear, non-dissipative** circuit element; without it you only get an unusable harmonic oscillator.
+- The Josephson junction supplies the standard **nonlinear, ideally non-dissipative** circuit element; a bare superconducting LC oscillator can be low-loss, but it remains harmonic and therefore unusable as an addressable qubit.
 - Two relations: $I = I_c\sin\varphi$ and $\dot\varphi = 2eV/\hbar$, giving the phase-dependent inductance $L_J(\varphi) = \Phi_0/(2\pi I_c\cos\varphi)$.
 - The junction energy is the **cosine potential** $-E_J\cos\varphi$; its quartic term flattens the well and unevenly spaces the ladder.
 - $H = 4E_C(\hat n - n_g)^2 - E_J\cos\hat\varphi$ is **tridiagonal in the charge basis** and governed by $E_J/E_C$, a continuum from charge qubit to transmon.
-- Anharmonicity $\alpha\approx -E_C/\hbar$ lets a selective pulse address one $0$-$1$ transition (gate-speed limited by $|\alpha|$); **charge dispersion $\sim e^{-\sqrt{8E_J/E_C}}$** is the exponential charge-noise immunity that defines the transmon.
+- Anharmonicity $\alpha_\omega\approx -E_C/\hbar$ lets a selective pulse address one $0$-$1$ transition (gate-speed limited by $|\alpha_\omega|$); **charge dispersion $\sim e^{-\sqrt{8E_J/E_C}}$** is the exponential charge-noise immunity that defines the transmon.
 
 ## Go deeper
 
