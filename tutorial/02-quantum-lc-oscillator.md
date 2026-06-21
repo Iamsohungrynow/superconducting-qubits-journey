@@ -25,7 +25,7 @@ To quantize a circuit the way we quantize mechanics, we need a *coordinate* and 
 
 $$\Phi(t) = \int_{-\infty}^{t} V(t')\,dt',$$
 
-the time integral of the voltage at the node, so that $V = \dot\Phi$ (this is just Faraday's law for the node). Two short steps build the Lagrangian:
+the time integral of the voltage at the node, so that $V = \dot\Phi$ (the node-flux coordinate; for an inductor branch it coincides with the usual magnetic flux variable). Two short steps build the Lagrangian:
 
 1. **Capacitive ("kinetic") energy.** The charge on the capacitor is $Q = CV = C\dot\Phi$, so its stored energy is $\tfrac{Q^2}{2C} = \tfrac{1}{2}C\dot\Phi^2$. This is quadratic in the *velocity* $\dot\Phi$, it behaves like kinetic energy.
 2. **Inductive ("potential") energy.** The energy stored in the inductor is $\tfrac{\Phi^2}{2L}$. This is quadratic in the *coordinate* $\Phi$ itself, it behaves like potential energy.
@@ -80,11 +80,11 @@ so the flux and charge of the circuit cannot both be perfectly sharp.
 
 ## The harmonic ladder (with the actual operators)
 
-Because $H$ is quadratic, we diagonalize it with ladder operators. The trick is to rescale $\Phi$ and $Q$ so that both terms in $H$ carry equal weight; the natural scale is the **characteristic (wave) impedance**
+Because $H$ is quadratic, we diagonalize it with ladder operators. The trick is to rescale $\Phi$ and $Q$ so that both terms in $H$ carry equal weight; the natural scale is the **oscillator impedance**
 
 $$Z = \sqrt{\frac{L}{C}}.$$
 
-Define the zero-point scales $\Phi_{\rm zpf}=\sqrt{\hbar Z/2}$ and $Q_{\rm zpf}=\sqrt{\hbar/2Z}$, and set
+Define the zero-point scales $\Phi_{\rm zpf}=\sqrt{\hbar Z/2}$ and $Q_{\rm zpf}=\sqrt{\hbar/(2Z)}$, and set
 
 $$\hat{a} = \frac{1}{\sqrt{2\hbar Z}}\,\hat{\Phi} + \frac{i\sqrt{Z}}{\sqrt{2\hbar}}\,\hat{Q}.$$
 
@@ -110,21 +110,25 @@ $\hat{a}^\dagger$ climbs the ladder, $\hat{a}$ descends it, and $|0\rangle$ is t
                \     |     /       ── E₁ = 3/2·ℏω
                 \    |    /
                  \___|___/         ── E₀ = 1/2·ℏω   ← sits ABOVE the well bottom
-                 [±Φ_zpf]            (Q also fluctuates by ±Q_zpf)
+                 rms width ΔΦ=Φ_zpf   (and ΔQ=Q_zpf)
 ```
 *The lowest level is not at the bottom of the well: the vacuum is not silent.*
 
 ## Zero-point fluctuations: the vacuum is busy
 
-That $\tfrac12\hbar\omega_q$ is not a bookkeeping offset, it encodes real, measurable fluctuations. On the vacuum $|0\rangle$, only the $\hat a\hat a^\dagger$ term survives, so
+The additive $\tfrac12\hbar\omega_q$ can often be shifted away for an isolated oscillator, but the ground state is not classical: it has real, measurable fluctuations. On the vacuum $|0\rangle$, only the $\hat a\hat a^\dagger$ term survives, so
 
 $$\langle 0|\hat\Phi^2|0\rangle = \Phi_{\rm zpf}^2, \qquad \langle 0|\hat Q^2|0\rangle = Q_{\rm zpf}^2,$$
 
 $$\Phi_{\rm zpf} = \sqrt{\frac{\hbar Z}{2}}, \qquad Q_{\rm zpf} = \sqrt{\frac{\hbar}{2Z}}, \qquad \Phi_{\rm zpf}\,Q_{\rm zpf} = \frac{\hbar}{2}.$$
 
-Their product *saturates* the Heisenberg bound, the LC vacuum is a minimum-uncertainty state. Notice the role of impedance: a **large $Z$** gives big flux fluctuations and small charge fluctuations (flux-like circuits), and a **small $Z$** does the opposite (charge-like circuits). The benchmark is the resistance quantum $R_Q = h/4e^2 \approx 6.45~\text{k}\Omega$. Typical lab resonators have $Z\sim 50\text{ to }100~\Omega \ll R_Q$, so their *flux* fluctuations are tiny in units of $\Phi_0/2\pi$ (here $\Phi_{\rm zpf}\sim 0.1\text{ to }0.2\,\Phi_0/2\pi$) while their charge fluctuations are comparatively large, such low-impedance circuits sit far on the charge-like side, which is exactly why building a strongly anharmonic qubit takes deliberate engineering.
+Their product *saturates* the Heisenberg bound, the LC vacuum is a minimum-uncertainty state. Notice the role of impedance: a **large $Z$** gives big phase/flux fluctuations and small Cooper-pair-number fluctuations, while a **small $Z$** does the opposite. In dimensionless variables $\varphi=2\pi\Phi/\Phi_0$ and $n=Q/2e$,
 
-> **Pitfall.** "Zero-point energy means nothing happens in the ground state." Wrong: $\Phi_{\rm zpf}$ and $Q_{\rm zpf}$ are genuine fluctuations, and they drive real physics (dispersive shifts, vacuum-induced relaxation, Casimir-like effects). The $\tfrac12$ is physically loaded, not ignorable.
+$$\varphi_{\rm zpf}=\sqrt{\pi Z/R_Q},\qquad n_{\rm zpf}=\sqrt{R_Q/(4\pi Z)},\qquad R_Q=h/4e^2.$$
+
+Thus $R_Q \approx 6.45~\text{k}\Omega$ is the natural impedance benchmark, with the $\pi$ factors fixed by the phase convention. Typical lab resonators have $Z\sim 50\text{ to }100~\Omega \ll R_Q$, so their *flux* fluctuations are tiny in units of $\Phi_0/2\pi$ (here $\Phi_{\rm zpf}\sim 0.1\text{ to }0.2\,\Phi_0/2\pi$) while their charge-number fluctuations are comparatively large; these low-impedance modes are phase/flux-localized and charge-delocalized.
+
+> **Pitfall.** "Zero-point energy means nothing happens in the ground state." Wrong: $\Phi_{\rm zpf}$ and $Q_{\rm zpf}$ are genuine fluctuations, and they drive real physics (dispersive shifts, vacuum-induced relaxation, Casimir-like effects). The variances are physically loaded even when the constant energy offset is dynamically removable.
 
 ## How cold is "cold enough"?
 
@@ -154,34 +158,35 @@ Walking through it: (1) $\omega_q = 1/\sqrt{LC} = 3.14\times10^{10}~\text{rad/s}
 
 ## Why a uniform ladder can't be a qubit
 
-A qubit needs **two** addressable levels, a clean $\{|0\rangle,|1\rangle\}$ subspace we can drive with a pulse at $\omega_q$. But in the LC oscillator every gap is identical, $E_{n+1}-E_n = \hbar\omega_q$, independent of $n$. The **anharmonicity**
+A qubit needs **two** addressable levels, a clean $\{|0\rangle,|1\rangle\}$ subspace we can drive with a pulse at $\omega_q$. But in the LC oscillator every transition frequency is identical, $\omega_{n,n+1}=(E_{n+1}-E_n)/\hbar=\omega_q$, independent of $n$. The **anharmonicity**
 
-$$\alpha \equiv (E_2 - E_1) - (E_1 - E_0) = 0$$
+$$\alpha \equiv \omega_{12}-\omega_{01}
+= \frac{(E_2 - E_1) - (E_1 - E_0)}{\hbar} = 0$$
 
 vanishes exactly. A pulse resonant with $0\to1$ is *equally* resonant with $1\to2$, $2\to3$, … so population leaks straight up the ladder. No pulse shape can fix this; with $\alpha=0$ there is literally no spectrum that isolates two levels.
 
 ```
    Harmonic (α = 0)                 Anharmonic (α < 0)
    ───── |3⟩                        ──── |3⟩
-     ↑ ℏω  (leak!)                    ↑ ω₀₁ + 2α  (off-resonant)
+     ↑ omega_q (leak!)                 ↑ omega_01 + 2 alpha  (off-resonant)
    ───── |2⟩                        ──── |2⟩
-     ↑ ℏω  (leak!)                    ↑ ω₀₁ + α   (smaller gap)
+     ↑ omega_q (leak!)                 ↑ omega_01 + alpha   (smaller gap)
    ───── |1⟩                        ──── |1⟩
-     ↑ ℏω  drive ω_q                  ↑ ω₀₁       drive here
+     ↑ omega_q drive omega_q           ↑ omega_01       drive here
    ───── |0⟩                        ──── |0⟩
-   one drive climbs ALL rungs       drive at ω₀₁ misses 1→2
+   one drive climbs ALL rungs       drive at omega_01 misses 1->2
 ```
 
-To make a qubit we must *bend the ladder* so $0\to1$ and $1\to2$ sit at different frequencies. For scale, a real transmon deliberately introduces **(illustrative)** $\alpha/2\pi \approx -200$ to $-300~\text{MHz}$, a few percent of $\omega_q$, so the $1\to2$ transition is detuned enough to avoid leakage (Chapter 03).
+To make a qubit we must *bend the ladder* so $0\to1$ and $1\to2$ sit at different frequencies. For scale, a real transmon deliberately introduces **(illustrative)** $\alpha/2\pi \approx -200$ to $-300~\text{MHz}$, a few percent of $f_q=\omega_q/2\pi$, so the $1\to2$ transition is detuned enough to avoid leakage (Chapter 03).
 
-Crucially, the nonlinear element must be (a) **non-dissipative**, a resistor would bend the spectrum but dump energy and destroy coherence, and (b) **functional at millikelvin**. The only circuit element meeting both is the **Josephson junction**, whose nonlinear inductance is the entire subject of the next chapter.
+Crucially, the nonlinear element must be (a) **non-dissipative** and Hamiltonian, because a resistor couples the mode to a lossy bath and broadens or thermalizes levels instead of producing a coherent anharmonic ladder, and (b) **functional at millikelvin**. The standard circuit element meeting both requirements is the **Josephson junction**, whose nonlinear inductance is the entire subject of the next chapter.
 
 ## Key takeaways
 
 - A Lagrangian in the node flux $\Phi$ ($\mathcal{L}=\tfrac12 C\dot\Phi^2 - \Phi^2/2L$) makes charge the conjugate momentum, $Q=C\dot\Phi$, that's *why* flux and charge are conjugate.
 - One postulate, $[\hat\Phi,\hat Q]=i\hbar$, delivers uncertainty, the ladder, and zero-point fluctuations; it's just $[\hat x,\hat p]=i\hbar$ in disguise.
 - Diagonalizing gives $E_n=\hbar\omega_q(n+\tfrac12)$ with $\omega_q=1/\sqrt{LC}$, built from $\hat a,\hat a^\dagger$ weighted by $Z=\sqrt{L/C}$.
-- The vacuum genuinely fluctuates: $\Phi_{\rm zpf}=\sqrt{\hbar Z/2}$, $Q_{\rm zpf}=\sqrt{\hbar/2Z}$, product $\hbar/2$. Impedance vs. $R_Q\approx6.45~\text{k}\Omega$ sets flux-like vs. charge-like.
+- The vacuum genuinely fluctuates: $\Phi_{\rm zpf}=\sqrt{\hbar Z/2}$, $Q_{\rm zpf}=\sqrt{\hbar/(2Z)}$, product $\hbar/2$. Impedance vs. $R_Q\approx6.45~\text{k}\Omega$ sets flux-like vs. charge-like.
 - Excitations are microwave photons; only $\hbar\omega_q\gg k_B T$ (millikelvin) keeps the mode in $|0\rangle$.
 - Uniform spacing means $\alpha=0$: no drive isolates two levels, so a linear oscillator cannot be a qubit. A **non-dissipative** nonlinearity, the Josephson junction, is required.
 

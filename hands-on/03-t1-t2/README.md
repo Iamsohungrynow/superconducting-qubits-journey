@@ -18,7 +18,8 @@ the two textbook experiments:
    population `P1(t)` decay as `exp(-t/T1)`.
 2. **Ramsey with pure dephasing.** Prepare `(|0> + |1>)/sqrt(2)`, add a small
    detuning so `<sx>` oscillates, and include both relaxation and pure dephasing
-   collapse operators. The fringes decay under an envelope set by T2*.
+   collapse operators. The fringes decay under the Markovian Ramsey envelope set
+   by T2.
 
 You then numerically verify the coherence relation `1/T2 = 1/(2*T1) + 1/Tphi`.
 
@@ -58,13 +59,13 @@ res_T2 = mesolve(H, psi_plus, t2_times, c_ops_T2, e_ops=[sigmax()])
 ```
 
 **Envelope fit and consistency check.** We pick the local maxima of `|<sx>|` as
-samples of the decay envelope, fit `log` of those peaks to get T2*, and compare
-`1/T2*` against `1/(2*T1) + 1/Tphi`.
+samples of the decay envelope, fit `log` of those peaks to get T2, and compare
+`1/T2` against `1/(2*T1) + 1/Tphi`.
 
 ## Expected output
 
 The script prints the input vs fitted T1 (they agree to a fraction of a
-percent), the predicted vs fitted T2*, and the consistency check. With the
+percent), the predicted vs fitted T2, and the consistency check. With the
 default parameters (T1 = 30 us, Tphi = 40 us) you get T2 = 24 us, and the
 measured `1/T2` matches `1/(2*T1) + 1/Tphi` to within about 0.1 percent:
 
@@ -74,7 +75,7 @@ measured `1/T2` matches `1/(2*T1) + 1/Tphi` to within about 0.1 percent:
   fitted T1            = 30.00 us
 === T2 Ramsey (dephasing) ===
   predicted T2         = 24.00 us
-  fitted    T2*        = 23.99 us
+  fitted    T2         = 23.99 us
 === Consistency: 1/T2 = 1/(2 T1) + 1/Tphi ===
   relative error       = 0.05 %
 ```
@@ -87,7 +88,7 @@ right panel shows the Ramsey fringes hugging their decaying envelope.
 ## Try this
 
 1. **Dephasing-limited vs relaxation-limited.** Set `Tphi = 5.0` (much shorter
-   than `2*T1`) and rerun. T2* should collapse toward `Tphi`, showing that fast
+   than `2*T1`) and rerun. T2 should collapse toward `Tphi`, showing that fast
    dephasing dominates the coherence budget.
 2. **Spin echo intuition.** Increase `detuning` to `2*np.pi*2.0` and watch the
    fringes get denser while the envelope is unchanged: the decay time depends on

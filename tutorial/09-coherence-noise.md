@@ -6,13 +6,13 @@ A perfect qubit would hold whatever state you put into it forever. Real qubits d
 
 A qubit never decoheres on its own. It decoheres because it is weakly coupled to a **bath**, a huge collection of environmental modes it cannot control. How the coupling is oriented relative to the qubit's quantization axis decides *which* clock it spoils:
 
-- **Longitudinal coupling** (along a transverse direction, $\hat\sigma_x$/$\hat\sigma_y$) can exchange *energy* with the bath. The bath can absorb a photon at $\omega_q$ and de-excite the qubit. This drives **$T_1$ relaxation**.
-- **Transverse coupling along the qubit axis** ($\hat\sigma_z$) conserves energy but modulates the qubit frequency $\omega_q$. No photon is exchanged; instead the phase is scrambled. This drives **pure dephasing**, $T_\phi$.
+- **Transverse coupling** (perpendicular to the qubit axis, $\hat\sigma_x$/$\hat\sigma_y$) can exchange *energy* with the bath. The bath can absorb a photon at $\omega_q$ and de-excite the qubit. This drives **$T_1$ relaxation**.
+- **Longitudinal coupling** (along the qubit axis, $\hat\sigma_z$) conserves energy but modulates the qubit frequency $\omega_q$. No photon is exchanged; instead the phase is scrambled. This drives **pure dephasing**, $T_\phi$.
 
 ```mermaid
 flowchart TD
     P["Prepared state<br/>(Bloch sphere<br/>superposition)"]
-    P --> A["Energy loss<br/>|1>-> |0>, photon<br/>(longitudinal bath)"]
+    P --> A["Energy loss<br/>|1>-> |0>, photon<br/>(transverse bath)"]
     P --> B["Phase scramble<br/>w_q jitter, no energy<br/>(sigma_z bath)"]
     A --> A1["T1 relaxation<br/>P1 = exp(-t/T1)<br/>inversion recovery"]
     B --> B1["T_phi dephasing<br/>Ramsey (T2*)<br/>or echo (T2E)"]
@@ -54,15 +54,15 @@ To go beyond rates we need to describe the noise itself. Let $\lambda(t)$ be a f
 
 $$C(\tau) = \langle \lambda(t)\,\lambda(t+\tau)\rangle.$$
 
-The **Wiener-Khinchin theorem** says the noise **power spectral density (PSD)** is the Fourier transform of that autocorrelation:
+With a bilateral angular-frequency convention, the **Wiener-Khinchin theorem** says the noise **power spectral density (PSD)** is the Fourier transform of that autocorrelation:
 
 $$S(\omega) = \int_{-\infty}^{\infty} C(\tau)\, e^{-i\omega\tau}\, d\tau.$$
 
-$S(\omega)$ tells you how much noise power sits at each frequency. **White noise** is flat ($S$ = const, no memory) and produces Markovian, exponential decay. But the noise that limits superconducting qubits is emphatically *not* white. Flux and charge noise follow a **$1/f$ (flicker)** law,
+$S(\omega)$ tells you how much noise power sits at each angular frequency. **White noise** is flat ($S$ = const, no memory) and produces Markovian, exponential decay. Many dephasing channels in superconducting qubits are emphatically *not* white: flux and charge noise often follow a **$1/f$ (flicker)** law, while relaxation channels are frequently well approximated as Markovian near $\omega_q$. Noise amplitudes in superconducting qubits are usually quoted as a one-sided cyclic-frequency PSD:
 
-$$S_\Phi(\omega) = A^2 \left(\frac{2\pi \times 1\,\text{Hz}}{|\omega|}\right)^{\alpha}, \qquad \alpha \approx 1,$$
+$$S_\Phi^{(1)}(f) = A_\Phi^2 \left(\frac{1\,\text{Hz}}{f}\right)^{\alpha}, \qquad f>0,\quad \alpha \approx 1,$$
 
-where $A$ is the noise amplitude, usually quoted in $\mu\Phi_0/\sqrt{\text{Hz}}$ at 1 Hz. Microscopically, a $1/f$ spectrum is what you get when you sum many bistable fluctuators (e.g. surface spins) with a broad distribution of switching rates. The key feature is the **divergence at low frequency**: most of the noise power is in slow drifts. That is exactly why $T_2^*$ is drift-limited, and exactly what echo sequences are built to defeat.
+where $A_\Phi$ is the noise amplitude, usually quoted in micro-$\Phi_0/\sqrt{\text{Hz}}$ at 1 Hz. Convert explicitly before inserting it into a bilateral $S_\Phi(\omega)$ formula: if $S_\Phi^{(1)}(f)$ is one-sided in Hz, then the bilateral angular-frequency PSD used in the filter integral is $S_{\Phi,\omega}(\omega)=\tfrac12 S_\Phi^{(1)}(|\omega|/2\pi)$, and $S_{\delta\omega}(\omega)=(\partial\omega_q/\partial\Phi)^2S_{\Phi,\omega}(\omega)$. Microscopically, a $1/f$ spectrum is what you get when you sum many bistable fluctuators (e.g. surface spins) with a broad distribution of switching rates. The key feature is the **divergence at low frequency**: most of the noise power is in slow drifts. That is exactly why $T_2^*$ is drift-limited, and exactly what echo sequences are built to defeat.
 
 ## The filter-function picture: why echo works
 
@@ -72,12 +72,16 @@ Here is the unifying idea of the whole chapter. A pulse sequence acts as a **ban
 
 1. **Accumulated phase.** During free evolution the qubit picks up phase $\varphi(t) = \int_0^t \delta\omega(t')\,g(t')\,dt'$, where $\delta\omega$ is the frequency noise and $g(t') = \pm 1$ is a **switching function** that flips sign at every $\pi$ pulse.
 2. **Gaussian average.** For Gaussian noise, $\langle e^{i\varphi}\rangle = e^{-\langle\varphi^2\rangle/2}$, so the coherence decays as $e^{-\chi(t)}$ with $\chi(t) = \tfrac{1}{2}\langle\varphi^2\rangle$.
-3. **To frequency domain.** Writing $\langle\varphi^2\rangle$ as a double time integral of $C(\tau)$ and using Wiener-Khinchin turns the switching function into its squared Fourier transform $|\tilde g(\omega,t)|^2$, the **filter function**.
+3. **To frequency domain.** Writing $\langle\varphi^2\rangle$ as a double time integral of $C(\tau)$ and using Wiener-Khinchin turns the switching function into a squared frequency-domain weighting, the **filter function**.
 4. **Result.** The dephasing exponent is the *overlap* of the noise PSD with the filter:
 
-$$\chi(t) = \frac{1}{2}\int_0^\infty \frac{d\omega}{\pi}\, S(\omega)\, \frac{|\tilde g(\omega,t)|^2}{\omega^2}, \qquad \langle\sigma_x\rangle \propto e^{-\chi(t)}.$$
+$$G_N(\omega,t)=\int_0^t g_N(t')e^{i\omega t'}dt',$$
 
-The pulse sequence literally shapes which noise frequencies reach the qubit. The explicit weighting functions for the two basic sequences are
+$$\chi(t) = \frac{1}{2}\int_0^\infty \frac{d\omega}{\pi}\, S_{\delta\omega}(\omega)\, |G_N(\omega,t)|^2, \qquad \langle\sigma_x\rangle \propto e^{-\chi(t)}.$$
+
+Equivalently, if $Y_N(\omega,t)=i\omega G_N(\omega,t)$ is used as the dimensionless filter numerator, write $|Y_N|^2/\omega^2$ instead of $|G_N|^2$.
+
+The pulse sequence literally shapes which noise frequencies reach the qubit. Writing $|G_N(\omega,t)|^2=t^2 W_N(f,t)$ with $\omega=2\pi f$, the dimensionless weighting functions for the two basic sequences are
 
 $$W_R(f,t) = \frac{\sin^2(\pi f t)}{(\pi f t)^2}, \qquad W_E(f,t) = \frac{\sin^4(\pi f t/2)}{(\pi f t/2)^2}.$$
 
@@ -103,18 +107,19 @@ For **Ramsey**, $g = +1$ throughout, giving a low-pass filter $W_R$ that lets DC
 
 ## Decay shape follows noise color
 
-The draft's all-exponential story is incomplete: **the color of the noise sets the *shape* of the decay**, not just its rate.
+A purely exponential story is incomplete: **the color of the noise sets the *shape* of the decay**, not just its rate.
 
 - **White / Markovian noise** (fast compared to the sequence) gives memoryless, **exponential** decay, $e^{-t/T_2}$. $T_1$ relaxation is the canonical example.
 - **Quasi-static $1/f$ noise** (frozen during one run, Gaussian-distributed across runs) makes the phase variance grow as $t^2$ rather than $t$, because $\varphi = \delta\omega\cdot t$ with $\delta\omega$ fixed per shot. Then $\langle e^{i\varphi}\rangle = e^{-\langle\varphi^2\rangle/2}$ gives a **Gaussian** envelope:
 
-$$\langle\sigma_x\rangle \propto e^{-(t/T_2^*)^2}, \qquad \frac{1}{T_2^*} \sim \left|\frac{\partial\omega_q}{\partial\Phi}\right| A\sqrt{2\ln 2}.$$
+$$\langle\sigma_x\rangle \propto e^{-(t/T_2^*)^2}, \qquad \frac{1}{T_2^*} \sim \left|\frac{\partial\omega_q}{\partial\Phi}\right| A_\Phi\sqrt{\ln(f_{\rm uv}/f_{\rm ir})},$$
+up to the stated one-sided/bilateral convention factors.
 
 | Noise type | Regime | Envelope | Set by |
 |---|---|---|---|
 | White / Markovian | fast noise, $T_1$ | $e^{-t/T}$ (exponential) | rate $\Gamma$ |
 | Quasi-static $1/f$ | Ramsey dephasing | $e^{-(t/T_2^*)^2}$ (Gaussian) | dispersion slope $\times A$ |
-| Echo on $1/f$ | refocused | stretched, near-exp, longer | residual fast $1/f$ |
+| Echo on $1/f^\alpha$ | refocused | $e^{-(t/T_E)^{1+\alpha}}$ ideal; often mixed in data | residual finite-frequency noise |
 
 *(Illustrative shapes.)* Note that $1/T_2^*$ carries the **flux-dispersion slope** $\partial\omega_q/\partial\Phi$. Operate where that slope is zero, a **sweet spot**, and the linear sensitivity vanishes.
 
@@ -155,7 +160,7 @@ $$\langle\sigma_x\rangle(t) \propto e^{-(t/T_2^*)^p}\cos(\delta\omega\, t),$$
 
 with $p\!=\!1$ for white noise and $p\!=\!2$ (Gaussian) when quasi-static $1/f$ noise dominates, the case for most flux-tunable qubits off the sweet spot.
 
-**Hahn echo** inserts one $\pi$ pulse, zeroing the $f\!\to\!0$ filter response and rejecting slow noise; $T_2^E \ge T_2^*$ and their *ratio diagnoses the noise color*. **CPMG** uses $N$ equally spaced $\pi$ pulses (along $Y$ to suppress pulse errors), pushing the filter passband to $\sim N/(2t)$ and extending coherence further. Sweeping $N$ and the spacing turns the qubit into a **tunable spectrometer**: each sequence samples $S(\omega)$ at a different center frequency, so you can reconstruct the PSD itself, closing the loop between measurement and noise model.
+**Hahn echo** inserts one $\pi$ pulse, zeroing the $f\!\to\!0$ filter response and rejecting slow noise; when slow dephasing dominates and pulse errors are small, usually $T_2^E \gtrsim T_2^*$, and their *ratio diagnoses the noise color*. **CPMG** uses $N$ equally spaced $\pi$ pulses (along $Y$ to suppress pulse errors), pushing the filter passband to $\sim N/(2t)$ and extending coherence further. Sweeping $N$ and the spacing turns the qubit into a **tunable spectrometer**: each sequence samples $S(\omega)$ at a different center frequency, so you can reconstruct the PSD itself, closing the loop between measurement and noise model.
 
 ## Purcell decay as a circuit-level $T_1$ channel
 
@@ -206,10 +211,10 @@ The lesson: the qubit Hamiltonian was solved long ago; the frontier is the dirty
 
 ## Key takeaways
 
-- A qubit decoheres because it is weakly coupled to a bath: longitudinal coupling drives $T_1$, $\sigma_z$ coupling drives $T_\phi$.
+- A qubit decoheres because it is weakly coupled to a bath: transverse coupling drives $T_1$, while longitudinal $\sigma_z$ coupling drives $T_\phi$.
 - Bloch-Redfield gives $1/T_2 = 1/2T_1 + 1/T_\phi$ as a *result*, with the hard ceiling $T_2 \le 2T_1$.
 - Noise is characterized by its PSD $S(\omega)$; flux and charge noise are $1/f$, with most power at low frequency.
-- The filter-function formula $\chi(t)=\tfrac12\int S(\omega)|\tilde g|^2/\omega^2\,d\omega$ unifies Ramsey, echo, and CPMG and explains *why* echo works.
+- The filter-function formula $\chi(t)=\tfrac12\int_0^\infty(d\omega/\pi)\,S_{\delta\omega}(\omega)|G_N(\omega,t)|^2$ unifies Ramsey, echo, and CPMG and explains *why* echo works.
 - Noise color sets decay *shape*: quasi-static $1/f$ → Gaussian, white → exponential.
 - Sweet spots kill first-order noise sensitivity; CPMG doubles as noise spectroscopy.
 - $T_1$ limiters (TLS, Purcell, quasiparticles) and $T_\phi$ limiters ($1/f$ flux/charge, photon shot noise) need different fixes, match the mitigation to the mechanism.

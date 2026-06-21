@@ -41,7 +41,7 @@ A dilution refrigerator gives you a ladder of plates, each colder than the last,
 | 4 K | 4 K | $\sim 1$ W | 20 dB | HEMT amp | stainless |
 | Still | ~0.8 K | $\sim 10$ mW | 10-20 dB | (none) | NbTi |
 | Cold | ~0.1 K | $\sim 100\ \mu$W | (light) | (none) | NbTi |
-| MXC | ~10 mK | $\sim 10$-$50\ \mu$W | 20 dB | TWPA, isolators, **chip** | NbTi |
+| MXC | ~10 mK base | model-dependent; $\sim 10$-$50\ \mu$W only at elevated MXC temperature, e.g. ~20 mK, not at base | 20 dB | TWPA, isolators, **chip** | NbTi |
 
 There are **two distinct heat loads** on every coax line, and they pull cable design in opposite directions:
 
@@ -60,7 +60,11 @@ A perfect lossless cable would be a disaster, it would faithfully deliver all ~1
 
 Model a matched attenuator of power-attenuation factor $A$ (so 20 dB $\Rightarrow A = 100$) at temperature $T_i$. By the fluctuation-dissipation theorem, whatever quanta it removes from the signal it must replace with its own thermal emission. Fraction $1/A$ of the input is transmitted; the complementary fraction $(1-1/A)$ is replaced by the attenuator's bath:
 
-$$T_{\text{noise}}^{\text{out}} = \frac{T_{\text{noise}}^{\text{in}}}{A_i} + \left(1 - \frac{1}{A_i}\right) T_i, \qquad \bar n_{\text{out}} = \frac{\bar n_{\text{in}}}{A_i} + \left(1 - \frac{1}{A_i}\right)\bar n(\omega, T_i).$$
+If we use a Rayleigh-Jeans-equivalent noise temperature $T_{\rm RJ}\equiv(\hbar\omega/k_B)\bar n$, then
+$$T_{{\rm RJ},\text{out}} = \frac{T_{{\rm RJ},\text{in}}}{A_i} + \left(1 - \frac{1}{A_i}\right)T_{\rm RJ}(T_i), \qquad
+T_{\rm RJ}(T_i)=\frac{\hbar\omega}{k_B}\bar n(\omega,T_i).$$
+This reduces to the physical temperature $T_i$ only in the classical limit $k_BT_i\gg\hbar\omega$. The exact quantum statement is
+$$\bar n_{\text{out}} = \frac{\bar n_{\text{in}}}{A_i} + \left(1 - \frac{1}{A_i}\right)\bar n(\omega, T_i).$$
 
 This is the **rigorous version** of the heuristic $\bar n_{\text{eff}} \approx \sum_i \bar n(\omega,T_i)/A_i^{\text{cum}}$. Cascade it: feed each stage's **full** output (not just its transmitted fraction) into the next, colder attenuator. Each attenuator re-emits at its own temperature, while any warmer residual is suppressed only by the product of the attenuations that *follow* it, so enough total cold attenuation drives the occupation down toward the base-temperature floor.
 
@@ -82,16 +86,16 @@ input noise ~16 photons (from 4 K)
 
 Total staged input attenuation is typically 40-60 dB (illustrative), and the choice per stage is bounded **below by noise** (you need enough *cold* attenuation to reach the floor) and **above by heat** (each dB dumps power on a cold plate). That is why you can't just put 60 dB at one place.
 
-**Filtering is a separate job from attenuation**, and conflating the two is a common mistake. Attenuators are GHz-band devices; they do nothing about radiation far outside that band. Three roles:
+**Filtering is a separate job from attenuation**, and conflating the two is a common mistake. Attenuators are GHz-band devices; they do nothing about radiation far outside that band. Four roles:
 
 | Component | What it blocks | Frequency range | Where placed |
 |---|---|---|---|
 | Staged attenuators | in-band thermal microwave noise | GHz (readout/qubit band) | every plate |
 | Low-pass / band-pass filter | out-of-band drive harmonics & noise | GHz | near chip |
-| IR / Eccosorb / lossy-coax filter | THz blackbody, **pair-breaking** radiation | far infrared | MXC, right at chip |
+| IR / Eccosorb / lossy-coax filter | photons above the superconducting gap; mm-wave/IR/THz blackbody, **pair-breaking** radiation | mm-wave through infrared | MXC, right at chip |
 | Isolator / circulator | **backward** amplifier noise | readout band | between chip and TWPA |
 
-Stray far-infrared photons are dangerous in a way attenuators can't fix: a THz photon carries enough energy to **break Cooper pairs**, generating quasiparticles that directly limit $T_1$. Hence the separate **IR/Eccosorb** filtering at the coldest stage.
+Stray high-frequency photons are dangerous in a way attenuators can't fix: any photon with $h\nu>2\Delta$ can **break Cooper pairs** (for aluminum, the threshold is order 90 GHz), generating quasiparticles that directly limit $T_1$. Hence the separate **IR/Eccosorb** filtering at the coldest stage.
 
 ## Output lines: protect, then amplify
 
@@ -103,18 +107,26 @@ The readout signal coming *back* from the chip is a handful of microwave photons
 
 1. The output mode must obey bosonic commutation, $[\hat b, \hat b^\dagger] = 1$, exactly like the input mode $\hat a$.
 2. Naively setting $\hat b = \sqrt{G}\,\hat a$ gives $[\hat b,\hat b^\dagger] = G \neq 1$, illegal for $G>1$.
-3. Restore the commutator by adding an independent ancillary (idler) mode $\hat c$: $\hat b = \sqrt{G}\,\hat a + \sqrt{G-1}\,\hat c^\dagger$. Check: $[\hat b,\hat b^\dagger] = G - (G-1) = 1$. ✓
+3. Restore the commutator by adding an independent idler input mode $\hat c_{\rm in}$:
+   $$\hat a_{\rm out} = \sqrt{G}\,\hat a_{\rm in} + \sqrt{G-1}\,\hat c_{\rm in}^\dagger.$$
+   Check: $[\hat a_{\rm out},\hat a_{\rm out}^\dagger] = G - (G-1) = 1$. ✓
 4. Even with the ancilla in vacuum ($\langle \hat c^\dagger \hat c\rangle = 0$), its zero-point fluctuation adds variance. Referred to input, the added noise is $\tfrac{G-1}{G}(n_c + \tfrac12) \to \tfrac12$ at high gain.
 
 $$\boxed{\;T_{\text{add}}^{\min} = \frac{\hbar\omega}{2 k_B}\qquad\Longleftrightarrow\qquad n_{\text{add}}^{\min} = \tfrac{1}{2}\;}$$
 
 For a 7 GHz readout, $\hbar\omega/2k_B \approx 0.17\,$K. This is a *fundamental quantum limit*, not an engineering shortfall, **only a phase-sensitive amplifier (squeezing) can beat it, and only on one quadrature**, at the cost of the other.
 
-**The amplifier cascade.** First a near-quantum-limited **TWPA** at the MXC (adds close to the half-photon SQL); then a **HEMT** at 4 K (high gain, but $\sim 5$-$10$ K noise temperature); then room-temperature amps. The order is decided by **Friis's formula**, which refers each stage's added noise back to the input:
+**The amplifier cascade.** First a near-quantum-limited Josephson parametric amplifier at the MXC: a **JPA** for narrowband readout, a **JPC** for nondegenerate phase-preserving gain, or a **TWPA** for broadband/multiplexed readout; then a **HEMT** at 4 K (high gain, but $\sim 5$-$10$ K noise temperature); then room-temperature amps. The order is decided by **Friis's formula**, which refers each stage's added noise back to the input:
 
 $$T_{\text{sys}} = T_1 + \frac{T_2}{G_1} + \frac{T_3}{G_1 G_2} + \cdots$$
 
 Derivation in one breath: stage 2's own noise $T_2$ appears at the system output multiplied by $G_2$ but accompanied by $G_1 G_2 T_1$ from stage 1; dividing the total output noise by the total gain $G_1 G_2$ refers stage 2 back as $T_2/G_1$, stage 3 as $T_3/(G_1 G_2)$, and so on. **A large first-stage gain $G_1$ crushes every downstream contribution.**
+
+Passive loss before the first amplifier must be included as a Friis stage with gain $G=1/L$, not ignored. For normal-ordered thermal occupation, a cold lossy element with power loss $L$ contributes $(L-1)\bar n(\omega,T)$ referred to its input; for amplifier-noise and efficiency bookkeeping it contributes
+
+$$n_{\rm add,loss}=(L-1)\left[\bar n(\omega,T)+\tfrac12\right],$$
+
+and multiplies all downstream input-referred amplifier noise by $L$. Thus even zero-temperature insertion loss before the first amplifier mixes in vacuum noise and costs efficiency.
 
 ```mermaid
 flowchart TD
@@ -155,15 +167,15 @@ flowchart TD
 
 *(All numbers illustrative.)* Readout at $f = 7$ GHz, so $\hbar\omega/k_B = hf/k_B = 0.336\,$K and the half-photon SQL is $0.168\,$K. Cascade: **(1)** TWPA, $G_1 = 20$ dB $= 100$, $T_1 = 0.3\,$K ($\approx 0.9$ photons, near but not at the SQL); **(2)** HEMT, $G_2 = 40$ dB $= 10^4$, $T_2 = 5\,$K; **(3)** room-temp amp, $T_3 = 75\,$K.
 
-$$T_{\text{sys}} = 0.3 + \frac{5}{100} + \frac{75}{100\cdot 10^4} = 0.3 + 0.05 + 7.5\times10^{-6} \approx 0.350\,\text{K}.$$
+$$T_{\text{sys}} = 0.3 + \frac{5}{100} + \frac{75}{100\cdot 10^4} = 0.3 + 0.05 + 7.5\times10^{-5} \approx 0.350\,\text{K}.$$
 
-The TWPA's 0.30 K **dominates**; the 5 K HEMT shrinks to 0.05 K once divided by the TWPA gain; the room-temp amp is utterly negligible. In photons referred to input, $n_{\text{add}} = k_B T_{\text{sys}}/\hbar\omega = 0.350/0.336 = 1.04$ photons. Adding the unavoidable half-photon of vacuum gives total input-referred noise $0.5 + 1.04 = 1.54$ photons, so the **measurement (quantum) efficiency** is
+The TWPA's 0.30 K **dominates**; the 5 K HEMT shrinks to 0.05 K once divided by the TWPA gain; the room-temp amp is utterly negligible. Interpreting $T_{\text{sys}}$ as amplifier-added noise temperature, excluding the input vacuum, the chain has $n_{\text{add,sys}} = k_B T_{\text{sys}}/\hbar\omega = 0.350/0.336 = 1.04$ photons. Adding the unavoidable half-photon of vacuum gives total input-referred noise $0.5 + 1.04 = 1.54$ photons, so the **measurement (quantum) efficiency** is
 
 $$\eta = \frac{0.5}{1.54} \approx 0.32 \quad (\sim 32\%, \text{ illustrative}).$$
 
-**Now delete the TWPA.** With the HEMT first, $T_{\text{sys}} = 5 + 75/10^4 = 5.0075\,$K $\Rightarrow n_{\text{add}} = 14.9$ photons, $\eta = 0.5/15.4 \approx 3\%$. The TWPA improves input-referred added noise by **~14x** and efficiency by **~10x**. Since the integration time to reach a fixed single-shot SNR scales roughly with added-noise power, that ~14x cut shortens the readout time by a similar factor, *that* is why a good first amplifier "transforms readout fidelity."
+**Now delete the TWPA.** With the HEMT first, $T_{\text{sys}} = 5 + 75/10^4 = 5.0075\,$K $\Rightarrow n_{\text{add}} = 14.9$ photons, $\eta = 0.5/15.4 \approx 3\%$. The TWPA improves input-referred added noise by **~14x** and efficiency by **~10x**. Since the integration time to reach fixed single-shot SNR scales with the total input-referred measurement-noise denominator $0.5+n_{\rm add}$, this example shortens the readout time by $(0.5+14.9)/(0.5+1.04)\approx10\times$. The amplifier-added noise itself improves by $\sim14\times$.
 
-**Input-side sanity check.** A 7 GHz tone entering at 300 K carries $\bar n(7\text{ GHz}, 300\text{ K}) = 1/(e^{0.336/300}-1) \approx 892$ photons. To push this below ~0.01 at the chip you need $\sim 892/0.01 \approx 10^5 = 50\,$dB of cold attenuation, exactly the standard 40-60 dB staged budget, with the **last 20 dB at the MXC** so the residual line temperature is the MXC attenuator's, not 300 K.
+**Input-side sanity check.** A 7 GHz tone entering at 300 K carries $\bar n(7\text{ GHz}, 300\text{ K}) = 1/(e^{0.336/300}-1) \approx 892$ photons. The naive lower bound for reaching $0.01$ photon is $10\log_{10}(892/0.01)\approx49.5\,$dB, but real staged attenuation must include each attenuator's own re-emission. For example, 20 dB at 4 K, 10 dB at 100 mK, and 20 dB at 10 mK gives $\bar n_{\rm out}\approx0.020$ at 7 GHz; changing the middle attenuator to 20 dB gives $\bar n_{\rm out}\approx0.0024$. Thus 50 dB is a lower bound, while about 60 dB is the usual target for few-$10^{-3}$ occupations.
 
 ## Wiring discipline as a coherence budget
 
@@ -174,7 +186,7 @@ The chain only works if you respect it. Heat-sink every cable and attenuator fir
 - **"A lossless cable is ideal."** No, it delivers 300 K noise to the qubit. You *want* controlled, well-thermalized cold loss on the input.
 - **"Attenuators only weaken the signal."** They also *emit* Johnson-Nyquist noise at their own temperature; a poorly heat-sunk attenuator is a warm noise source.
 - **"Put all attenuation at one stage."** The floor is set by the *coldest, last* attenuator, and each plate has a cooling-power budget, hence staging.
-- **"GHz attenuators are enough."** THz blackbody photons break Cooper pairs; you need separate IR/Eccosorb filtering.
+- **"GHz attenuators are enough."** High-frequency photons above the superconducting gap break Cooper pairs; you need separate IR/Eccosorb filtering.
 - **"The half-photon limit is a hardware flaw."** It is the fundamental Haus-Caves limit; only phase-sensitive squeezing beats it, on one quadrature.
 - **"The 5 K HEMT limits readout."** With a quantum-limited first stage, Friis divides the HEMT noise by $G_1$, the first amplifier dominates.
 - **"Noise temperature = physical temperature."** Noise temperature is an equivalent-input bookkeeping quantity; a 10 mK TWPA can have a sub-kelvin *noise* temperature set by quantum noise.

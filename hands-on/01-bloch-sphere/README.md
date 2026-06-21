@@ -75,6 +75,7 @@ the X drive carrying the state from the north pole down through the equator.
 
 1. Change `Omega` to `2 * np.pi * 10.0` and confirm the pi pulse time halves
    and the qubit completes more oscillations within the same `tlist`.
-2. Swap `sesolve` for `mesolve` with a collapse operator
-   `c_ops=[np.sqrt(2.0) * destroy(2)]` to add relaxation, and watch the
-   trajectory spiral inward toward `|0>` instead of staying on the surface.
+2. Import `mesolve` and `destroy`, then swap `sesolve` for `mesolve` with
+   `c_ops=[np.sqrt(2.0) * destroy(2)]` to add relaxation. Under the continuous
+   X drive the trajectory spirals inward toward the driven steady state; if you
+   turn the drive off afterward, relaxation carries it to `|0>`.

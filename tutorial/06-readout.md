@@ -9,12 +9,12 @@ This chapter builds that idea quantitatively. We start from Jaynes-Cummings, der
 Recall the Jaynes-Cummings (JC) Hamiltonian for a qubit coupled to a single resonator mode:
 
 $$
-H/\hbar = \omega_r\, a^\dagger a + \tfrac{1}{2}\omega_q\,\sigma_z + g\left(a^\dagger \sigma_- + a\,\sigma_+\right).
+H/\hbar = \omega_r\, a^\dagger a - \tfrac{1}{2}\omega_q\,Z + g\left(a^\dagger \sigma_- + a\,\sigma_+\right).
 $$
 
-Three pieces: a harmonic resonator ($a^\dagger a$), a two-level qubit ($\sigma_z$), and a coupling that swaps **one photon for one qubit excitation**. That coupling conserves total excitation number, it's the rotating-wave term you keep when $g \ll \omega_q,\omega_r$.
+Three pieces: a harmonic resonator ($a^\dagger a$), a two-level qubit ($Z$), and a coupling that swaps **one photon for one qubit excitation**. That coupling conserves total excitation number, it's the rotating-wave term you keep when $g \ll \omega_q,\omega_r$.
 
-We use the readout (quantum-information) convention $\sigma_z = |0\rangle\langle0| - |1\rangle\langle1|$, so $\sigma_z = +1$ on $|0\rangle$ and $-1$ on $|1\rangle$; with this sign the qubit term places the *occupied* $|1\rangle$ at the lower diagonal entry, which is purely a bookkeeping choice and does not affect any readout result below.
+We use the readout (quantum-information) convention $Z = |0\rangle\langle0| - |1\rangle\langle1|$, so $Z = +1$ on $|0\rangle$ and $-1$ on $|1\rangle$. With this convention the physical qubit Hamiltonian carries the minus sign above, placing $|0\rangle$ below $|1\rangle$.
 
 Define the detuning $\Delta = \omega_q - \omega_r$. In the **dispersive regime** $|\Delta| \gg g$, the coupling can't conserve energy if it tries to actually move an excitation: emitting a photon would cost/release $\sim\Delta$ of energy it doesn't have. So real population transfer is forbidden, but the qubit and resonator still feel each other through *virtual* exchange. Our job is to fold that virtual coupling into an effective, diagonal Hamiltonian.
 
@@ -25,42 +25,42 @@ Define the detuning $\Delta = \omega_q - \omega_r$. In the **dispersive regime**
 We remove the coupling perturbatively with a small unitary rotation $U = e^{S}$, choosing the anti-Hermitian generator
 
 $$
-S = \frac{g}{\Delta}\left(a^\dagger \sigma_- - a\,\sigma_+\right).
+S = -\frac{g}{\Delta}\left(a^\dagger \sigma_- - a\,\sigma_+\right).
 $$
 
 **Step 1.** Transform: $H' = U H U^\dagger = H + [S,H] + \tfrac{1}{2}[S,[S,H]] + \dots$ (Baker-Campbell-Hausdorff).
 
 **Step 2.** $S$ is chosen so that $[S,\,H_0]$ exactly cancels the original $g$-term to first order, where $H_0$ is the uncoupled part. This is the whole point of the rotation: kill the off-diagonal coupling.
 
-**Step 3.** The first surviving correction is the second-order term $\tfrac{1}{2}[S, g(a^\dagger\sigma_- + a\sigma_+)]$. Evaluating the commutators (using $[a,a^\dagger]=1$ and $[\sigma_+,\sigma_-]=\sigma_z$) gives
+**Step 3.** The first surviving correction is the second-order term $\tfrac{1}{2}[S, g(a^\dagger\sigma_- + a\sigma_+)]$. Evaluating the commutators (using $[a,a^\dagger]=1$ and, in this chapter's convention, $[\sigma_-,\sigma_+]=Z$, equivalently $[\sigma_+,\sigma_-]=-Z$) gives
 
 $$
-\frac{g^2}{\Delta}\left(a^\dagger a + \tfrac{1}{2}\right)\sigma_z .
+-\frac{g^2}{\Delta}\left(a^\dagger a + \tfrac{1}{2}\right)Z .
 $$
 
 **Step 4.** Collecting terms, define $\chi \equiv g^2/\Delta$:
 
 $$
-\boxed{\,H_{\mathrm{disp}}/\hbar \approx \left(\omega_r + \chi\,\sigma_z\right) a^\dagger a + \tfrac{1}{2}\!\left(\omega_q + \chi\right)\sigma_z\,}
+\boxed{\,H_{\mathrm{disp}}/\hbar \approx \left(\omega_r - \chi\,Z\right) a^\dagger a - \tfrac{1}{2}\!\left(\omega_q + \chi\right)Z\,}
 $$
 
-Two things fell out at once. The $\chi\,\sigma_z\,a^\dagger a$ term is a **cross-Kerr** coupling, and the leftover $\tfrac12\chi\sigma_z$ is a Lamb shift of the qubit. The expansion parameter was $g/\Delta$, keep it small.
+Two things fell out at once. The $-\chi\,Z\,a^\dagger a$ term is a **cross-Kerr** coupling, and the leftover $-\tfrac12\chi Z$ is a Lamb shift of the qubit. The expansion parameter was $g/\Delta$, keep it small.
 
 ## 2. One term, two pictures
 
-That single cross-Kerr term $\chi\,\sigma_z\,a^\dagger a$ is symmetric, you can group the operators two ways, and each grouping is a physical "picture."
+That single cross-Kerr term $-\chi\,Z\,a^\dagger a$ is symmetric, you can group the operators two ways, and each grouping is a physical "picture."
 
 ```mermaid
 flowchart TD
-    H["cross-Kerr term<br/>chi*sigma_z*a-dag a"]
+    H["cross-Kerr term<br/>-chi*Z*a-dag a"]
     H --> A["Resonator picture<br/>w_r +/- chi<br/>set by qubit"]
     H --> B["Qubit picture<br/>w_q + 2 chi n_avg<br/>(ac-Stark shift)"]
     A --> C["IQ separation<br/>-> SNR -> readout"]
     B --> D["measurement-induced<br/>dephasing and<br/>number splitting"]
 ```
 
-- **Resonator picture**: group as $(\chi\sigma_z)\,a^\dagger a$: the resonator frequency is $\omega_r + \chi$ if the qubit is in $|0\rangle$ (where $\sigma_z=+1$) and $\omega_r - \chi$ if in $|1\rangle$. The two frequencies are split by $2\chi$. **This is what we read.**
-- **Qubit picture**: group as $\chi(a^\dagger a)\,\sigma_z$: the qubit frequency shifts by $2\chi\,\bar n$ where $\bar n$ is the photon number. This is the **ac-Stark shift**, and its photon-number dependence causes the back-action we meet in §5.
+- **Resonator picture**: group as $(-\chi Z)\,a^\dagger a$: the resonator frequency is $\omega_r - \chi$ if the qubit is in $|0\rangle$ (where $Z=+1$) and $\omega_r + \chi$ if in $|1\rangle$. The two frequencies are split by $2|\chi|$. **This is what we read.**
+- **Qubit picture**: group as $-\chi(a^\dagger a)\,Z$: the qubit frequency shifts by $2\chi\,\bar n$ where $\bar n$ is the photon number. This is the **ac-Stark shift**, and its photon-number dependence causes the back-action we meet in Section 5.
 
 Both are the *same physics*. Read the resonator, learn the qubit; but the same term means probing the resonator inevitably disturbs the qubit's phase.
 
@@ -72,7 +72,7 @@ $$
 \boxed{\;\chi = \frac{g^2}{\Delta}\,\frac{\alpha}{\Delta + \alpha}, \qquad \alpha < 0\;}
 $$
 
-Because $\alpha<0$, the factor $\alpha/(\Delta+\alpha)$ is less than one: **the third level partially cancels the dispersive shift.** Using the bare two-level formula overestimates $\chi$, a common and costly mistake when designing a chip. A typical illustrative value is $\chi/2\pi \sim 0.5\text{ to }1$ MHz.
+For the common transmon-readout case used below, $\Delta<0$ and $\alpha<0$, so $0<\alpha/(\Delta+\alpha)<1$ and $|\chi|<|g^2/\Delta|$: **the third level partially cancels the two-level dispersive shift.** For other detuning signs, keep the full signed formula and avoid the straddling region $\Delta+\alpha\approx0$. Using the bare two-level formula overestimates $\chi$ in this common design regime, a common and costly mistake when designing a chip. A typical illustrative value is $|\chi|/2\pi \sim 0.5\text{ to }1$ MHz.
 
 ## 4. Where it breaks: the critical photon number
 
@@ -86,7 +86,7 @@ Push more than $\sim n_{\mathrm{crit}}$ photons into the resonator and the pertu
 
 ## 5. Reading it out in the IQ plane
 
-We probe the resonator with a microwave tone near $\omega_r$ and measure the reflected/transmitted signal. The qubit state shifts the resonance, changing **both the amplitude and the phase** of the returned tone, near $\omega_r$ the *phase* shift usually dominates, which is why we homodyne along an optimal quadrature. We demodulate into two quadratures $I$ and $Q$; each single-shot lands as a point, and the two qubit states form two Gaussian clouds.
+We probe the resonator with a microwave tone near $\omega_r$ and measure the reflected/transmitted signal. The qubit state shifts the resonance, changing **both the amplitude and the phase** of the returned tone. Near $\omega_r$ the state information usually lies mostly along one rotated quadrature. In practice the receiver performs phase-coherent IQ homodyne or low-IF heterodyne demodulation to obtain $I(t)$ and $Q(t)$, then rotates and integrates the optimal quadrature; each single-shot lands as a point, and the two qubit states form two Gaussian clouds.
 
 ```
         Q
@@ -112,14 +112,19 @@ The two coherent states $\alpha_0,\alpha_1$ are the steady states of a damped, d
 Each escaping photon carries which-state information, so the integrated signal is $\propto \sqrt{\kappa}\,(\alpha_0-\alpha_1)$ over time $T$. The noise per quadrature is vacuum ($\tfrac12$) plus amplifier added noise $n_{\mathrm{add}}$, divided by efficiency $\eta$. Forming (signal)$^2$/(noise):
 
 $$
-\mathrm{SNR}^2 = \frac{2\,\eta\,\kappa\,T\,|\alpha_0-\alpha_1|^2}{1 + 2 n_{\mathrm{add}}}
-\;\sim\; \eta\,\frac{16\chi^2}{\kappa}\,\bar n\,T \quad(\text{near } 2\chi = \kappa).
+\mathrm{SNR}^2 =
+\frac{2\,\eta\,\kappa}{1 + 2 n_{\mathrm{add}}}
+\int_0^T |\alpha_0(t)-\alpha_1(t)|^2\,dt
+\xrightarrow[T\gg 2/\kappa]{\rm steady\ state}
+\frac{2\,\eta\,\kappa\,T\,|\alpha_0-\alpha_1|^2}{1 + 2 n_{\mathrm{add}}}
+\;\sim\; \eta\,\frac{16\chi^2}{\kappa}\,\bar n\,T \quad(\text{near } 2|\chi| \sim \kappa).
 $$
 
-SNR rewards larger $\chi$, more photons $\bar n$, longer $T$, higher efficiency $\eta$, and lower $n_{\mathrm{add}}$. The separation overlap then sets the **fidelity**:
+SNR rewards larger $\chi$, more photons $\bar n$, longer $T$, higher efficiency $\eta$, and lower $n_{\mathrm{add}}$. The steady-state form assumes the pointer states have settled for most of the integration window; for a square pulse starting from an empty cavity, use the integral form. The separation overlap then sets the **assignment fidelity** and **contrast**:
 
 $$
-F = 1 - P(0|1) - P(1|0), \qquad
+F_{\rm avg}=1-\frac{P(0|1)+P(1|0)}{2},\qquad
+C = 1 - P(0|1) - P(1|0), \qquad
 \varepsilon_{\mathrm{overlap}} \approx \tfrac12\,\mathrm{erfc}\!\left(\frac{\mathrm{SNR}}{2}\right).
 $$
 
@@ -131,11 +136,11 @@ Here is the conceptual heart, and it's the *qubit picture* of §2 coming back to
 
 $$
 \Gamma_\phi^{\mathrm{meas}} = \kappa\,\frac{|\alpha_0-\alpha_1|^2}{2}
-\;\xrightarrow{\,2\chi\ll\kappa\,}\;
+\;\xrightarrow{\,2|\chi|\ll\kappa\,}\;
 \boxed{\;\frac{8\chi^2}{\kappa}\,\bar n\;}
 $$
 
-This is **unavoidable**: in an ideal ($\eta=1$) measurement, the rate at which you learn about $\sigma_z$ *equals* the rate at which $\sigma_x,\sigma_y$ dephase. That is the rigorous statement behind "measure the resonator, learn the qubit." QND does *not* mean "no back-action", it means the measured observable $\sigma_z$ is preserved while its conjugates are scrambled.
+This is **unavoidable**: in an ideal ($\eta=1$) measurement, the rate at which you learn about $Z$ *equals* the rate at which $\sigma_x,\sigma_y$ dephase. That is the rigorous statement behind "measure the resonator, learn the qubit." QND does *not* mean "no back-action", it means the measured observable $Z$ is preserved while its conjugates are scrambled.
 
 ## 7. Purcell decay and the Purcell filter
 
@@ -182,30 +187,30 @@ flowchart TD
 
 \*All numbers illustrative.
 
-## 9. Why $2\chi \approx \kappa$, and the trade space
+## 9. Why $2|\chi| \sim \kappa$, and the trade space
 
-Maximize integrated SNR per unit time at fixed photon number. The phase separation of the two coherent states is largest when the two Lorentzian responses (width $\kappa$, split by $2\chi$) are *just resolved*, too narrow a $\kappa$ imprints lots of phase but leaks slowly; too broad a $\kappa$ is fast but smears the phase contrast and worsens Purcell. The optimum lands near $2\chi = \kappa$.
+Maximize integrated SNR per unit time at fixed photon number. The phase separation of the two coherent states is largest when the two Lorentzian responses (width $\kappa$, split by $2|\chi|$) are *just resolved*, too narrow a $\kappa$ imprints lots of phase but leaks slowly; too broad a $\kappa$ is fast but smears the phase contrast and worsens Purcell. A common design scale is $2|\chi|\sim\kappa$, but the exact optimum depends on drive frequency, photon number, integration time, filtering, and allowed measurement-induced transitions.
 
 ```
  amplitude/phase
-     |        |1>: ω_r - χ       |0>: ω_r + χ
+    |        |0>: omega_r - chi      |1>: omega_r + chi
      |          _                  _
      |        /   \              /   \
-     |       /     \            /     \      each peak width ≈ κ
+    |       /     \            /     \      each peak width ~ kappa
      |      /       \    |     /       \
-     |____/_________\___|___/_________\____ → probe freq
-                       ω_r (drive)
-        <----- 2χ ----->   peaks just resolved when 2χ ≈ κ
+    |____/_________\___|___/_________\____ -> probe freq
+                      omega_r (drive)
+       <----- 2|chi| ----->   compare with kappa
 ```
 
 | Knob | Increase helps | Increase hurts |
 |---|---|---|
 | $\chi$ | more signal / SNR | more measurement dephasing; smaller $n_{\mathrm{crit}}$ margin |
 | $\bar n$ photons | more SNR | approaches $n_{\mathrm{crit}}$, MIST/leakage, more dephasing |
-| $\kappa$ | faster info out; less Purcell-$T_1$ cost (fast escape) | less phase contrast; worse Purcell at $\omega_q$ (without filter) |
+| $\kappa$ | faster photon escape; shorter cavity ring-down | less phase contrast if too broad; larger unfiltered Purcell decay unless a Purcell filter suppresses the density of states at $\omega_q$ |
 | $T$ (integration) | more SNR (overlap error ↓) | more $T_1$ decay during readout; lower QND repeatability |
 
-Bottom line: aim for $2\chi \approx \kappa$, keep $\bar n \ll n_{\mathrm{crit}}$, and add a Purcell filter. (The exact optimum shifts with $\eta$, target fidelity, and your Purcell/$T_1$ budget, $2\chi=\kappa$ is a sweet spot, not a law.)
+Bottom line: compare $2|\chi|$ with $\kappa$, keep $\bar n \ll n_{\mathrm{crit}}$, and add a Purcell filter. (The exact optimum shifts with $\eta$, target fidelity, and your Purcell/$T_1$ budget; $2|\chi|\sim\kappa$ is a useful scale, not a law.)
 
 ## 10. Worked example (all numbers illustrative)
 
@@ -214,32 +219,32 @@ Bottom line: aim for $2\chi \approx \kappa$, keep $\bar n \ll n_{\mathrm{crit}}$
 1. **Detuning:** $\Delta/2\pi = 5.0 - 7.0 = -2000$ MHz.
 2. **Critical photons:** $n_{\mathrm{crit}} = \Delta^2/(4g^2) = 2000^2/(4\cdot100^2) = 100$. We'll use $\bar n \sim 5$, safely QND.
 3. **Two-level guess:** $g^2/\Delta = 100^2/(-2000) = -5$ MHz.
-4. **Transmon $\chi$:** $\chi = (-5)\cdot\dfrac{-300}{-2000-300} = (-5)(0.130) = -0.65$ MHz. So $2|\chi|/2\pi \approx 1.3$ MHz vs $\kappa/2\pi = 2$ MHz → near the $2\chi\approx\kappa$ sweet spot.
+4. **Transmon $\chi$:** $\chi/2\pi = (-5)\cdot\dfrac{-300}{-2000-300} = (-5)(0.130) = -0.65$ MHz. So $2|\chi|/2\pi \approx 1.3$ MHz vs $\kappa/2\pi = 2$ MHz, near the $2|\chi|\sim\kappa$ design scale.
 5. **Purcell (no filter):** $\Gamma_{\mathrm{Purcell}} = \kappa(g/\Delta)^2 = (2\pi\cdot2\text{ MHz})(0.05)^2 = 2\pi\cdot5$ kHz → $T_1^{\mathrm{Purcell}} \approx 32\,\mu$s. A 20 dB filter pushes this to ~3 ms, no longer a bottleneck.
-6. **Measurement dephasing** at $\bar n=5$: $\Gamma_\phi = 8\chi^2\bar n/\kappa \approx 2\pi\cdot8.5$ MHz → coherence gone in ~19 ns. Fine: we've already collapsed to a $\sigma_z$ eigenstate; readout and idle coherence are different regimes.
-7. **SNR:** separation $|\alpha_0-\alpha_1|^2 \approx \dfrac{16\chi^2}{\kappa^2+4\chi^2}\bar n = \dfrac{6.81}{5.70}\cdot5 \approx 5.97$ photons. Collected photons $\kappa T = (2\pi\cdot2\text{e}6)(500\text{e-}9)\approx6.28$. Then $\mathrm{SNR}^2 \approx \dfrac{2\cdot0.5\cdot6.28\cdot5.97}{1+1} \approx 18.7$, so $\mathrm{SNR}\approx4.3$.
-8. **Fidelity:** overlap error $\approx \tfrac12\,\mathrm{erfc}(2.16) = 0.0011$; both tails → $\approx0.998$. Add $T_1$ error $T_{\mathrm{meas}}/(2T_1)=0.005$. **Net $F \approx 0.99$.**
+6. **Measurement dephasing** at $\bar n=5$: using the exact pointer separation below, $|\alpha_0-\alpha_1|^2 \approx 5.97$, so $\Gamma_\phi=\kappa|\alpha_0-\alpha_1|^2/2 \approx 2\pi\cdot6.0$ MHz and coherence is gone in ~27 ns. The small-pull formula $8\chi^2\bar n/\kappa$ would give $2\pi\cdot8.5$ MHz here, an overestimate. Fine: we've already collapsed to a $Z$ eigenstate; readout and idle coherence are different regimes.
+7. **SNR:** separation $|\alpha_0-\alpha_1|^2 \approx \dfrac{16\chi^2}{\kappa^2+4\chi^2}\bar n = \dfrac{6.81}{5.70}\cdot5 \approx 5.97$ photons. Collected photons $\kappa T = (2\pi\cdot2\text{e}6)(500\text{e-}9)\approx6.28$. In the steady-state limit, $\mathrm{SNR}^2 \approx \dfrac{2\cdot0.5\cdot6.28\cdot5.97}{1+1} \approx 18.7$, so $\mathrm{SNR}\approx4.3$. If the 500 ns is the full square pulse from vacuum, use the integral formula; finite ring-up reduces the SNR.
+8. **Fidelity:** steady-state overlap error $\approx \tfrac12\,\mathrm{erfc}(2.16) = 0.0011$, so $F_{\rm avg}\approx0.9989$ and contrast $\approx0.9978$ before decay. Add $T_1$ error $T_{\mathrm{meas}}/(2T_1)=0.005$. **Net assignment fidelity is around 99%.**
 
 This already sits around 99%; to push it solidly past 99.x%: raise $\eta$ (better amplifier), modestly raise $\chi$ or $\bar n$ (staying $\ll n_{\mathrm{crit}}=100$), or lengthen $T$ while watching $T_1$, exactly the levers in the §9 table.
 
 ## Common pitfalls
 
-- **"Dispersive readout measures the qubit."** No, it measures the *resonator field*. The qubit's $\sigma_z$ is only inferred, which is *why* it's preserved (QND).
+- **"Dispersive readout measures the qubit."** No, it measures the *resonator field*. The qubit's $Z$ is inferred through the dispersive interaction, which is why that observable is preserved in the ideal QND model.
 - **"More photons are always better."** Beyond $\sim n_{\mathrm{crit}}$ you break the approximation and trigger MIST/leakage, fidelity collapses.
-- **"QND means no back-action."** Only $\sigma_z$ is protected; $\sigma_x,\sigma_y$ dephase at exactly the information-gain rate.
+- **"QND means no back-action."** Only $Z$ is protected; $\sigma_x,\sigma_y$ dephase at exactly the information-gain rate.
 - **"$\chi = g^2/\Delta$ for a transmon."** The third level cancels part of it: $\chi = (g^2/\Delta)\,\alpha/(\Delta+\alpha)$.
 - **"Just buy a better HEMT."** Friis says the *first* stage sets system noise, a quantum-limited JPA/TWPA in front is what matters.
 - **"Any amplifier reaches the quantum limit."** Caves forbids $n_{\mathrm{add}}<\tfrac12$ for phase-insensitive amps; only squeezing beats it, and only for one quadrature.
 
 ## Key takeaways
 
-- The cross-Kerr term $\chi\,\sigma_z\,a^\dagger a$ gives two equivalent pictures: resonator pull $\omega_r\pm\chi$ (what we read) and ac-Stark shift $2\chi\bar n$ (the back-action).
+- The cross-Kerr term $-\chi\,Z\,a^\dagger a$ gives two equivalent pictures: resonator pulls separated by $2|\chi|$ (what we read) and ac-Stark shift $2\chi\bar n$ (the back-action).
 - For a transmon, $\chi = \dfrac{g^2}{\Delta}\dfrac{\alpha}{\Delta+\alpha}$, the third level matters.
 - The dispersive picture dies above $n_{\mathrm{crit}} = \Delta^2/(4g^2)$; stay well below it.
-- $\mathrm{SNR}^2 \sim \eta\,(16\chi^2/\kappa)\,\bar n\,T$ (near $2\chi=\kappa$), and $\varepsilon_{\mathrm{overlap}}\approx\tfrac12\mathrm{erfc}(\mathrm{SNR}/2)$, but $T_1$ decay caps the useful integration time.
+- $\mathrm{SNR}^2 \sim \eta\,(16\chi^2/\kappa)\,\bar n\,T$ (near $2|\chi|\sim\kappa$), and $\varepsilon_{\mathrm{overlap}}\approx\tfrac12\mathrm{erfc}(\mathrm{SNR}/2)$, but $T_1$ decay caps the useful integration time.
 - Back-action is unavoidable: $\Gamma_\phi^{\mathrm{meas}} = 8\chi^2\bar n/\kappa$ equals the information-gain rate.
 - A **Purcell filter** decouples $\kappa$ from $T_1$; a **JPA/TWPA first** sets system noise near the Caves limit ($n_{\mathrm{add}}\ge\tfrac12$).
-- Operate near $2\chi\approx\kappa$, $\bar n\ll n_{\mathrm{crit}}$.
+- Operate near the appropriate $2|\chi|/\kappa$ design scale, with $\bar n\ll n_{\mathrm{crit}}$.
 
 ## Go deeper
 

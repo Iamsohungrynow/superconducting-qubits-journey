@@ -20,8 +20,8 @@ flowchart TD
 
 The individual steps:
 
-- **Qubit frequency $\omega_q$: coarse.** Drive continuously while sweeping the drive frequency and watch the excited-state population. You get a Lorentzian (continuous-wave spectroscopy); its center is $\omega_q$ to ~MHz precision.
-- **Qubit frequency $\omega_q$: fine, plus $T_2^*$ (Ramsey).** Two $\pi/2$ pulses separated by a free-evolution delay $\tau$ convert a small detuning $\delta$ into an observable beat. The fringe frequency *is* your frequency error; the envelope decay *is* your dephasing time. This is kHz-level and is how you track drift.
+- **Qubit frequency $\omega_q$: coarse.** Drive continuously while sweeping the drive frequency and watch the excited-state population. You get a Lorentzian; its center is $\omega_q/2\pi$ to ~MHz precision when quoted in Hz.
+- **Qubit frequency $\omega_q$: fine, plus $T_2^*$ (Ramsey).** Two $\pi/2$ pulses separated by a delay $\tau$ convert a small detuning into a beat. If the fitted beat is $\Delta f$ in Hz, then $\delta\omega=2\pi\Delta f$. This is kHz-level and is how you track drift.
 - **Pulse amplitude (Rabi).** Sweep drive amplitude (or duration), fit the Rabi oscillation, pick the amplitude giving exactly a $\pi$ rotation.
 - **DRAG & leakage.** A transmon is only weakly anharmonic ($\alpha \sim -200$ MHz, illustrative), so a fast pulse has spectral weight at the $1\!\leftrightarrow\!2$ transition and *leaks* into $|2\rangle$. The **DRAG** technique adds a quadrature component proportional to the derivative of the main pulse to cancel that leakage and the associated phase error; the DRAG coefficient is itself a calibrated knob.
 - **AllXY fine-tuning.** A fixed sequence of 21 pairs of $X/Y$, $\pi/\pi/2$ pulses whose ideal outcome is a known staircase. Different error types (amplitude, detuning, DRAG phase) deform the staircase in characteristic, distinguishable ways, a cheap, sensitive diagnostic for the residuals Rabi/Ramsey miss.
@@ -35,15 +35,21 @@ A 1% amplitude error is invisible in one $\pi$ pulse but obvious after 50. If a 
 
 ### The Ramsey fringe, derived
 
-$$ P_{\text{Ramsey}}(\tau) = \tfrac{1}{2}\left[\,1 + e^{-\tau/T_2^*}\cos(\delta\,\tau + \phi)\,\right] $$
+$$
+\begin{aligned}
+P_{\text{Ramsey}}(\tau)
+&= \tfrac{1}{2}\left[1 + e^{-\tau/T_2^*}\cos(\delta\omega\,\tau + \phi)\right] \\
+&= \tfrac{1}{2}\left[1 + e^{-\tau/T_2^*}\cos(2\pi\Delta f\,\tau + \phi)\right].
+\end{aligned}
+$$
 
 Step by step:
 
 1. The first $\pi/2$ pulse maps $|0\rangle$ to an equator superposition $(|0\rangle+|1\rangle)/\sqrt{2}$.
-2. During the delay $\tau$ the Bloch vector precesses in the rotating frame at the detuning $\delta = \omega_{\text{drive}} - \omega_q$, accumulating phase $\delta\,\tau$.
+2. During the delay $\tau$ the Bloch vector precesses in the rotating frame at the detuning $\delta\omega = \omega_{\text{drive}} - \omega_q = 2\pi\Delta f$, accumulating phase $\delta\omega\,\tau$.
 3. Dephasing randomizes that phase across the ensemble; averaging gives a contrast factor $e^{-\tau/T_2^*}$ (or a *Gaussian* $e^{-(\tau/T_2^*)^2}$ when slow $1/f$ noise dominates).
-4. The second $\pi/2$ pulse converts accumulated phase into population: projecting back gives $P=\tfrac12[1+e^{-\tau/T_2^*}\cos(\delta\tau+\phi)]$.
-5. **Fit:** the oscillation frequency $\to \delta$ (correct $\omega_q$ by it); the envelope $\to T_2^*$.
+4. The second $\pi/2$ pulse converts accumulated phase into population: projecting back gives $P=\tfrac12[1+e^{-\tau/T_2^*}\cos(\delta\omega\tau+\phi)]$.
+5. **Fit:** the oscillation frequency $\to |\Delta f|$ unless the IQ phase convention or a deliberately signed offset supplies the sign; the envelope $\to T_2^*$. With $\delta\omega=\omega_{\text{drive}}-\omega_q$, estimate $\omega_q=\omega_{\text{drive}}-\delta\omega$, so set $f_{d,\mathrm{new}}=f_d-\Delta f_{\rm signed}$. If the sign is unknown, test both directions or use phase-sensitive Ramsey.
 
 ## Randomized benchmarking (RB)
 
@@ -53,25 +59,28 @@ The naive way to grade a gate, run it, do tomography, compare to ideal, is conta
 
 $$ F(m) = A\,p^{\,m} + B. $$
 
-Here $A$ and $B$ absorb all SPAM into *offset and amplitude*, so the **decay rate $p$ is SPAM-free**, that is the entire point.
+Here $A$ and $B$ absorb time-independent SPAM into *offset and amplitude*, so the **decay rate $p$ is SPAM-robust** under the RB model.
 
 ### Why one number? The twirl
 
-The deep reason RB works is *twirling*: averaging an arbitrary error channel $\Lambda$ over the Clifford group collapses it to a **depolarizing channel** described by a single parameter $p$.
+The deep reason RB works is *twirling*: for time-stationary, Markovian, trace-preserving errors that remain in the computational subspace and are gate-independent (or only weakly gate-dependent), averaging $\Lambda$ over the Clifford group collapses it to a **depolarizing channel** described by a single parameter $p$.
 
 $$ \Lambda_{\text{dep}}(\rho) = p\,\rho + (1-p)\,\frac{\mathbb{I}}{d}, \qquad \overline{\Lambda}(\rho) = \int d\mu(C)\, C^{\dagger}\,\Lambda\!\left(C\rho C^{\dagger}\right)C $$
 
 1. A general channel has many parameters (write it as a Pauli transfer matrix).
 2. Average it over the group (twirl).
 3. The Clifford group is a **unitary 2-design**, so by Schur's lemma the twirled channel must commute with every group element; on the traceless subspace it can only be a scalar multiple of the identity.
-4. Hence $\overline{\Lambda}$ is fixed by *one* number $p$, it is exactly depolarizing: keep $\rho$ with probability $p$, replace it by $\mathbb{I}/d$ with probability $1-p$.
+4. Hence, under those assumptions, $\overline{\Lambda}$ is fixed by *one* number $p$: keep $\rho$ with probability $p$, replace it by $\mathbb{I}/d$ with probability $1-p$.
 5. Composing $m$ such steps multiplies the $p$'s $\Rightarrow p^m$. SPAM enters only as the constants $A$ (initial-state/readout contrast) and $B$ (asymptote, $\sim 1/d$).
+6. Leakage is outside this model; it must be measured separately, for example with leakage/seepage RB. With qutrit-sensitive readout, one often fits the leakage population as
+   $$P_{\rm leak}(m)=P_\infty+[P_{\rm leak}(0)-P_\infty](1-L-S)^m,\qquad P_\infty=\frac{L}{L+S},$$
+   where $L$ is leakage out of the computational subspace and $S$ is seepage back. AllXY is useful for phase/amplitude/DRAG residuals, but it is not a substitute for $P_2$ readout or leakage/seepage RB.
 
 The average error per Clifford follows:
 
 $$ r = \frac{(d-1)(1-p)}{d}, \qquad d = 2^{n}, \qquad F_{\text{avg}} = p + \frac{1-p}{d} = 1 - r. $$
 
-> **Pitfall.** $r$ is per **Clifford**, not per physical gate. A Clifford compiles to ~1.5-2 native gates, so per-gate error is roughly $r$ divided by that compiling factor. Always state the assumption.
+> **Pitfall.** $r$ is per **Clifford**, not per physical gate. A single-qubit Clifford often compiles to ~1.5-2 native pulses, so the native-gate error is roughly $r$ divided by the average native-gates-per-Clifford. Always state the assumption.
 
 ```
  survival F(m)
@@ -82,7 +91,7 @@ $$ r = \frac{(d-1)(1-p)}{d}, \qquad d = 2^{n}, \qquad F_{\text{avg}} = p + \frac
      |   '·o._        '''*----*----*----  → B≈0.50
  0.5 |.......'·--o.._.................... ← same p (parallel)
      |    dashed: o''--o----o----o----    worse SPAM (small A, high B)
-     |    "same p, same r → SPAM cancels"
+     |    "same p, same r; static SPAM changes A,B"
      +------------------------------------ m
       0      50     100    150    200
 ```
@@ -106,7 +115,7 @@ $$ F_{\text{XEB}} = 2^{n}\,\big\langle P_{\text{ideal}}(x_{\text{meas}})\big\ran
 3. Defining $F_{\text{XEB}} = 2^n\langle P_{\text{ideal}}\rangle - 1$ sends ideal $\to 1$, uniform noise $\to 0$.
 4. Under a **digital error model**, each faulty gate scrambles weight into the uniform background, so surviving coherent weight *multiplies*: $F_{\text{XEB}} \approx \prod_g (1-e_g) \approx e^{-\sum_g e_g}$. This per-cycle product lets you predict full-circuit fidelity from individual gate errors and cross-check.
 
-> **Pitfall.** XEB needs a *trusted classical simulation* of the ideal amplitudes (infeasible past ~50 qubits at depth), assumes the digital error model, and is known to be **spoofable**. It is a statistical test, not a proof of correctness.
+> **Pitfall.** XEB needs a *trusted classical simulation* of the ideal amplitudes, assumes the digital error model, and shallow-circuit linear-XEB spoofing results are known. It is a statistical test, not a proof of correctness.
 
 ## Readout: the assignment (confusion) matrix
 
@@ -143,10 +152,14 @@ Two gates with identical $r$ can behave completely differently in a deep circuit
           +----------------------------- N
 ```
 
-- **Incoherent** (depolarizing/dephasing) errors shrink the Bloch sphere uniformly; in fidelity they add roughly **linearly** with depth.
+- **Incoherent** errors randomize rather than apply a fixed rotation. Depolarization shrinks the Bloch sphere uniformly; dephasing shrinks the transverse components. In average fidelity they add roughly **linearly** with depth.
 - **Coherent** (calibration/over-rotation) errors *rotate* the sphere rigidly; amplitudes can interfere constructively, so worst-case error can be much larger and accumulate **quadratically**. For a fixed average $r$, coherent errors are generally the more dangerous.
 
-RB averages over the sphere and is largely **blind** to coherent errors. The SPAM-free tool that separates them is **unitarity (purity) RB**: instead of survival probability, it tracks the *purity* of the output state vs sequence length. Depolarization drains purity; a pure over-rotation does not, so a high $r$ with high unitarity flags a *coherent* error you can calibrate away.
+Standard RB reports coherent errors only through their average infidelity; it does not by itself tell you whether the error was coherent, stochastic, or dangerous in worst case. The SPAM-robust tool that separates them is **unitarity (purity) RB**: instead of survival probability, it tracks the *purity* of the output state vs sequence length. For the unital block $T$ of the Pauli-transfer matrix,
+
+$$u=\frac{1}{d^2-1}\mathrm{Tr}(T^\dagger T).$$
+
+Purity RB fits a decay $A u^{m-1}+B$. Depolarization drains purity; a pure over-rotation has $u\simeq1$ even when $r>0$, so a high $r$ with high unitarity flags a *coherent* error you can calibrate away. Unitarity flags coherent/unitary-like error but does not identify the error axis by itself.
 
 ## The coherence floor
 
@@ -154,28 +167,36 @@ Even with perfect control, $T_1$ and $T_2$ cap the fidelity:
 
 $$ F_{\lim} = \frac{1}{6}\left[\,3 + e^{-\tau_g/T_1} + 2\,e^{-\tau_g/T_2}\,\right] \;\Longrightarrow\; r_{\lim} \approx \frac{\tau_g}{6}\left(\frac{1}{T_1} + \frac{2}{T_2}\right). $$
 
-Model the gate as ideal unitary + amplitude damping ($1/T_1$) + dephasing ($1/T_2$) over duration $\tau_g$; averaging the channel fidelity over the Bloch sphere (longitudinal axis $\propto e^{-\tau_g/T_1}$, two transverse axes $\propto e^{-\tau_g/T_2}$) gives $F_{\lim}$. Comparing measured $r$ to $r_{\lim}$ tells you whether you are **control-limited** ($r \gg r_{\lim}$, keep tuning) or **coherence-limited** ($r \approx r_{\lim}$, only longer $T_1/T_2$ or shorter gates help).
+Model the gate as ideal unitary plus relaxation and total transverse decay over duration $\tau_g$; $T_2$ already includes the $T_1$ contribution via $1/T_2=1/(2T_1)+1/T_\phi$. Averaging the channel fidelity over the Bloch sphere (longitudinal axis $\propto e^{-\tau_g/T_1}$, two transverse axes $\propto e^{-\tau_g/T_2}$) gives $F_{\lim}$. Comparing measured $r$ to $r_{\lim}$ tells you whether you are **control-limited** ($r \gg r_{\lim}$, keep tuning) or **coherence-limited** ($r \approx r_{\lim}$, only longer $T_1/T_2$ or shorter gates help).
 
 ## Worked example (all values illustrative)
 
 Single qubit, $n=1$, $d=2$. Fit $F(m)=A\,p^m+B$ → $A=0.49$, $B=0.50$, $p=0.999$.
 
-- **Error per Clifford:** $r=\dfrac{(d-1)(1-p)}{d}=\dfrac{(1)(0.001)}{2}=5\times10^{-4}$, a "99.95%" gate. Check: $F_{\text{avg}}=p+(1-p)/d=0.999+0.0005=0.9995=1-r$. ✓
+- **Error per Clifford:** $r=\dfrac{(d-1)(1-p)}{d}=\dfrac{(1)(0.001)}{2}=5\times10^{-4}$, a "99.95%" Clifford. Check: $F_{\text{avg}}=p+(1-p)/d=0.999+0.0005=0.9995=1-r$. ✓
 - **Per physical gate:** if the compiler averages ~1.5 native gates/Clifford, per-gate error $\approx r/1.5 = 3.3\times10^{-4}$.
-- **Coherence-limited?** Take $T_1=80\,\mu$s, $T_2=60\,\mu$s, $\tau_g=30$ ns: $r_{\lim}\approx\frac{30\text{ ns}}{6}\left(\frac{1}{80\,\mu s}+\frac{2}{60\,\mu s}\right)=(5.0\times10^{-9})(45833)=2.3\times10^{-4}$. Measured $r=5\times10^{-4}$ is only ~$2.2\times$ the floor, close to coherence-limited. Pushing the pulse harder buys little; longer $T_1/T_2$ is the lever.
+- **Coherence-limited?** Take $T_1=80\,\mu$s, $T_2=60\,\mu$s, $\tau_g=30$ ns: $r_{\lim}\approx\frac{30\text{ ns}}{6}\left(\frac{1}{80\,\mu s}+\frac{2}{60\,\mu s}\right)=(5.0\times10^{-9})(45833)=2.3\times10^{-4}$ per 30 ns physical gate. Compare like with like: the inferred per-gate error $3.3\times10^{-4}$ is $\sim1.4\times$ this per-gate coherence floor. Equivalently, a 1.5-pulse Clifford has $r_{\lim,C}\approx1.5(2.3\times10^{-4})=3.5\times10^{-4}$, so the measured $5\times10^{-4}$ per Clifford is also $\sim1.4\times$ the Clifford floor. Pushing the pulse harder buys little; longer $T_1/T_2$ is the lever.
 - **IRB add-on:** $p_{\text{ref}}=0.999$, interleaved $X$-gate $p_{\overline C}=0.9982$ → $r_{\text{gate}}=\frac12\left(1-\frac{0.9982}{0.999}\right)=\frac12(0.0008)=4.0\times10^{-4}$, quoted with the Magesan bound $E$.
 - **XEB sketch:** $n=20$, $2^n=1{,}048{,}576$. If $\langle P_{\text{ideal}}\rangle=1.9\times10^{-6}$, then $F_{\text{XEB}}=1{,}048{,}576\times1.9\times10^{-6}-1\approx1.992-1=0.992$. Uniform sampling ($\langle P\rangle=1/2^n$) gives exactly $0$.
 
 ## Disambiguating the fidelity zoo
 
+For an ideal target unitary $U$, process fidelity usually means the entanglement fidelity of $U^\dagger\circ\mathcal E$, equivalently $\chi_{00}$ in the ideal Pauli-process basis. It is related to average gate fidelity by
+
+$$
+F_{\rm avg}=\frac{dF_{\rm pro}+1}{d+1}, \qquad
+F_{\rm pro}=\frac{(d+1)F_{\rm avg}-1}{d}.
+$$
+
 | Symbol | Name | Formula | Note |
 |--------|------|---------|------|
-| $p$ | depolarizing / decay parameter | fit of $A p^m+B$ | **SPAM-free**; this is what RB measures |
+| $p$ | depolarizing / decay parameter | fit of $A p^m+B$ | **SPAM-robust** under the RB model |
 | $F_{\text{avg}}$ | average gate fidelity | $p+(1-p)/d$ | $=1-r$ |
+| $F_{\text{pro}}$ | process / entanglement fidelity | $\frac{(d+1)F_{\text{avg}}-1}{d}$ | not directly equal to $F_{\text{avg}}$ |
 | $r$ | avg error per **Clifford** | $(d-1)(1-p)/d$ | per Clifford, not per gate |
 | per-gate error | physical-gate error | $\approx r\,/\,1.5\text{ to }2$ | divide by compiling factor |
 | $F_a$ | readout assignment fidelity | $1-\tfrac12[P(1|0)+P(0|1)]$ | reported **separately** from RB |
-| $F_{\text{XEB}}$ | full-circuit XEB fidelity | $2^n\langle P_{\text{ideal}}\rangle-1$ | needs classical simulation |
+| $F_{\text{XEB}}$ | linear-XEB estimator | $2^n\langle P_{\text{ideal}}\rangle-1$ | approximates circuit fidelity under the XEB noise model |
 
 | Method | Measures | Needs | Scales? | Blind spots |
 |--------|----------|-------|---------|-------------|
@@ -186,9 +207,9 @@ Single qubit, $n=1$, $d=2$. Fit $F(m)=A\,p^m+B$ → $A=0.49$, $B=0.50$, $p=0.999
 
 ## Common pitfalls
 
-- **"RB gives THE gate error."** No, an *average* over the Clifford group, not a single physical gate and not worst-case. Divide by the ~1.5-2 Cliffords/gate factor for per-gate error.
-- **"High fidelity = safe gate."** RB is blind to coherent errors; two gates with the same $r$ can diverge in deep circuits. Use unitarity RB and remember the diamond norm exists.
-- **"$p$ depends on SPAM."** It doesn't, SPAM lives only in $A$ and $B$. Misreading the offset as the error is a classic slip.
+- **"RB gives THE gate error."** No, an *average* over the Clifford group, not a single physical gate and not worst-case. Divide by the average native-gates-per-Clifford for a rough per-gate error.
+- **"High fidelity = safe gate."** RB alone does not diagnose coherent accumulation; two gates with the same $r$ can diverge in deep circuits. Use unitarity RB and remember the diamond norm exists.
+- **"$p$ is just readout error."** In the standard RB model, static SPAM lives in $A$ and $B$, not in $p$. Drift, leakage, or model failure still need residual checks.
 - **"Readout fidelity is part of RB."** It is separate ($F_a$ / the assignment matrix).
 - **"Just invert $M$."** Constrained least-squares / unfolding, not naive $M^{-1}$.
 - **"Good single-qubit RB ⇒ good multi-qubit."** Isolated RB hides crosstalk; run **simultaneous/correlated RB**.
@@ -196,9 +217,9 @@ Single qubit, $n=1$, $d=2$. Fit $F(m)=A\,p^m+B$ → $A=0.49$, $B=0.50$, $p=0.999
 ## Key takeaways
 
 - Calibration is a **closed loop**: spectroscopy → Ramsey → Rabi → DRAG/AllXY → readout → RB/IRB, re-run to track drift; **error amplification** exposes errors below the noise floor.
-- RB reports a **SPAM-free** average error per Clifford because the **twirl** (Clifford = unitary 2-design) collapses any error to one depolarizing $p$.
+- RB reports a **SPAM-robust** average error per Clifford because the **twirl** (Clifford = unitary 2-design) collapses in-subspace Markovian error to one depolarizing $p$.
 - **IRB** isolates one gate (with a systematic bound $E$); **XEB** scales to large random circuits via the Porter-Thomas product model (but needs simulation and is spoofable).
-- A fidelity is meaningful only with context: averaged not worst-case, floored by $T_1/T_2$ ($r_{\lim}$), separate from readout ($F_a$) and crosstalk, and silent about **coherent** errors unless you run unitarity RB.
+- A fidelity is meaningful only with context: averaged not worst-case, floored by $T_1/T_2$ ($r_{\lim}$), separate from readout ($F_a$) and crosstalk, and not diagnostic of **coherent vs stochastic** errors unless you run unitarity RB.
 
 ## Go deeper
 
@@ -208,6 +229,7 @@ Single qubit, $n=1$, $d=2$. Fit $F(m)=A\,p^m+B$ → $A=0.49$, $B=0.50$, $p=0.999
 - S. Boixo *et al.*, *Characterizing Quantum Supremacy in Near-Term Devices*, Nat. Phys. **14**, 595 (2018), [arXiv:1608.00263](https://arxiv.org/abs/1608.00263) (XEB).
 - F. Arute *et al.* (Google AI Quantum), *Quantum supremacy using a programmable superconducting processor*, Nature **574**, 505 (2019), [DOI:10.1038/s41586-019-1666-5](https://doi.org/10.1038/s41586-019-1666-5).
 - P. Krantz *et al.*, *A Quantum Engineer's Guide to Superconducting Qubits*, Appl. Phys. Rev. **6**, 021318 (2019), [arXiv:1904.06560](https://arxiv.org/abs/1904.06560).
+- B. Barak, C.-N. Chou, X. Gao, *Spoofing Linear Cross-Entropy Benchmarking in Shallow Quantum Circuits*, [arXiv:2005.02421](https://arxiv.org/abs/2005.02421).
 
 ---
 
