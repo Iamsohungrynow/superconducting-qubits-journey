@@ -110,8 +110,8 @@ amplifiers.
   dispersive readout, where the qubit state pulls the resonator frequency and is
   inferred from the transmitted microwave signal. https://arxiv.org/abs/cond-mat/0502645
 
-- **A Near-Quantum-Limited Josephson Traveling-Wave Parametric Amplifier**, Macklin, O'Brien, Hover, Schwartz, Bolkhovsky, Zhang, Oliver, Siddiqi (2015), Introduces the broadband Josephson traveling-wave parametric amplifier
-  (TWPA), which made fast, high-fidelity, multiplexed readout practical by
+- **A Near-Quantum-Limited Josephson Traveling-Wave Parametric Amplifier**, Macklin, O'Brien, Hover, Schwartz, Bolkhovsky, Zhang, Oliver, Siddiqi (2015), Demonstrates the first practical broadband Josephson traveling-wave parametric
+  amplifier (TWPA), which made fast, high-fidelity, multiplexed readout practical by
   amplifying near the quantum limit over a wide bandwidth. (no arXiv preprint; published in Science 350, 2015)
 
 ---
@@ -122,7 +122,8 @@ How single- and two-qubit operations are actually implemented on transmons.
 
 - **Simple All-Microwave Entangling Gate for Fixed-Frequency Superconducting
   Qubits**, Chow, Córcoles, Gambetta, Rigetti, Johnson, Smolin, Rozen, Keefe,
-  Rothwell, Ketchen, Steffen (2011), Introduces the cross-resonance gate, an
+  Rothwell, Ketchen, Steffen (2011), Demonstrates the cross-resonance gate
+  (proposed theoretically by Rigetti and Devoret in 2010), an
   all-microwave two-qubit entangling gate widely used on fixed-frequency
   architectures. https://arxiv.org/abs/1106.0553
 
@@ -143,7 +144,7 @@ this thread covers how those are characterized and improved.
 
 - **New Material Platform for Superconducting Transmon Qubits with Coherence
   Times Exceeding 0.3 Milliseconds**, Place, Rodgers, Mundada, Smitham,
-  Fitzpatrick, Leng, Premkumar, Bryon, Vrajitoarea, Sussman, Cheng, Madhavan,
+  Fitzpatrick, Leng, Premkumar, Bryon, Sussman, Cheng, Madhavan,
   Babla, Jäck, Gyenis, Yao, Cava, de Leon, Houck (2021), Demonstrates
   tantalum-based transmons reaching markedly longer coherence than the
   then-standard niobium/aluminum devices, kicking off the "tantalum transmon"
@@ -173,7 +174,7 @@ threshold logical-qubit milestones.
   repeated stabilizer-style error detection on a superconducting chip, an
   important proof of principle on the road to the surface code. https://arxiv.org/abs/1411.7403
 
-- **Exponential Suppression of Bit or Phase Errors with Repetitive Error
+- **Exponential Suppression of Bit or Phase Flip Errors with Repetitive Error
   Correction**, Google Quantum AI (2021), Shows that error rates can be
   suppressed exponentially as a repetition code is made larger, a key scaling
   signature on the path to fault tolerance. https://arxiv.org/abs/2102.06132
@@ -206,7 +207,9 @@ threshold logical-qubit milestones.
    results.
 
 > Note on identifiers: the arXiv identifiers given inline have been verified
-> against the arXiv listing (title, authors, and year). Two entries, the
-> Bouchiat et al. (1998) Cooper-pair-box paper and the Macklin et al. (2015)
-> TWPA paper, have no arXiv preprint, and are cited by their published venue
-> instead.
+> against the arXiv listing (title, authors, and year); where a paper's
+> published title differs from its arXiv preprint title (e.g. the Wallraff et
+> al. 2004 experiment, published in Nature), the published title is used. Two
+> entries, the Bouchiat et al. (1998) Cooper-pair-box paper and the Macklin et
+> al. (2015) TWPA paper, have no arXiv preprint, and are cited by their
+> published venue instead.

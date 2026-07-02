@@ -1,6 +1,6 @@
 # 01 · Introduction: Why Superconducting Qubits
 
-A qubit is just a quantum two-level system: something with two distinguishable states, $|0\rangle$ and $|1\rangle$, that you can put into superpositions and entangle with its neighbors. Nature gives us plenty of two-level systems for free, the spin of an electron, the polarization of a photon, two energy levels of a trapped ion. So why would anyone build a qubit out of a *circuit*, a lithographically patterned aluminum device on a millimeter-to-centimeter-scale chip cooled to a few millikelvin?
+A qubit is just a quantum two-level system: something with two distinguishable states, $|0\rangle$ and $|1\rangle$, that you can put into superpositions and entangle with its neighbors. Nature gives us plenty of two-level systems for free, the spin of an electron, the polarization of a photon, two energy levels of a trapped ion. So why would anyone build a qubit out of a *circuit*, a lithographically patterned aluminum device on a millimeter-to-centimeter-scale chip cooled to about ten millikelvin?
 
 The short answer: because we get to design it. This chapter sets up the rest of the tutorial by explaining what makes superconducting circuits a compelling qubit platform, what makes them genuinely hard, and how to navigate the chapters that follow. We'll keep one question in the back of our minds the whole time: *which physical system do we pick, and what do we trade away to get it?*
 
@@ -118,12 +118,16 @@ The punchline is the exponential $e^{-\sqrt{8E_J/E_C}}$. As you raise $E_J/E_C$:
 
 That asymmetry is the *entire justification* for the transmon: you pay a small, polynomial price in anharmonicity to buy exponential immunity to charge noise. (This also retroactively justifies dropping $n_g$ above, deep in the transmon regime the qubit's dependence on it is exponentially suppressed, though not zero.) A common design window lives around $E_J/E_C \sim 50$-$100$.
 
+![Semilog plot versus the ratio of Josephson to charging energy: the normalized charge dispersion plunges exponentially over many decades while the relative anharmonicity declines only gently as a power law, with the common design window shaded and the worked example at 39 marked](figures/01-tradeoff.png)
+
+*The whole transmon argument in one plot (log vertical axis): as $E_J/E_C$ grows, charge-noise sensitivity (blue) collapses **exponentially** while the relative anharmonicity you pay with (orange) shrinks only as a gentle power law. The shaded band is the common design window; the dot marks the worked example below at $E_J/E_C = 39$.*
+
 > **Worked example: designing a transmon (all numbers illustrative).**
 > **Goal:** $\omega_q/2\pi = 5.0$ GHz with $\alpha/2\pi = -300$ MHz.
 > 1. **$E_C$ from $\alpha$.** Since $\alpha/2\pi \approx -E_C/h$, we need $E_C/h = 300$ MHz.
 > 2. **The capacitor.** $E_C = e^2/2C \Rightarrow C = e^2/2E_C = (1.602\times10^{-19})^2 / (2\cdot 6.626\times10^{-34}\cdot 3.0\times10^{8}) \approx 65$ fF, a realistic shunt capacitance.
 > 3. **$E_J$ from $\omega_q$.** Invert $\sqrt{8E_JE_C} = h(5.0+0.30)$ GHz $\Rightarrow E_J = (5.30)^2/(8\cdot0.30)\,h$ GHz $\approx h\cdot 11.7$ GHz.
-> 4. **Check the regime.** $E_J/E_C = 11.7/0.30 \approx 39 \gg 1$, the perturbative formulas are self-consistent.
+> 4. **Check the regime.** $E_J/E_C = 11.7/0.30 \approx 39 \gg 1$, the perturbative formulas are self-consistent. (39 sits a bit below the quoted 50-100 window, but step 6 shows the dispersion is already down to $\sim$100 kHz; lowering $E_C$ would buy more margin at the cost of anharmonicity.)
 > 5. **Relative anharmonicity.** $-300/5000 = -6\%$, matching $-(8\cdot39)^{-1/2}\approx-5.7\%$.
 > 6. **Charge-noise check.** The exponential alone is $e^{-\sqrt{8\cdot39}}\approx2\times10^{-8}$, but Koch's prefactor matters. The same asymptotic formula gives $\epsilon_0/E_C\sim5\times10^{-6}$ and $\epsilon_1/E_C\sim-3.5\times10^{-4}$, so the $0\to1$ charge dispersion is of order $10^5$ Hz for $E_C/h=300$ MHz: small next to a 5 GHz qubit, but not the bare exponential by itself.
 > 7. **The junction.** $E_J = I_c\Phi_0/2\pi \Rightarrow I_c = 2\pi(h\cdot11.7\times10^9)/(2.07\times10^{-15}) \approx 23$ nA, a typical Al/AlOₓ junction.
@@ -132,7 +136,7 @@ That asymmetry is the *entire justification* for the transmon: you pay a small, 
 
 ## Reading the qubit: circuit QED
 
-You measure a transmon without touching it directly. Couple it to a microwave resonator (coupling strength $g$). In the **dispersive limit**, the resonator is far detuned from both the $0\to1$ and nearby $1\to2$ transitions, e.g. $|g/\Delta|\ll1$ and $|g/(\Delta+\alpha)|\ll1$ with $\Delta = \omega_{01}-\omega_r$. A Schrieffer-Wolff transformation of the Jaynes-Cummings Hamiltonian removes the direct photon exchange and leaves a state-dependent cavity pull. Here $g,\Delta,\alpha,\chi,\kappa$ are angular-frequency quantities. For a *two-level* system this would be $\chi_0 = g^2/\Delta$, but a transmon has a $|2\rangle$ state nearby, and including it gives the correct multilevel shift:
+You measure a transmon without touching it directly. (This section name-drops several concepts, Schrieffer-Wolff, Jaynes-Cummings, QND, Purcell, that Chapters 05-06 unpack properly; here you only need the punchlines.) Couple the qubit to a microwave resonator (coupling strength $g$). In the **dispersive limit**, the resonator is far detuned from both the $0\to1$ and nearby $1\to2$ transitions, e.g. $|g/\Delta|\ll1$ and $|g/(\Delta+\alpha)|\ll1$ with $\Delta = \omega_{01}-\omega_r$. A Schrieffer-Wolff transformation of the Jaynes-Cummings Hamiltonian removes the direct photon exchange and leaves a state-dependent cavity pull. Here $g,\Delta,\alpha,\chi,\kappa$ are angular-frequency quantities. For a *two-level* system this would be $\chi_0 = g^2/\Delta$, but a transmon has a $|2\rangle$ state nearby, and including it gives the correct multilevel shift:
 
 $$\chi \approx \frac{g^2\,\alpha}{\Delta(\Delta+\alpha)}.$$
 
@@ -154,7 +158,7 @@ Here $T_1$ is energy relaxation ($|1\rangle\to|0\rangle$), $T_\phi$ is *pure* de
 | Flux noise | $T_\phi$/$T_2$ | $1/f$ magnetic noise in SQUID loops | Sweet-spot bias, fixed-frequency design |
 | Photon shot noise | $T_\phi$ | Thermal photons in readout cavity | Better thermalization/attenuation |
 
-Beyond coherence, **scaling is engineering physics**, not a solved consequence of lithography. Each qubit needs microwave control connectivity; many architectures also need flux-bias connectivity, and readout resonators are commonly multiplexed onto shared feedlines running from room temperature to $\sim$10 mK. Every coax carries both a passive heat leak and active heat from attenuating drive power. Cooling power at the mixing chamber is only $\sim$hundreds of microwatts (illustrative), so wiring is a genuine bottleneck. Add **frequency crowding** (collisions between similar-frequency qubits) and **crosstalk**, and you see why "more qubits" is hard.
+Beyond coherence, **scaling is engineering physics**, not a solved consequence of lithography. Each qubit needs microwave control connectivity; many architectures also need flux-bias connectivity, and readout resonators are commonly multiplexed onto shared feedlines running from room temperature to $\sim$10 mK. Every coax carries both a passive heat leak and active heat from attenuating drive power. Cooling power at the mixing chamber is tiny: the usual spec is $\sim$hundreds of microwatts *at 100 mK*, which shrinks to mere tens of microwatts at the $\sim$20 mK operating point (illustrative), so wiring is a genuine bottleneck. Add **frequency crowding** (collisions between similar-frequency qubits) and **crosstalk**, and you see why "more qubits" is hard.
 
 ```mermaid
 flowchart TD
@@ -164,7 +168,7 @@ flowchart TD
   C -->|"readout signal"| A
   C --> N1["Per qubit: drive +<br/>flux + readout line"]
   N1 --> N2["Passive + active<br/>heat per coax"]
-  N2 --> N3["Cooling power<br/>~few hundred uW"]
+  N2 --> N3["Cooling power at chip plate<br/>~tens of uW at ~20 mK"]
   N3 --> N4["-> wiring bottleneck"]
 ```
 
@@ -175,7 +179,7 @@ flowchart TD
 | 1. Scalable, well-characterized qubits | Lithographic transmons on a wafer | Fab disorder, frequency targeting |
 | 2. Initialization | Passive cooling ($k_BT\ll\hbar\omega_q$) or active reset | Residual thermal/QP population |
 | 3. Decoherence vs gate time | $T_1,T_2\sim100$ µs vs $\sim20$ ns gates ⇒ $10^3$-$10^4$ ops | Maintaining threshold-level fidelity, leakage control, and calibration stability at scale |
-| 4. Universal gates | Microwave single-qubit + tunable-coupler/cross-resonance two-qubit | Crosstalk, leakage to $|2\rangle$ |
+| 4. Universal gates | Microwave single-qubit + tunable-coupler/cross-resonance two-qubit | Crosstalk, leakage to $\vert 2\rangle$ |
 | 5. Qubit-specific readout | Dispersive cQED, multiplexed | Purcell decay, readout crosstalk |
 
 ## Common pitfalls

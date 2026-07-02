@@ -35,14 +35,14 @@ Charge qubits live around $E_J/E_C \sim 1$; transmons deliberately push it to $E
 
 ## Why charge noise dies exponentially
 
-Think of the $-E_J\cos\hat{\varphi}$ term as a pendulum. When $E_J/E_C$ is large the "pendulum" is heavy and sits deep in its cosine well, barely swinging. The phase $\varphi$ is well-localized. Quantitatively, the ground-state phase spread in the harmonic well (derived below) is $\langle\varphi^2\rangle^{1/2} = (2E_C/E_J)^{1/4}$, which shrinks as the ratio grows. By the uncertainty relation $[\hat\varphi,\hat n]=i$, a tightly-localized $\varphi$ forces the conjugate charge $\hat n$ to spread over **several** charge eigenstates ($\langle n^2\rangle^{1/2} = \tfrac12(E_J/2E_C)^{1/4}$, only about $1$ Cooper pair at $E_J/E_C\sim50$, with appreciable support out to $|n|$ of a few). A charge wavefunction spread over several $|n\rangle$ states simply cannot tell where the offset charge $n_g$ sits, shifting $n_g$ by a fraction of a Cooper pair barely overlaps with anything.
+Think of the $-E_J\cos\hat{\varphi}$ term as a pendulum. When $E_J/E_C$ is large the "pendulum" is heavy and sits deep in its cosine well, barely swinging. The phase $\varphi$ is well-localized. Quantitatively, the ground-state phase spread in the harmonic well (derived below) is $\langle\varphi^2\rangle^{1/2} = (2E_C/E_J)^{1/4}$, which shrinks as the ratio grows. By the uncertainty relation $[\hat\varphi,\hat n]=i$, a tightly-localized $\varphi$ forces the conjugate charge $\hat n$ to spread over **several** charge eigenstates ($\langle n^2\rangle^{1/2} = \tfrac12(E_J/2E_C)^{1/4}$, only about $1$ Cooper pair at $E_J/E_C\sim50$, with appreciable support out to $|n|$ of a few). A charge wavefunction spread smoothly over several $|n\rangle$ states simply cannot tell where the offset charge $n_g$ sits: sliding the parabola of charging energies by a fraction of a Cooper pair leaves such a state almost unchanged.
 
-The rigorous statement is a **Bloch-band** argument: $n_g$ enters exactly like a quasimomentum, and the qubit's residual $n_g$-dependence (the *charge dispersion* $\epsilon_m$, the peak-to-peak swing of $E_m$ as $n_g$ runs over one period) is the tunnelling bandwidth between adjacent cosine wells. A WKB / Mathieu analysis of that inter-well tunnelling gives
+The rigorous statement is a **Bloch-band** argument: $n_g$ enters exactly like a quasimomentum, and the qubit's residual $n_g$-dependence (the signed *charge dispersion* $\epsilon_m \equiv E_m(n_g{=}\tfrac12)-E_m(n_g{=}0)$, whose magnitude $|\epsilon_m|$ is the peak-to-peak swing of $E_m$ as $n_g$ runs over one period) is the tunnelling bandwidth between adjacent cosine wells. A WKB / Mathieu analysis of that inter-well tunnelling gives
 
 $$\epsilon_m \;\simeq\; (-1)^m\,E_C\,\frac{2^{4m+5}}{m!}\sqrt{\frac{2}{\pi}}\left(\frac{E_J}{2E_C}\right)^{\frac{m}{2}+\frac34}\,
 e^{-\sqrt{8 E_J/E_C}}.$$
 
-The decisive feature is the factor $e^{-\sqrt{8E_J/E_C}}$: charge sensitivity is suppressed **exponentially** in $\sqrt{E_J/E_C}$. Double the ratio and the charge sensitivity doesn't halve, it plummets by orders of magnitude. The $(-1)^m$ and the growing prefactor show higher levels disperse more, which is why we always use the lowest, most protected levels. This single exponential is what buys the transmon its long coherence and lets us forget $n_g$.
+The decisive feature is the factor $e^{-\sqrt{8E_J/E_C}}$: charge sensitivity is suppressed **exponentially** in $\sqrt{E_J/E_C}$. Double the ratio and the charge sensitivity doesn't halve, it plummets by orders of magnitude. The growing prefactor shows higher levels disperse more, which is why we always use the lowest, most protected levels; the $(-1)^m$ says adjacent levels swing in *opposite* directions, so the $0\to1$ transition inherits both: $|\epsilon_1-\epsilon_0| = |\epsilon_0|+|\epsilon_1|$. This single exponential is what buys the transmon its long coherence and lets us forget $n_g$.
 
 > **Intuition aside.** It's like tuning a heavy bell versus a light one. A featherweight bell rings at a pitch that changes with every breeze (every stray charge). A massive cathedral bell rings at essentially the same note no matter what the air does. We traded a nimble, twitchy qubit for a heavy, steady one, and steadiness is what coherence needs.
 
@@ -116,7 +116,7 @@ And $\alpha_r$ falls only as a **power law**, while charge dispersion falls **ex
 
 *All values illustrative.* As $E_J/E_C$ goes $1\to100$, charge dispersion drops by **eleven orders of magnitude** while $\alpha_r$ only shrinks by a factor of $\sim10$. **Exponential beats power law → a wide usable window.**
 
-> **Misconception check.** Bigger $E_J/E_C$ is *not* always better. By $E_J/E_C\sim 50$-$100$ the charge dispersion is already utterly negligible; pushing higher buys essentially no extra charge protection but keeps eroding anharmonicity and slowing your gates. There is an optimum window, not a monotonic "more is better."
+> **Misconception check.** Bigger $E_J/E_C$ is *not* always better. By $E_J/E_C\sim 50$-$100$ the charge dispersion is already utterly negligible; pushing higher buys essentially no *useful* extra charge protection (the suppression is still exponential, but charge noise is by then far below every other noise source) while it keeps eroding anharmonicity and slowing your gates. There is an optimum window, not a monotonic "more is better."
 
 ## A worked example (illustrative numbers)
 
@@ -153,20 +153,9 @@ For $d\neq0$, the nonsingular asymmetric expression also has a smooth extremum a
 
 At a flux sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\omega_q/\partial\Phi^2)\,\delta\Phi^2$, only **second order** in flux noise, so first-order flux-noise dephasing is locally suppressed. The best total $T_2$ still depends on curvature, the local $E_{J,\mathrm{eff}}/E_C$, charge dispersion, dielectric loss, Purcell loss, quasiparticles, and other channels. This is the flux-domain analogue of the transmon's charge insensitivity, not an automatic guarantee that total coherence is maximized.
 
-```
- ω_q                       Φ₀/2          Φ₀/2
-   │       ●●●●●          (symmetric        (symmetric
-   │     ●●     ●●         dips to 0)        dips to 0)
-   │    ●         ●                ●●●          ●●●
-   │   ●  SWEET    ●              ●   ●        ●   ●   ← asymmetric d>0:
-   │  ●   SPOT      ●            ●     ●      ●     ●     min never reaches 0,
-   │ ●  dω/dΦ=0,     ●          ●       ●    ●       ●    flatter / less tuning
-   │●   best T₂       ●●      ●●         ●●●●
-   │  steep flanks =    ●●●●●●
-   │  high flux-noise sensitivity
-   └────┼────────┼────────┼────────┼────────► Φ/Φ₀
-      -1.0     -0.5      0.0      0.5      1.0
-```
+![Flux tuning of a SQUID transmon: the symmetric SQUID tunes over the full band and dives toward zero at half-integer flux, while an asymmetric SQUID (d = 0.3) has a smaller but flatter, flux-noise-friendlier tuning curve; sweet spots sit at integer flux](figures/04-squid-tuning.png)
+
+*Symmetric ($d=0$) vs. asymmetric ($d=0.3$) SQUID transmon. Sweet spots (dots) sit at integer flux where the slope vanishes; steep flanks between them are where flux noise bites. The symmetric curve plunges toward $E_{J,\mathrm{eff}}=0$ at $\Phi_0/2$ (dashed: transmon formula no longer valid), while the asymmetric one turns around smoothly at a second sweet spot.*
 
 > **Misconception check.** A sweet spot removes only the *first-order* flux sensitivity (slope $=0$); the *curvature* still couples second-order flux noise. That is why tunable transmons generally trail fixed-frequency ones in $T_2$, and why a symmetric SQUID tunes $E_{J,\mathrm{eff}}$ to zero at $\Phi_0/2$ but an asymmetric one never does.
 

@@ -105,19 +105,9 @@ Crucially, within this effective dispersive model, $H_\text{disp}$ commutes with
 
 > **Intuition aside.** Think of the resonator as a tuning fork and the qubit as a tiny weight you clip on. You never let them ring together, the weight just barely shifts the fork's pitch. Listen to the pitch and you know whether the weight is "on" ($|e\rangle$) or "off" ($|g\rangle$), without ever stopping the fork.
 
-```text
- cavity-probe
- freq (y)        dispersive            resonant            dispersive
-                  wing                  center                wing
-  ω_r+χ  ──────────────  ·  ·
-  ω_r     · · · · · · · ╲     avoided        ╱ · · · · · · ·   (bare cavity)
-                          ╲   crossing      ╱
-                           ╲   gap = 2g    ╱
-  ω_r-χ                     ╲· · · · · · ·╱ ────────────────
-        ───────────────────────┼──────────────────────────►  ω_q (or flux)
-                              ω_q = ω_r
-   far-detuned: cavity at ω_r ± χ      |      on resonance: 2g split
-```
+![Dressed single-excitation frequencies vs qubit frequency: the bare qubit and cavity lines cross, the coupled branches avoid each other with a minimum gap of 2g at resonance, and far from resonance the cavity-like branch is pulled by g squared over the detuning](figures/05-avoided-crossing.png)
+
+*The single-excitation spectrum as the qubit is tuned through the resonator (here $\omega_r/2\pi=7$ GHz, $g/2\pi=100$ MHz). Dashed: bare $\omega_q$ and $\omega_r$. Solid: exact dressed branches, which avoid each other with minimum gap $2g$ at $\omega_q=\omega_r$. On the dispersive wings the cavity-like branch sits at $\omega_r + g^2/|\Delta|$ (left wing, $\Delta<0$, i.e. $\omega_r-\chi$ with $\chi<0$) and $\omega_r - g^2/|\Delta|$ (right wing) — keeping the signed convention straight is exactly why we fixed it at the top of the chapter.*
 
 ### Why a transmon needs anharmonicity: the realistic $\chi$
 
@@ -134,6 +124,10 @@ Two limiting checks make the physics vivid:
 
 - $\alpha\to-\infty$ (a true two-level atom): the factor $\to1$ and $\chi\to g^2/\Delta$. ✓
 - $\alpha\to0$ (a perfectly **harmonic** multilevel mode): the factor $\to0$, so the state-dependent pull $\chi\to0$. The two contributions **cancel exactly**: two linearly coupled oscillators can have state-independent normal-mode shifts, but they have no cross-Kerr / qubit-state-dependent dispersive shift to read out. Anharmonicity is what makes readout possible. *This is the single most important correction to the naive formula.*
+
+![Dispersive shift chi versus detuning for a two-level atom and for a transmon: the transmon curve is suppressed between its two divergences at Delta = 0 and Delta = minus alpha, with the worked example point at Delta of minus 2 GHz marked](figures/05-chi-vs-detuning.png)
+
+*Two-level $\chi=g^2/\Delta$ vs. the transmon $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$ for $g/2\pi=100$ MHz, $\alpha/2\pi=-300$ MHz. The transmon formula diverges at $\Delta=0$ **and** at $\Delta=-\alpha$ (the resonator hitting $|e\rangle\!\to\!|f\rangle$); between and beyond them it is strongly suppressed. The dot marks the worked example below: $-5$ MHz naive vs $-0.65$ MHz real.*
 
 ## Resonators as readout, and as buses
 
@@ -195,9 +189,9 @@ All values chosen for teaching, not from any device.
 
 ## Resonant vs dispersive at a glance
 
-| Property | Resonant ($\Delta\approx0$) | Dispersive ($|\Delta|\gg g$) |
+| Property | Resonant ($\Delta\approx0$) | Dispersive ($\vert\Delta\vert\gg g$) |
 |----------|------------------------------|------------------------------|
-| Condition | $\Delta\approx0$ | $g/|\Delta|\ll1$ |
+| Condition | $\Delta\approx0$ | $g/\vert\Delta\vert\ll1$ |
 | Dominant effect | excitation **swap** | frequency **pull** |
 | Key quantity | $2g$ split; $T_\text{swap}=\pi/2g$ | $\chi=g^2/\Delta\cdot\frac{\alpha}{\Delta+\alpha}$ |
 | Eigenstates | maximally-entangled dressed states | nearly product |
