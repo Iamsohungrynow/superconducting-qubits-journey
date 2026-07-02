@@ -89,17 +89,19 @@ for Omega, label, color in zip(omegas, labels, ["C0", "C1", "C2"]):
     ax.plot(tlist * 1e3, P1, color=color,
             label=f"{label}  (T = {rabi_period*1e3:.0f} ns)")
 
-    # Annotate the pi-pulse time for the slowest (clearest) drive only.
+    # Annotate the pi-pulse time for the slowest (clearest) drive only,
+    # keeping the labels in the empty band above the curves.
     if Omega == omegas[0]:
         ax.axvline(pi_pulse * 1e3, color=color, ls="--", lw=1, alpha=0.6)
-        ax.annotate("pi-pulse\n(full inversion)",
-                    xy=(pi_pulse * 1e3, 1.0),
-                    xytext=(pi_pulse * 1e3 + 30, 0.78),
+        ax.annotate("pi-pulse (full inversion)",
+                    xy=(pi_pulse * 1e3, 1.005),
+                    xytext=(pi_pulse * 1e3 + 12, 1.045),
                     arrowprops=dict(arrowstyle="->", color=color),
                     color=color, fontsize=9)
         ax.annotate("Rabi period T",
                     xy=(rabi_period * 1e3, 0.02),
-                    xytext=(rabi_period * 1e3 + 5, 0.18),
+                    xytext=(rabi_period * 1e3 + 4, -0.042),
+                    arrowprops=dict(arrowstyle="->", color=color),
                     color=color, fontsize=9)
 
 print("=" * 60)
