@@ -47,6 +47,10 @@ Reading is good, but doing sticks. The [**hands-on/**](hands-on/README.md) track
 | [Rabi oscillations](hands-on/02-rabi/) | a qubit flipping under a drive | ch07 |
 | [T1 and T2](hands-on/03-t1-t2/) | relaxation and Ramsey dephasing | ch09 |
 | [Dispersive readout](hands-on/04-dispersive-readout/) | IQ separation of the qubit states | ch06 |
+| [Leakage & DRAG](hands-on/05-drag-leakage/) | a three-level transmon under fast pulses | ch07 |
+| [CZ gate](hands-on/06-cz-gate/) | the \|11>-\|20> avoided crossing and conditional phase | ch08 |
+| [Randomized benchmarking](hands-on/07-randomized-benchmarking/) | error per Clifford from an RB decay | ch11 |
+| [Repetition code](hands-on/08-repetition-code/) | majority-vote error correction and break-even | ch12 |
 
 Every script runs as-is after `pip install qutip matplotlib numpy scipy`. Running on real hardware with Qiskit and Qibocal is on the roadmap.
 

@@ -24,7 +24,7 @@ Convention used throughout:
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from qutip import (basis, destroy, qeye, sigmaz, tensor, mesolve, ket2dm,
+from qutip import (basis, destroy, qeye, sigmaz, tensor, mesolve,
                    steadystate, expect)
 
 # ---------------------------------------------------------------------------
@@ -77,8 +77,9 @@ psi_ground = tensor(basis(2, 0), vac)    # qubit |0>
 psi_excited = tensor(basis(2, 1), vac)   # qubit |1>
 
 # Solve the master equation for both qubit states, tracking <a>.
-res_g = mesolve(H, ket2dm(psi_ground), tlist, c_ops, e_ops=[a])
-res_e = mesolve(H, ket2dm(psi_excited), tlist, c_ops, e_ops=[a])
+# (mesolve accepts kets directly and promotes them to density matrices.)
+res_g = mesolve(H, psi_ground, tlist, c_ops, e_ops=[a])
+res_e = mesolve(H, psi_excited, tlist, c_ops, e_ops=[a])
 
 a_g = np.asarray(res_g.expect[0])   # complex <a>(t) for qubit |0>
 a_e = np.asarray(res_e.expect[0])   # complex <a>(t) for qubit |1>

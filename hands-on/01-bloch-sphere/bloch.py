@@ -63,9 +63,8 @@ print()
 # ----------------------------------------------------------------------
 # A pure state |psi> maps to the Bloch vector (<sx>, <sy>, <sz>).
 b_states = Bloch()
-b_states.point_marker = ["o"]
 for psi in states.values():
-    b_states.add_states(psi)
+    b_states.add_states(psi)   # rendered as arrows, one colour per state
 
 
 # ----------------------------------------------------------------------
@@ -102,7 +101,6 @@ print()
 # ----------------------------------------------------------------------
 # The X drive rotates the state in the y-z plane; <sx> stays ~0 throughout.
 b_traj = Bloch()
-b_traj.point_marker = ["o"]
 b_traj.add_points([xs, ys, zs], meth="l")   # connect the trajectory as a line
 
 
