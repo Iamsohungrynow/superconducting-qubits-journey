@@ -56,6 +56,12 @@ Why these work, step by step:
 
 *Footnote:* the syndrome columns never depend on $\alpha,\beta$, the encoded amplitudes are untouched. The logical operators here are $Z_L = Z_1$ and $X_L = X_1X_2X_3$; both commute with $S_1,S_2$, so correction never disturbs the stored information.
 
+And does the encoding actually *help*? Quantitatively: if each qubit flips independently with probability $p$, correction fails only when **two or more** qubits flip, with probability $3p^2 - 2p^3$. That beats the bare, unencoded error $p$ whenever $p < \tfrac12$, and at small $p$ the suppression is *quadratic*: at $p = 1\%$, the logical error is $\approx 3\times10^{-4}$, thirty times better. That quadratic kill is the entire point of redundancy.
+
+![Failure probability of the three-qubit code versus the physical flip probability: the curve 3 p squared minus 2 p cubed sits below the bare error line for p below one half, crossing it at the break-even point, with a log-log inset showing the quadratic slope](figures/12-repetition-breakeven.png)
+
+*The three-qubit code's failure probability $3p^2-2p^3$ vs. the unencoded error $p$. Below the break-even point $p=\tfrac12$ encoding wins, quadratically so at small $p$ (log-log inset: slope 2). Above break-even, redundancy actively hurts, majority vote amplifies bad hardware. ([Lab 08](../hands-on/08-repetition-code/) simulates exactly this, out to distance 7.)*
+
 > **Intuition aside.** Stabilizers are like the parity bits on a Sudoku grid. You never reveal the hidden numbers; you only check "does this row still add up?" A violated check localizes the mistake without exposing the solution. QEC is continuous, gentle Sudoku-checking on your quantum data.
 
 ### Digitizing continuous errors, the conceptual heart of QEC
@@ -71,7 +77,7 @@ $$E = c_I\, I + c_X\, X + c_Y\, Y + c_Z\, Z.$$
 
 So the analog noise of the lab gets **digitized** into a discrete $\{X,Y,Z\}$ the moment we look at the syndrome. In a full single-qubit-error-correcting code, correcting those three corrects arbitrary single-qubit errors. This is why a finite code can tame continuous noise.
 
-> **The exception: leakage.** Digitization assumes every error stays inside the computational $\{|0\rangle,|1\rangle\}$ subspace, where the Paulis are a complete basis. A transmon can instead **leak** to $|2\rangle$ and higher (recall the weak anharmonicity of [Chapter 4](04-transmon.md) and the DRAG story of [Chapter 7](07-single-qubit-gates.md)). A leaked state is *not* any combination of $\{I,X,Y,Z\}$, so it escapes the Pauli-digitization argument and corrupts every stabilizer it touches. Real QEC stacks therefore add **leakage-reduction units** or explicit **reset** to pump population back into the qubit subspace, on top of the Pauli correction.
+> **The exception: leakage.** Digitization assumes every error stays inside the computational $\{|0\rangle,|1\rangle\}$ subspace, where the Paulis are a complete basis. A transmon can instead **leak** to $|2\rangle$ and higher (recall the weak anharmonicity of [Chapter 4](04-transmon.md) and the DRAG story of [Chapter 7](07-single-qubit-gates.md)). An error that sends population to $|2\rangle$ cannot be written as a combination of the qubit Paulis (they act only within the $\{|0\rangle,|1\rangle\}$ subspace), so it escapes the Pauli-digitization argument and corrupts every stabilizer it touches. Real QEC stacks therefore add **leakage-reduction units** or explicit **reset** to pump population back into the qubit subspace, on top of the Pauli correction.
 
 ## A genuine code: phase-flips, then Shor's nine
 
@@ -143,8 +149,9 @@ In repeated syndrome extraction, a **defect** or detection event is a change in 
 ```
 defect pair (harmless, local):     spanning chain (logical FAILURE):
   o-o-*-e-*-o-o                       *-e-e-e-e-e-e-*
-        ↑ one data error              defects only at the two boundaries,
-   two flipped checks bracket it      error of weight d crosses undetected
+        ↑ one data error              chain terminates on the two boundaries
+   two flipped checks bracket it      (* = virtual boundary nodes), so NO check
+                                      fires anywhere: weight-d error crosses undetected
 ```
 
 ## The threshold theorem, why this is allowed to work
@@ -174,6 +181,10 @@ Numbers chosen for clean arithmetic, **not** measured values. Take $p_{\text{th}
 - **Step 3: read off $\Lambda$.** $\Lambda = p_{\text{th}}/p = 0.01/0.001 = 10 > 1$ → below threshold; scaling wins.
 - **Step 4: qubit cost.** Reaching $p_L \sim 10^{-5}$ costs $\sim81$ rotated-layout data qubits plus $\sim80$ measure ancillas before leakage/helper qubits. In the larger unrotated planar count the data-qubit number would be $d^2+(d-1)^2=145$.
 - **Step 5: contrast above threshold.** If instead $p = 2\% > p_{\text{th}}$, the below-threshold scaling no longer gives a valid probability; its formal growth signals that larger distance no longer provides exponential suppression, so logical errors approach order-one rather than improving. Adding qubits now makes things **worse**, the qualitative meaning of being above threshold.
+
+![Logical error rate versus physical error rate on log-log axes for code distances 3, 5, 7, and 9: all curves cross at the threshold of one percent; below it larger codes give lower logical error, above it larger codes are worse](figures/12-threshold.png)
+
+*The threshold picture: $p_L = (p/p_{\text{th}})^{(d+1)/2}$ for $d=3,5,7,9$ with $p_{\text{th}}=1\%$. All curves pivot at $p = p_{\text{th}}$ (dashed): to its left, bigger codes win (the worked example's $p=0.1\%$, dotted, gains $\times10$ per step of $d$); to its right, bigger codes lose. Which side of this line your hardware sits on decides whether scaling helps at all.*
 
 The same scaling picture explains why below-threshold operation wins exponentially and why above-threshold operation loses; within its valid domain it converts a target $p_L$ into a concrete qubit budget.
 

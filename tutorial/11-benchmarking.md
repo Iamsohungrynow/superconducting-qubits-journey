@@ -24,7 +24,7 @@ The individual steps:
 - **Qubit frequency $\omega_q$: fine, plus $T_2^*$ (Ramsey).** Two $\pi/2$ pulses separated by a delay $\tau$ convert a small detuning into a beat. If the fitted beat is $\Delta f$ in Hz, then $\delta\omega=2\pi\Delta f$. This is kHz-level and is how you track drift.
 - **Pulse amplitude (Rabi).** Sweep drive amplitude (or duration), fit the Rabi oscillation, pick the amplitude giving exactly a $\pi$ rotation.
 - **DRAG & leakage.** A transmon is only weakly anharmonic ($\alpha \sim -200$ MHz, illustrative), so a fast pulse has spectral weight at the $1\!\leftrightarrow\!2$ transition and *leaks* into $|2\rangle$. The **DRAG** technique adds a quadrature component proportional to the derivative of the main pulse to cancel that leakage and the associated phase error; the DRAG coefficient is itself a calibrated knob.
-- **AllXY fine-tuning.** A fixed sequence of 21 pairs of $X/Y$, $\pi/\pi/2$ pulses whose ideal outcome is a known staircase. Different error types (amplitude, detuning, DRAG phase) deform the staircase in characteristic, distinguishable ways, a cheap, sensitive diagnostic for the residuals Rabi/Ramsey miss.
+- **AllXY fine-tuning.** A fixed sequence of 21 pulse pairs, each drawn from $\pi$ and $\pi/2$ rotations about the $X$ and $Y$ axes, whose ideal outcome is a known staircase. Different error types (amplitude, detuning, DRAG phase) deform the staircase in characteristic, distinguishable ways, a cheap, sensitive diagnostic for the residuals Rabi/Ramsey miss.
 - **Readout.** Calibrate $\chi$, choose the readout frequency and power that best separate the $|0\rangle$/$|1\rangle$ pointer states in the IQ plane, and fit the discrimination boundary. (More below, the full story is the *assignment matrix*.)
 
 ### The engine underneath: error amplification
@@ -42,6 +42,10 @@ P_{\text{Ramsey}}(\tau)
 &= \tfrac{1}{2}\left[1 + e^{-\tau/T_2^*}\cos(2\pi\Delta f\,\tau + \phi)\right].
 \end{aligned}
 $$
+
+![Ramsey fringe: probability oscillating at the detuning frequency inside a decaying envelope, with the envelope dashed and annotations showing that the fringe period gives the detuning and the envelope gives T2 star](figures/11-ramsey-fringe.png)
+
+*A Ramsey fringe ($\Delta f = 250$ kHz, $T_2^* = 10\,\mu$s): the oscillation period reads out the detuning (frequency calibration), the decaying envelope (dashed) reads out $T_2^*$. One experiment, two numbers.*
 
 Step by step:
 
@@ -67,7 +71,7 @@ The deep reason RB works is *twirling*: for time-stationary, Markovian, trace-pr
 
 $$ \Lambda_{\text{dep}}(\rho) = p\,\rho + (1-p)\,\frac{\mathbb{I}}{d}, \qquad \overline{\Lambda}(\rho) = \int d\mu(C)\, C^{\dagger}\,\Lambda\!\left(C\rho C^{\dagger}\right)C $$
 
-1. A general channel has many parameters (write it as a Pauli transfer matrix).
+1. A general channel has many parameters (write it as a **Pauli transfer matrix**: the matrix recording how each of $I, X, Y, Z$ maps under the channel).
 2. Average it over the group (twirl).
 3. The Clifford group is a **unitary 2-design**, so by Schur's lemma the twirled channel must commute with every group element; on the traceless subspace it can only be a scalar multiple of the identity.
 4. Hence, under those assumptions, $\overline{\Lambda}$ is fixed by *one* number $p$: keep $\rho$ with probability $p$, replace it by $\mathbb{I}/d$ with probability $1-p$.
@@ -82,19 +86,9 @@ $$ r = \frac{(d-1)(1-p)}{d}, \qquad d = 2^{n}, \qquad F_{\text{avg}} = p + \frac
 
 > **Pitfall.** $r$ is per **Clifford**, not per physical gate. A single-qubit Clifford often compiles to ~1.5-2 native pulses, so the native-gate error is roughly $r$ divided by the average native-gates-per-Clifford. Always state the assumption.
 
-```
- survival F(m)
- 1.0 |*.
-     |  '*..        F(m) = A p^m + B
-     |     '-*..
-     |  o      '-*-..._        good SPAM (large A)
-     |   '·o._        '''*----*----*----  → B≈0.50
- 0.5 |.......'·--o.._.................... ← same p (parallel)
-     |    dashed: o''--o----o----o----    worse SPAM (small A, high B)
-     |    "same p, same r; static SPAM changes A,B"
-     +------------------------------------ m
-      0      50     100    150    200
-```
+![Randomized benchmarking decay curves: two curves with identical decay constant but different SPAM offsets, plus a faster-decaying interleaved curve, showing that SPAM moves only the amplitude and offset while gate error alone sets the decay](figures/11-rb-decay.png)
+
+*Three RB decays. The solid and dashed curves have **the same $p$** (same gate error $r$), they differ only in SPAM, which rescales $A$ and shifts $B$ but cannot mimic a different decay rate. The dotted curve is an interleaved experiment (Section below): the extra per-step error of the interleaved gate shows up as a genuinely faster decay.*
 
 ### Interleaved RB (IRB): isolating one gate
 
@@ -195,7 +189,7 @@ $$
 | $F_{\text{pro}}$ | process / entanglement fidelity | $\frac{(d+1)F_{\text{avg}}-1}{d}$ | not directly equal to $F_{\text{avg}}$ |
 | $r$ | avg error per **Clifford** | $(d-1)(1-p)/d$ | per Clifford, not per gate |
 | per-gate error | physical-gate error | $\approx r\,/\,1.5\text{ to }2$ | divide by compiling factor |
-| $F_a$ | readout assignment fidelity | $1-\tfrac12[P(1|0)+P(0|1)]$ | reported **separately** from RB |
+| $F_a$ | readout assignment fidelity | $1-\tfrac12[P(1\vert 0)+P(0\vert 1)]$ | reported **separately** from RB |
 | $F_{\text{XEB}}$ | linear-XEB estimator | $2^n\langle P_{\text{ideal}}\rangle-1$ | approximates circuit fidelity under the XEB noise model |
 
 | Method | Measures | Needs | Scales? | Blind spots |

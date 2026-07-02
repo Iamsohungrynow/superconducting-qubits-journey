@@ -22,11 +22,15 @@ $$\boxed{\;\bar{n}(\omega,T) = \frac{1}{\exp\!\left(\dfrac{\hbar\omega}{k_B T}\r
 |---|---|---|
 | 300 K (room) | $8.0\times10^{-4}$ | $\sim 1.25\times10^{3}$ |
 | 4 K | $0.060$ | $\sim 16$ |
-| 0.8 K (still) | $0.30$ | $\sim 2.8$ |
-| 100 mK (cold) | $2.4$ | $\sim 0.09$ |
+| 0.8 K (still) | $0.30$ | $\sim 2.9$ |
+| 100 mK (cold) | $2.4$ | $\sim 0.10$ |
 | 10 mK (MXC) | $24$ | $\sim 4\times10^{-11}$ |
 
 The chain's job, in one line: turn the **~1250 photons** arriving from room temperature into **$\ll 1$** photon at the chip.
+
+![Mean thermal photon number of a 5 GHz mode versus temperature on log-log axes, falling about 14 orders of magnitude from room temperature to 10 millikelvin, with the five fridge stages marked and the Rayleigh-Jeans asymptote shown](figures/10-thermal-photons.png)
+
+*The one curve the whole chain serves: $\bar n$(5 GHz, $T$). Above the crossover $\hbar\omega/k_B=0.24$ K it follows the classical Rayleigh-Jeans line $k_BT/\hbar\omega$ (dashed); below it, occupation collapses exponentially. The dots are the fridge stages from the table, spanning ~14 orders of magnitude.*
 
 > **Intuition aside.** $\bar n$ is not "how cold the metal is", it is "how many junk photons share the qubit's mode." A 10 mK plate is wonderful, but a single warm wire dumping photons into the mode ruins it. We are managing *photons in a mode*, not just temperature of matter.
 
@@ -76,13 +80,17 @@ input noise ~16 photons (from 4 K)
    │  @4 K   │──────▶│ @100 mK │──────▶│ @10 mK  │────▶ to chip
    └─────────┘        └─────────┘        └─────────┘
  n = 16/100           n = 16/10           n = 1.7/100
-   + 0.99·16            + 0.9·0.09           + 0.99·4e-11
-   ≈ 0.16 + 16          ≈ 1.6 + 0.08         ≈ 0.017 + 4e-11
+   + 0.99·16            + 0.9·0.10           + 0.99·4e-11
+   ≈ 0.16 + 16          ≈ 1.6 + 0.09         ≈ 0.017 + 4e-11
    ≈ 16                 ≈ 1.7                ≈ 0.017
  (resets to 4 K)      (4 K leak through     (4 K leak through the
                        only 10 dB dominates) last 20 dB still dominates)
 ```
 *Each attenuator re-emits at its own temperature, but the surviving 4 K residual is suppressed only by the attenuation downstream of it. Here 50 dB total still leaves $\sim 0.017$ photon, set by residual 4 K leakage rather than the 10 mK stage's own $\sim 4\times10^{-11}$ emission, which is exactly why real input lines pile on 40-60 dB. Numbers illustrative.*
+
+![Staircase plot of the photon occupation propagating through the input attenuator chain for the 20-10-20 dB and 20-20-20 dB configurations, showing each attenuator resetting the line toward its own stage temperature and the warm residual setting the final floor](figures/10-attenuation-cascade.png)
+
+*The cascade as a staircase: each attenuator divides what arrives and re-emits at its own temperature (dotted levels), so the line keeps "resetting" toward the local $\bar n(T)$. The final floor is set by the warm residual leaking through the attenuation downstream of it, which is why upgrading the middle attenuator from 10 to 20 dB (orange) buys nearly a factor of 10.*
 
 Total staged input attenuation is typically 40-60 dB (illustrative), and the choice per stage is bounded **below by noise** (you need enough *cold* attenuation to reach the floor) and **above by heat** (each dB dumps power on a cold plate). That is why you can't just put 60 dB at one place.
 
@@ -120,7 +128,7 @@ For a 7 GHz readout, $\hbar\omega/2k_B \approx 0.17\,$K. This is a *fundamental 
 
 $$T_{\text{sys}} = T_1 + \frac{T_2}{G_1} + \frac{T_3}{G_1 G_2} + \cdots$$
 
-Derivation in one breath: stage 2's own noise $T_2$ appears at the system output multiplied by $G_2$ but accompanied by $G_1 G_2 T_1$ from stage 1; dividing the total output noise by the total gain $G_1 G_2$ refers stage 2 back as $T_2/G_1$, stage 3 as $T_3/(G_1 G_2)$, and so on. **A large first-stage gain $G_1$ crushes every downstream contribution.**
+(Watch the notation: in Friis's formula $T_1, T_2, T_3$ are the **noise temperatures of amplifier stages 1, 2, 3**, standard microwave-engineering symbols, *not* the qubit's lifetimes from Chapter 09.) Derivation in one breath: stage 2's own noise $T_2$ appears at the system output multiplied by $G_2$ but accompanied by $G_1 G_2 T_1$ from stage 1; dividing the total output noise by the total gain $G_1 G_2$ refers stage 2 back as $T_2/G_1$, stage 3 as $T_3/(G_1 G_2)$, and so on. **A large first-stage gain $G_1$ crushes every downstream contribution.**
 
 Passive loss before the first amplifier must be included as a Friis stage with gain $G=1/L$, not ignored. For normal-ordered thermal occupation, a cold lossy element with power loss $L$ contributes $(L-1)\bar n(\omega,T)$ referred to its input; for amplifier-noise and efficiency bookkeeping it contributes
 
@@ -175,7 +183,7 @@ $$\eta = \frac{0.5}{1.54} \approx 0.32 \quad (\sim 32\%, \text{ illustrative}).$
 
 **Now delete the TWPA.** With the HEMT first, $T_{\text{sys}} = 5 + 75/10^4 = 5.0075\,$K $\Rightarrow n_{\text{add}} = 14.9$ photons, $\eta = 0.5/15.4 \approx 3\%$. The TWPA improves input-referred added noise by **~14x** and efficiency by **~10x**. Since the integration time to reach fixed single-shot SNR scales with the total input-referred measurement-noise denominator $0.5+n_{\rm add}$, this example shortens the readout time by $(0.5+14.9)/(0.5+1.04)\approx10\times$. The amplifier-added noise itself improves by $\sim14\times$.
 
-**Input-side sanity check.** A 7 GHz tone entering at 300 K carries $\bar n(7\text{ GHz}, 300\text{ K}) = 1/(e^{0.336/300}-1) \approx 892$ photons. The naive lower bound for reaching $0.01$ photon is $10\log_{10}(892/0.01)\approx49.5\,$dB, but real staged attenuation must include each attenuator's own re-emission. For example, 20 dB at 4 K, 10 dB at 100 mK, and 20 dB at 10 mK gives $\bar n_{\rm out}\approx0.020$ at 7 GHz; changing the middle attenuator to 20 dB gives $\bar n_{\rm out}\approx0.0024$. Thus 50 dB is a lower bound, while about 60 dB is the usual target for few-$10^{-3}$ occupations.
+**Input-side sanity check.** A 7 GHz tone entering at 300 K carries $\bar n(7\text{ GHz}, 300\text{ K}) = 1/(e^{0.336/300}-1) \approx 892$ photons. The naive lower bound for reaching $0.01$ photon is $10\log_{10}(892/0.01)\approx49.5\,$dB, but real staged attenuation must include each attenuator's own re-emission. For example (taking no attenuation at 50 K, for simplicity), 20 dB at 4 K, 10 dB at 100 mK, and 20 dB at 10 mK gives $\bar n_{\rm out}\approx0.020$ at 7 GHz; changing the middle attenuator to 20 dB gives $\bar n_{\rm out}\approx0.0024$. Thus 50 dB is a lower bound, while about 60 dB is the usual target for few-$10^{-3}$ occupations.
 
 ## Wiring discipline as a coherence budget
 

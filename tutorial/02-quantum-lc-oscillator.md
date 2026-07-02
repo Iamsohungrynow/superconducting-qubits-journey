@@ -21,6 +21,8 @@ flowchart TD
 
 Picture an inductor $L$ and a capacitor $C$ wired in a loop. Classically, charge sloshes back and forth between them, with energy trading between the capacitor's electric field and the inductor's magnetic field, exactly like a mass on a spring trades kinetic and potential energy.
 
+(A note on notation: we call the resonance $\omega_q$ throughout because this same circuit, once the junction bends its ladder, *becomes* the qubit; the linear readout resonators of Chapters 05-06 will get their own symbol $\omega_r$.)
+
 To quantize a circuit the way we quantize mechanics, we need a *coordinate* and its *conjugate momentum*, and the cleanest route is to write a Lagrangian first. The natural coordinate is the **node flux**
 
 $$\Phi(t) = \int_{-\infty}^{t} V(t')\,dt',$$
@@ -64,7 +66,7 @@ The first term is capacitive energy (kinetic), the second inductive energy (pote
 | $[\hat x,\hat p]=i\hbar$ | $[\hat\Phi,\hat Q]=i\hbar$ | commutator |
 | $x_{\rm zpf}=\sqrt{\hbar/2m\omega}$ | $\Phi_{\rm zpf}=\sqrt{\hbar Z/2}$ | zero-point spread |
 
-> **Pitfall: two different "fluxes".** The node flux $\Phi$ here is a *dynamical variable* (the time-integral of a voltage). It is **not** the externally applied magnetic flux threading a loop, even though both carry units of webers. We'll meet the external flux as a control knob in the SQUID/flux-qubit chapters; keep the two mentally separate.
+> **Pitfall: two different "fluxes".** The node flux $\Phi$ here is a *dynamical variable* (the time-integral of a voltage). It is **not** the externally applied magnetic flux threading a loop, even though both carry units of webers. We'll meet the external flux as a control knob when the transmon becomes flux-tunable via a SQUID loop (Chapter 04); keep the two mentally separate.
 
 ## Quantization: one postulate
 
@@ -102,17 +104,9 @@ $$E_n = \hbar\omega_q\left(n + \tfrac{1}{2}\right).$$
 
 $\hat{a}^\dagger$ climbs the ladder, $\hat{a}$ descends it, and $|0\rangle$ is the ground state with irreducible zero-point energy $\tfrac{1}{2}\hbar\omega_q$.
 
-```
-         U(Φ) = Φ²/2L
-            \        |        /
-             \       |       /     ── E₂ = 5/2·ℏω
-              \      |      /
-               \     |     /       ── E₁ = 3/2·ℏω
-                \    |    /
-                 \___|___/         ── E₀ = 1/2·ℏω   ← sits ABOVE the well bottom
-                 rms width ΔΦ=Φ_zpf   (and ΔQ=Q_zpf)
-```
-*The lowest level is not at the bottom of the well: the vacuum is not silent.*
+![Parabolic potential with evenly spaced energy levels and the Gaussian ground-state probability density drawn at the lowest level, its width labeled as the zero-point flux fluctuation](figures/02-harmonic-well.png)
+
+*The quantum LC well: a parabola $U(\Phi)=\Phi^2/2L$ with perfectly evenly spaced levels $E_n = \hbar\omega_q(n+\tfrac12)$. The lowest level sits **above** the well bottom, and the ground-state probability density $|\psi_0(\Phi)|^2$ (shaded) has rms width $\Phi_{\rm zpf}$: the vacuum is not silent.*
 
 ## Zero-point fluctuations: the vacuum is busy
 
@@ -126,7 +120,7 @@ Their product *saturates* the Heisenberg bound, the LC vacuum is a minimum-uncer
 
 $$\varphi_{\rm zpf}=\sqrt{\pi Z/R_Q},\qquad n_{\rm zpf}=\sqrt{R_Q/(4\pi Z)},\qquad R_Q=h/4e^2.$$
 
-Thus $R_Q \approx 6.45~\text{k}\Omega$ is the natural impedance benchmark, with the $\pi$ factors fixed by the phase convention. Typical lab resonators have $Z\sim 50\text{ to }100~\Omega \ll R_Q$, so their *flux* fluctuations are tiny in units of $\Phi_0/2\pi$ (here $\Phi_{\rm zpf}\sim 0.1\text{ to }0.2\,\Phi_0/2\pi$) while their charge-number fluctuations are comparatively large; these low-impedance modes are phase/flux-localized and charge-delocalized.
+Thus $R_Q \approx 6.45~\text{k}\Omega$ is the natural impedance benchmark, with the $\pi$ factors fixed by the phase convention. Typical lab resonators have $Z\sim 50\text{ to }100~\Omega \ll R_Q$, so their *flux* fluctuations are small compared to the $2\pi$ scale of a Josephson cosine potential (here $\Phi_{\rm zpf}\approx 0.16\text{ to }0.22\,\Phi_0/2\pi$) while their charge-number fluctuations are comparatively large; these low-impedance modes are phase/flux-localized and charge-delocalized.
 
 > **Pitfall.** "Zero-point energy means nothing happens in the ground state." Wrong: $\Phi_{\rm zpf}$ and $Q_{\rm zpf}$ are genuine fluctuations, and they drive real physics (dispersive shifts, vacuum-induced relaxation, Casimir-like effects). The variances are physically loaded even when the constant energy offset is dynamically removable.
 
@@ -137,6 +131,10 @@ Excitations are real photons, so whether the circuit actually sits in $|0\rangle
 $$\bar n = \frac{1}{e^{\hbar\omega_q/k_B T} - 1}.$$
 
 If $\hbar\omega_q \gg k_B T$, then $\bar n \approx 0$ and the mode is frozen in its ground state; if not, thermal photons swamp the quantum behaviour. This is the quantitative reason superconducting circuits live at millikelvin temperatures, see the worked example below.
+
+![Thermal occupation of a 5 gigahertz mode versus temperature on log-log axes, falling seven orders of magnitude between 300 millikelvin and 15 millikelvin, with the crossover temperature of 240 millikelvin marked](figures/02-thermal-occupation.png)
+
+*Why millikelvin: $\bar n$ for the worked example's 5 GHz mode vs. temperature. At 300 mK the mode holds $\bar n\approx0.8$ thermal photons, useless; at 15 mK it holds $\sim10^{-7}$, vacuum for all practical purposes. The cliff between them spans seven orders of magnitude, and the crossover sits at $\hbar\omega_q/k_B = 240$ mK.*
 
 ## A worked example (illustrative numbers)
 
