@@ -15,9 +15,11 @@ prepared first in `|0>` and then in `|1>`.
 
 ## Run it
 
+Run these commands from the **repository root**, using the environment from the [shared setup](../README.md).
+
 ```bash
-pip install qutip matplotlib numpy scipy
-python dispersive.py
+python -m pip install -r hands-on/requirements.txt
+python hands-on/04-dispersive-readout/dispersive.py
 ```
 
 ## The code explained

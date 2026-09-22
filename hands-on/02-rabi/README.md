@@ -21,8 +21,10 @@ population directly.
 
 ## Run it
 
-    pip install qutip matplotlib numpy scipy
-    python rabi.py
+Run these commands from the **repository root**, using the environment from the [shared setup](../README.md).
+
+    python -m pip install -r hands-on/requirements.txt
+    python hands-on/02-rabi/rabi.py
 
 ## The code explained
 

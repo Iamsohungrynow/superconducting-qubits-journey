@@ -2,6 +2,8 @@
 
 Welcome! This is a self-contained, beginner-friendly tour of superconducting qubits, written for anyone with undergraduate physics and a little linear algebra. It starts from "what is a qubit?", builds the device up one circuit element at a time, LC oscillator, Josephson junction, transmon, and carries you through control, readout, the cryogenic chain, benchmarking, and a first look at quantum error correction. Every chapter is short, teaches standard publicly known physics in plain language, and ends with key takeaways and pointers to the canonical literature. All numbers are illustrative, order-of-magnitude values meant to build intuition.
 
+Start with the [guided learning path and exercises](learning-path.md), [notation guide](00-notation.md), and [paper-to-course map](paper-map.md).
+
 ## Chapters
 
 | # | Chapter |

@@ -1,5 +1,7 @@
 # 12 · A First Look at Quantum Error Correction
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 By now you've met the transmon, learned how it decoheres with timescales $T_1$ and $T_2$, and seen how we read it out dispersively. Here's the uncomfortable truth: even our best superconducting qubits hold quantum information for only tens-to-hundreds of microseconds (illustrative), and gate errors sit around $10^{-3}$ (illustrative). A useful algorithm needs *billions* of reliable operations, $10^{9}$ or more. We're off by orders of magnitude. Quantum error correction (QEC) is how we bridge that gap, not by building better qubits, but by building a *better-behaved logical qubit* out of many imperfect physical ones.
 
 ## Why you can't just copy a qubit
@@ -144,7 +146,7 @@ flowchart TD
 ```
 *One QEC cycle, repeated as long as the memory or computation requires.*
 
-In repeated syndrome extraction, a **defect** or detection event is a change in a check outcome between adjacent rounds, not merely a single $-1$ stabilizer value. A data error usually creates a space-like pair of detection events; a measurement error creates a time-like pair on the same check in neighboring rounds; a boundary can absorb one endpoint. The decoder, classically **minimum-weight perfect matching (MWPM)**, increasingly correlated or neural decoders, infers the most likely chain and applies (or just bookkeeps) a correction. Doing this fast enough is a real frontier: real-time decoding latency must keep pace with the rounds (illustrative ~tens of microseconds).
+In repeated syndrome extraction, a **defect** or detection event is a change in a check outcome between adjacent rounds, not merely a single $-1$ stabilizer value. A data error usually creates a space-like pair of detection events; a measurement error creates a time-like pair on the same check in neighboring rounds; a boundary can absorb one endpoint. The decoder, classically **minimum-weight perfect matching (MWPM)**, increasingly correlated or neural decoders, infers the most likely chain and applies (or just bookkeeps) a correction. Decoder throughput must keep up with incoming syndrome rounds; latency is a separate quantity and can span several rounds when corrections are tracked in a Pauli frame. For example, [Acharya et al.](https://arxiv.org/abs/2408.13687) report 1.1 us cycles and 63 us average decoding latency at distance 5.
 
 ```
 defect pair (harmless, local):     spanning chain (logical FAILURE):
@@ -182,9 +184,9 @@ Numbers chosen for clean arithmetic, **not** measured values. Take $p_{\text{th}
 - **Step 4: qubit cost.** Reaching $p_L \sim 10^{-5}$ costs $\sim81$ rotated-layout data qubits plus $\sim80$ measure ancillas before leakage/helper qubits. In the larger unrotated planar count the data-qubit number would be $d^2+(d-1)^2=145$.
 - **Step 5: contrast above threshold.** If instead $p = 2\% > p_{\text{th}}$, the below-threshold scaling no longer gives a valid probability; its formal growth signals that larger distance no longer provides exponential suppression, so logical errors approach order-one rather than improving. Adding qubits now makes things **worse**, the qualitative meaning of being above threshold.
 
-![Logical error rate versus physical error rate on log-log axes for code distances 3, 5, 7, and 9: all curves cross at the threshold of one percent; below it larger codes give lower logical error, above it larger codes are worse](figures/12-threshold.png)
+![Logical error rate versus physical error rate on log-log axes for code distances 3, 5, 7, and 9: curves stop at the one-percent threshold, with the invalid above-threshold extrapolation shaded](figures/12-threshold.png)
 
-*The threshold picture: $p_L = (p/p_{\text{th}})^{(d+1)/2}$ for $d=3,5,7,9$ with $p_{\text{th}}=1\%$. All curves pivot at $p = p_{\text{th}}$ (dashed): to its left, bigger codes win (the worked example's $p=0.1\%$, dotted, gains $\times10$ per step of $d$); to its right, bigger codes lose. Which side of this line your hardware sits on decides whether scaling helps at all.*
+*A below-threshold scaling illustration, not a simulated surface code. Curves stop at $p_{\rm th}$: extrapolating this ansatz above threshold would give impossible probabilities greater than one. The worked example uses an arbitrary prefactor $A=1$; being below threshold means improvement with distance, not necessarily beating a bare qubit at every small distance.*
 
 The same scaling picture explains why below-threshold operation wins exponentially and why above-threshold operation loses; within its valid domain it converts a target $p_L$ into a concrete qubit budget.
 
@@ -196,7 +198,7 @@ A **logical qubit** is the protected two-level subspace, manipulated *only* thro
 - **Lattice surgery** merges and splits surface-code patches to realize two-qubit logical operations (e.g. logical $\mathrm{CNOT}$) using only the same nearest-neighbour checks.
 - **Magic-state distillation** supplies the non-Clifford gates (the $T$ gate) that no transversal surface-code operation provides, and it is typically the *dominant* resource cost in fault-tolerant estimates.
 
-A recent superconducting milestone (2024-2025) demonstrated $\Lambda > 1$, an illustrative reported $\approx 2.14$, across increasing distances up to $d=7$, with the logical memory *outliving the best physical qubit*. That's the first clear evidence that scaling up suppresses errors as predicted. Treat the numbers as illustrative of the milestone, not values to reproduce. Demonstrating $\Lambda>1$ for a memory is *necessary but not sufficient* for a fault-tolerant computer, universal computation still needs the logical gates above.
+[Acharya et al. (2024 preprint; Nature 2025)](https://arxiv.org/abs/2408.13687) report $\Lambda=2.14\pm0.02$ and a distance-7 logical memory lifetime $2.4\pm0.3$ times that of its best physical qubit. These are measured results from that experiment, not illustrative inputs to the scaling model above. Below-threshold memory is an important step; universal fault-tolerant computation additionally needs logical gates and their supporting resources.
 
 ## Common pitfalls
 

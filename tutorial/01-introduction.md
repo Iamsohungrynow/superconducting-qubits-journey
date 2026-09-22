@@ -1,5 +1,7 @@
 # 01 · Introduction: Why Superconducting Qubits
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 A qubit is just a quantum two-level system: something with two distinguishable states, $|0\rangle$ and $|1\rangle$, that you can put into superpositions and entangle with its neighbors. Nature gives us plenty of two-level systems for free, the spin of an electron, the polarization of a photon, two energy levels of a trapped ion. So why would anyone build a qubit out of a *circuit*, a lithographically patterned aluminum device on a millimeter-to-centimeter-scale chip cooled to about ten millikelvin?
 
 The short answer: because we get to design it. This chapter sets up the rest of the tutorial by explaining what makes superconducting circuits a compelling qubit platform, what makes them genuinely hard, and how to navigate the chapters that follow. We'll keep one question in the back of our minds the whole time: *which physical system do we pick, and what do we trade away to get it?*
@@ -64,7 +66,7 @@ A Josephson junction shunted by a capacitor is described by a single Hamiltonian
 
 $$H = 4E_C(\hat n - n_g)^2 - E_J\cos\hat\varphi.$$
 
-Let's earn each term. The capacitor stores charge $Q = -2en$, where $n$ is the number of excess Cooper pairs (each of charge $2e$). Its electrostatic energy is $Q^2/2C = 4E_C n^2$ with the **charging energy** $E_C = e^2/2C$. A stray offset charge $n_g$ from the environment shifts this to $4E_C(\hat n - n_g)^2$. The second term is the **Josephson energy**: a tunnel junction stores energy $-E_J\cos\hat\varphi$ in the gauge-invariant phase difference $\hat\varphi$, with $E_J = I_c\Phi_0/2\pi$ ($I_c$ the critical current, $\Phi_0 = h/2e$ the flux quantum). Promoting $\hat n$ and $\hat\varphi$ to conjugate operators, $[\hat\varphi,\hat n]=i$, quantizes the circuit. **Everything else in this chapter is a limit of this one equation.**
+Let's earn each term. The capacitor stores charge $Q = 2en$, where $n$ is the signed Cooper-pair number in our circuit-coordinate convention ($e>0$ is the elementary charge). Its electrostatic energy is $Q^2/2C = 4E_C n^2$ with the **charging energy** $E_C = e^2/2C$. A stray offset charge $n_g$ from the environment shifts this to $4E_C(\hat n - n_g)^2$. The second term is the **Josephson energy**: a tunnel junction stores energy $-E_J\cos\hat\varphi$ in the gauge-invariant phase difference $\hat\varphi$, with $E_J = I_c\Phi_0/2\pi$ ($I_c$ the critical current, $\Phi_0 = h/2e$ the flux quantum). Promoting $\hat n$ and $\hat\varphi$ to conjugate operators, $[\hat\varphi,\hat n]=i$, quantizes the circuit. This describes the isolated Cooper-pair box and transmon; coupling to resonators, drives, baths, or an inductive shunt requires additional terms.
 
 The picture to hold in your head is a particle in a cosine (washboard) well:
 
@@ -120,7 +122,7 @@ That asymmetry is the *entire justification* for the transmon: you pay a small, 
 
 ![Semilog plot versus the ratio of Josephson to charging energy: the normalized charge dispersion plunges exponentially over many decades while the relative anharmonicity declines only gently as a power law, with the common design window shaded and the worked example at 39 marked](figures/01-tradeoff.png)
 
-*The whole transmon argument in one plot (log vertical axis): as $E_J/E_C$ grows, charge-noise sensitivity (blue) collapses **exponentially** while the relative anharmonicity you pay with (orange) shrinks only as a gentle power law. The shaded band is the common design window; the dot marks the worked example below at $E_J/E_C = 39$.*
+*The whole transmon argument in one plot (log vertical axis): as $E_J/E_C$ grows, the exponential factor in charge dispersion (blue, omitting its prefactor) collapses **exponentially** while the relative anharmonicity you pay with (orange) shrinks only as a gentle power law. The shaded band is the common design window; the dot marks the worked example below at $E_J/E_C = 39$.*
 
 > **Worked example: designing a transmon (all numbers illustrative).**
 > **Goal:** $\omega_q/2\pi = 5.0$ GHz with $\alpha/2\pi = -300$ MHz.
@@ -185,7 +187,7 @@ flowchart TD
 ## Common pitfalls
 
 - **"A transmon is a perfect two-level system."** It's a weakly anharmonic *multilevel* oscillator; $|2\rangle$ is only $\sim$5-6% away, so leakage is real and pulses must be shaped (e.g. DRAG).
-- **"Bigger anharmonicity is always better."** Larger $|\alpha|$ means faster gates but exponentially worse charge sensitivity. The transmon deliberately trades anharmonicity for charge-noise immunity.
+- **"Bigger anharmonicity is always better."** Lowering $E_J/E_C$ to increase relative anharmonicity raises charge sensitivity; changing absolute anharmonicity alone does not specify that trade-off. The transmon deliberately trades anharmonicity for charge-noise immunity.
 - **"$T_2 = 2T_1$ always."** Only when $T_\phi\to\infty$. Real noise makes $T_\phi$ finite, so $T_2 < 2T_1$, and $T_2^* \le T_2$.
 - **"You read the qubit by absorbing its photon."** Dispersive readout is QND, you measure the cavity pull $\pm\chi$, not the qubit. That's the whole point of cQED.
 - **"The dispersive shift is just $g^2/\Delta$."** For a transmon the higher levels matter: $\chi = g^2\alpha/[\Delta(\Delta+\alpha)]$.
@@ -194,7 +196,7 @@ flowchart TD
 ## Key takeaways
 
 - Superconducting qubits are *engineerable artificial atoms*: you set $\omega_q$, $\alpha$, $g$ by circuit design, not by nature.
-- One Hamiltonian, $H = 4E_C(\hat n-n_g)^2 - E_J\cos\hat\varphi$, generates everything; the ratio $E_J/E_C$ chooses between Cooper-pair box and transmon.
+- One Hamiltonian, $H = 4E_C(\hat n-n_g)^2 - E_J\cos\hat\varphi$, describes the isolated Cooper-pair box/transmon; the ratio $E_J/E_C$ chooses between Cooper-pair box and transmon.
 - The transmon won because charge dispersion dies *exponentially* in $\sqrt{8E_J/E_C}$ while anharmonicity only weakens as a power law: $\omega_{01}\approx(\sqrt{8E_JE_C}-E_C)/\hbar$, $\alpha\approx-E_C/\hbar$.
 - Readout is dispersive cQED: $\chi = g^2\alpha/[\Delta(\Delta+\alpha)]$, an approximately QND dressed-cavity pull with separation $2|\chi|$ against linewidth $\kappa$, traded against Purcell decay.
 - Coherence obeys $1/T_2 = 1/2T_1 + 1/T_\phi$, fought against TLS defects, quasiparticles, flux and photon noise.

@@ -25,8 +25,10 @@ to 80%. Two lessons appear:
 
 ## Run it
 
-    pip install qutip matplotlib numpy scipy
-    python repetition.py
+Run these commands from the **repository root**, using the environment from the [shared setup](../README.md).
+
+    python -m pip install -r hands-on/requirements.txt
+    python hands-on/08-repetition-code/repetition.py
 
 (Only numpy and matplotlib are actually used; the "quantum" part of the
 story, stabilizers, syndromes, phase flips, lives in Chapter 12.)
@@ -69,9 +71,7 @@ up exactly there.
    ignore the rest. The logical error rate collapses back to p for every d.
    The redundancy is only as good as the decoding.
 2. Add measurement noise: flip each qubit's *reported* value with
-   probability q before the vote (without changing the true state). See how
-   the curves lift and the effective threshold drops, a first taste of why
-   real codes need repeated syndrome rounds.
+   probability q before the vote (without changing the true state). For independent flips the effective reported-bit error is p_eff = p + q - 2*p*q. Compare the result with the analytic majority-vote formula evaluated at p_eff. This models noisy final readout, not noisy quantum syndrome extraction; the majority threshold versus p_eff remains 1/2.
 3. Estimate the shot noise: rerun with a different seed and watch the
    scatter of the Monte Carlo points around the analytic line, largest
    where P_L * shots is a small count.

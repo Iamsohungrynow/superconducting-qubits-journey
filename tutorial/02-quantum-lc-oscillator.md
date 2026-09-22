@@ -1,5 +1,7 @@
 # 02 · The Quantum LC Oscillator
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 Before we build a qubit, we need to understand the simplest quantum circuit: the humble LC oscillator. It's the "hydrogen atom" of superconducting hardware, simple enough to solve exactly, yet it teaches us the language (flux, charge, ladder operators, zero-point fluctuations, impedance) we'll use everywhere else. The punchline, which we'll arrive at by the end, is that this perfect oscillator is *almost* a qubit, but a fatal flaw forces us to add the Josephson junction in the next chapter.
 
 Here's the whole arc of this chapter at a glance:

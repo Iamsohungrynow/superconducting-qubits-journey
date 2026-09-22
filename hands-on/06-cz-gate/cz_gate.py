@@ -27,7 +27,7 @@ on resonance for one full population cycle,
     t_CZ = 2*pi / (2*sqrt(2)*g) = pi / (sqrt(2)*g),
 
 the population goes |11> -> |20> -> back to |11>, but the round trip imprints
-a MINUS SIGN, an extra phase of pi, on |11> only. That is exactly a
+a MINUS SIGN, an extra phase of pi, on |11> only. In the isolated two-state approximation this is a
 controlled-Z gate (up to single-qubit phases, which virtual-Z rotations
 absorb, Chapter 07).
 
@@ -124,9 +124,27 @@ print(f"at t_CZ:  P11 back to     = {P11[k_cz]:.4f}")
 print(f"          residual P20    = {P20[k_cz]:.2e}")
 print(f"          conditional phase = {abs(phi_c[k_cz]):.4f} rad "
       f"(target pi = {np.pi:.4f})")
+# Project the complete propagator onto the computational subspace. This
+# catches |01> <-> |10> mixing and leakage to |02>, missed by P20 alone.
+U_gate = (-1j * H_res * t_cz).expm()
+comp_basis = list(comp.values())  # |00>, |01>, |10>, |11>
+K = np.array([[bra.overlap(U_gate * ket_) for ket_ in comp_basis]
+              for bra in comp_basis])
+diagonal_phase = np.angle(np.diag(K))
+local_phase = np.array([diagonal_phase[0], diagonal_phase[1],
+                       diagonal_phase[2],
+                       diagonal_phase[1]+diagonal_phase[2]-diagonal_phase[0]])
+K_corrected = np.diag(np.exp(-1j*local_phase)) @ K
+CZ = np.diag([1, 1, 1, -1])
+# Haar-average overlap with the ideal target, counting leakage as failure.
+average_overlap = (np.trace(K.conj().T @ K).real
+                   + abs(np.trace(CZ.conj().T @ K_corrected))**2) / 20
+mean_leakage = 1 - np.trace(K.conj().T @ K).real/4
+print(f"          mean computational leakage = {mean_leakage:.6f}")
+print(f"          average CZ overlap after local Z correction = {average_overlap:.6f}")
 print("=" * 64)
-print("Note: single-qubit phases do not matter, they are absorbed by")
-print("virtual-Z rotations; only the conditional phase pi defines the CZ.")
+print("Local Z corrections remove local phases, but cannot remove leakage or")
+print("unwanted exchange. A pi conditional phase alone does not certify CZ.")
 
 # ---------------------------------------------------------------------------
 # Plot: avoided crossing / population swap / conditional phase.
@@ -168,7 +186,7 @@ ax.axvline(t_cz * 1e3, color="k", ls="--", lw=1, alpha=0.6)
 ax.axhline(1.0, color="C3", ls="--", lw=1, alpha=0.6)
 ax.set_xlabel("Time on resonance (ns)")
 ax.set_ylabel("|Conditional phase| / pi")
-ax.set_title("Conditional phase reaches pi at t_CZ")
+ax.set_title("Conditional phase approaches pi at nominal t_CZ")
 ax.grid(True, alpha=0.3)
 
 fig.suptitle("CZ gate: park |11> on resonance with |20> for one swap cycle")

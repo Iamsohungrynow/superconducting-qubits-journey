@@ -51,9 +51,9 @@ def transmon_levels(EC, EJ, ng=0.0, nlev=5, N=40):
 r = np.linspace(1, 150, 500)
 fig, ax = plt.subplots(figsize=(8, 5))
 ax.semilogy(r, np.exp(-np.sqrt(8 * r)), "C0", lw=2,
-            label=r"charge dispersion $\sim e^{-\sqrt{8E_J/E_C}}$")
+            label=r"exponential factor only: $e^{-\sqrt{8E_J/E_C}}$")
 ax.semilogy(r, (8 * r) ** -0.5, "C1", lw=2,
-            label=r"relative anharmonicity $|\alpha_r| = (8E_J/E_C)^{-1/2}$")
+            label=r"asymptotic $|\alpha_r| \approx (8E_J/E_C)^{-1/2}$")
 ax.axvspan(50, 100, color="0.85", label="common design window")
 ax.plot([39], [np.exp(-np.sqrt(8 * 39))], "ko", ms=7)
 ax.annotate("worked example\n$E_J/E_C=39$", xy=(39, np.exp(-np.sqrt(8 * 39))),
@@ -80,7 +80,7 @@ for n in range(4):
     ax.hlines(E, -xt, xt, color="C1", lw=1.8)
     ax.text(xt + 0.1, E, f"$E_{n} = {2*n+1}/2\\,\\hbar\\omega_q$",
             va="center", fontsize=9)
-psi0 = np.exp(-x**2 / 2) / np.pi**0.25
+psi0 = np.exp(-x**2 / 4) / (2 * np.pi)**0.25  # density has rms x=1
 ax.fill_between(x, 0.5, 0.5 + 0.8 * psi0**2, color="C2", alpha=0.4)
 ax.annotate("$|\\psi_0(\\Phi)|^2$, rms width $\\Phi_{\\rm zpf}$",
             xy=(1.0, 0.75), xytext=(1.8, 1.1), fontsize=9,
@@ -258,8 +258,9 @@ ax.annotate("worked example:\n$-0.65$ MHz (vs $-5$ naive)", xy=(-2.0, -0.65),
             arrowprops=dict(arrowstyle="->", alpha=0.7))
 ax.set_xlabel(r"detuning $\Delta/2\pi$ (GHz)")
 ax.set_ylabel(r"dispersive shift $\chi/2\pi$ (MHz)")
-ax.set_title(r"The third level suppresses $\chi$ ($g/2\pi=100$ MHz, $\alpha/2\pi=-300$ MHz)")
-ax.set_ylim(-10, 10)
+ax.set_title(r"The third level changes $\chi$ ($g/2\pi=100$ MHz, $\alpha/2\pi=-300$ MHz)")
+ax.set_yscale("symlog", linthresh=1)
+ax.set_ylim(-200, 200)
 ax.legend(loc="upper left", fontsize=9)
 ax.grid(True, alpha=0.3)
 save(fig, "05-chi-vs-detuning.png")
@@ -655,7 +656,7 @@ save(fig, "12-repetition-breakeven.png")
 # 12-threshold: p_L vs p for d = 3..9, threshold at 1%
 # ===========================================================================
 pth = 0.01
-pphys = np.logspace(-4, np.log10(0.03), 400)
+pphys = np.logspace(-4, np.log10(pth), 400)
 fig, ax = plt.subplots(figsize=(8, 5))
 for d, color in [(3, "C0"), (5, "C2"), (7, "C1"), (9, "C3")]:
     ax.loglog(pphys, (pphys / pth) ** ((d + 1) // 2), color, lw=2, label=f"$d={d}$")
@@ -665,11 +666,13 @@ ax.axvline(0.001, color="0.5", ls=":", lw=1.2)
 ax.text(0.00105, 3e-8, "worked example $p=0.1\\%$", rotation=90, fontsize=8,
         color="0.4")
 ax.text(2.2e-4, 2e-4, "below threshold:\nbigger code wins", fontsize=9)
-ax.text(0.013, 3e-2, "above:\nbigger\ncode\nloses", fontsize=9)
+ax.text(0.012, 3e-2, "scaling model\nnot valid\nabove threshold", fontsize=9)
+ax.axvspan(pth, .03, color="0.9")
 ax.set_xlabel("physical error rate $p$")
 ax.set_ylabel("logical error rate $p_L$")
 ax.set_title(r"The threshold picture: $p_L = (p/p_{\rm th})^{(d+1)/2}$")
-ax.set_ylim(1e-10, 30)
+ax.set_ylim(1e-10, 1.2)
+ax.set_xlim(1e-4, .03)
 ax.legend(loc="lower right", fontsize=9)
 ax.grid(True, alpha=0.3, which="both")
 save(fig, "12-threshold.png")

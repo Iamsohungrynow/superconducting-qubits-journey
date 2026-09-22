@@ -1,5 +1,7 @@
 # 03 · The Josephson Junction & Anharmonicity
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 In the previous chapter we built an LC oscillator out of superconducting circuit elements. It has a beautiful, clean problem: it is *harmonic*. Its energy levels are perfectly evenly spaced, like rungs on a ladder where every step is the same height. That sounds nice, but for a qubit it is fatal. If you send in a microwave pulse tuned to drive the $0 \to 1$ transition, the exact same photon also drives $1 \to 2$, $2 \to 3$, and so on. You cannot isolate a clean two-level system. You need one circuit element that breaks this even spacing, and that element is the Josephson junction.
 
 A junction is almost embarrassingly simple to picture: two superconductors separated by a thin (~1 nm) insulating barrier. Classically nothing should flow. But the superconducting condensate on each side is described by a *single macroscopic wavefunction* $\psi = \sqrt{n_s}\,e^{i\theta}$ with a well-defined phase $\theta$. Only the **gauge-invariant phase difference**

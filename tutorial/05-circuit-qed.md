@@ -1,8 +1,10 @@
 # 05 · Circuit QED: Qubits + Resonators
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 A qubit sitting alone is useless, you need to talk to it (read out its state) and connect it to other qubits (entangle them). Circuit quantum electrodynamics (circuit QED) is how we do both, using a single, beautifully reusable trick: couple the qubit to a microwave **resonator** (an on-chip LC circuit, see Chapter 02). The resonator becomes your microphone for readout and your wire for coupling. The remarkable thing is that *one* coupling rate $g$ underlies **both** jobs. This chapter builds the physics from the dipole coupling up, derives the two regimes, resonant and dispersive, step by step, and ends with a fully worked numerical example.
 
-> **Conventions (stated once).** We write the qubit term as $\frac{\hbar\omega_q}{2}\hat\sigma_z$ (not $\hbar\omega_q\hat\sigma_z$), define the detuning $\Delta = \omega_q - \omega_r$, and take the anharmonicity $\alpha = \omega_{ef}-\omega_{ge} < 0$. With these choices $\chi = g^2/\Delta$ for a two-level system. Sign and factor-of-2 conventions differ across textbooks, mixing them is the #1 source of spurious errors, so we keep these fixed throughout.
+> **Conventions in this chapter.** Here $\hat\sigma_z=|e\rangle\langle e|-|g\rangle\langle g|=-Z$, where $Z=\mathrm{diag}(1,-1)$ is the computational Pauli operator used in Chapters 06–07 and all labs. Energy lowering is $\sigma_-=|g\rangle\langle e|=\texttt{destroy(2)}$. See the [notation guide](00-notation.md). We write the qubit term as $\frac{\hbar\omega_q}{2}\hat\sigma_z$ (not $\hbar\omega_q\hat\sigma_z$), define the detuning $\Delta = \omega_q - \omega_r$, and take the anharmonicity $\alpha = \omega_{ef}-\omega_{ge} < 0$. With these choices $\chi = g^2/\Delta$ for a two-level system. Sign and factor-of-2 conventions differ across textbooks, mixing them is the #1 source of spurious errors, so translate $\sigma_z=-Z$ when moving from this chapter to the code.
 
 ## From dipole coupling to Jaynes-Cummings
 
@@ -116,6 +118,8 @@ The two-level $\chi=g^2/\Delta$ is **wrong for a transmon**. A transmon is a wea
 - the $|g\rangle\!-\!|e\rangle$ coupling contributes $+g^2/\Delta$ to $\chi$,
 - the $|e\rangle\!-\!|f\rangle$ coupling contributes the **opposite** sign, $-g_{ef}^2/[2(\Delta+\alpha)]\approx -g^2/(\Delta+\alpha)$ (the factor $\tfrac12$ is how the *upper* transition enters the qubit's cavity shift, since it pulls the cavity only in $|e\rangle$, not $|g\rangle$).
 
+For a multilevel transmon, writing the cavity frequencies as $\omega_r\pm\chi$ also requires redefining $\omega_r$ as their midpoint: $\widetilde\omega_r=\omega_r^{\rm bare}-g^2/(\Delta+\alpha)$ to this order. The ground-state cavity shift relative to the **bare** cavity remains $-g^2/\Delta$. The transmon Lamb shift of the qubit is not obtained simply by replacing every two-level $\chi$ with the multilevel expression.
+
 Adding the two contributions, $\chi = g^2/\Delta - g^2/(\Delta+\alpha)$, factors neatly into
 
 $$\boxed{\ \chi = \frac{g^2}{\Delta}\cdot\frac{\alpha}{\Delta+\alpha}\ }, \qquad \alpha<0.$$
@@ -127,7 +131,7 @@ Two limiting checks make the physics vivid:
 
 ![Dispersive shift chi versus detuning for a two-level atom and for a transmon: the transmon curve is suppressed between its two divergences at Delta = 0 and Delta = minus alpha, with the worked example point at Delta of minus 2 GHz marked](figures/05-chi-vs-detuning.png)
 
-*Two-level $\chi=g^2/\Delta$ vs. the transmon $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$ for $g/2\pi=100$ MHz, $\alpha/2\pi=-300$ MHz. The transmon formula diverges at $\Delta=0$ **and** at $\Delta=-\alpha$ (the resonator hitting $|e\rangle\!\to\!|f\rangle$); between and beyond them it is strongly suppressed. The dot marks the worked example below: $-5$ MHz naive vs $-0.65$ MHz real.*
+*Two-level $\chi=g^2/\Delta$ vs. the transmon $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$ for $g/2\pi=100$ MHz, $\alpha/2\pi=-300$ MHz. The transmon formula diverges at $\Delta=0$ **and** at $\Delta=-\alpha$ (the resonator hitting $|e\rangle\!\to\!|f\rangle$); inside the straddling interval it can be enhanced or change sign; suppression is specific to the common negative-detuning regime. The dot marks the worked example below: $-5$ MHz naive vs $-0.65$ MHz real.*
 
 ## Resonators as readout, and as buses
 

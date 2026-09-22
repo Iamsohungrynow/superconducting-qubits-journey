@@ -1,5 +1,7 @@
 # 04 · The Transmon Qubit
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 In the previous chapter we met the Josephson junction and used it to build the charge qubit, the Cooper-pair box, a tiny superconducting island whose state is set by how many Cooper pairs have tunnelled across the junction. It made a beautiful two-level system, but it had a fatal flaw, it was painfully sensitive to stray electric charge. A single fluctuating charge near the island would smear out the qubit frequency and kill coherence in microseconds. The transmon is the fix, and it turned out to be such a good fix that it became the workhorse of nearly every superconducting quantum processor built today.
 
 The whole trick is one design choice: **make the Josephson energy $E_J$ much larger than the charging energy $E_C$.** Everything good (and the one thing we give up) follows from that single inequality. Here is the logical skeleton of the entire chapter, keep it in mind as we fill in each branch:
@@ -46,7 +48,7 @@ The decisive feature is the factor $e^{-\sqrt{8E_J/E_C}}$: charge sensitivity is
 
 > **Intuition aside.** It's like tuning a heavy bell versus a light one. A featherweight bell rings at a pitch that changes with every breeze (every stray charge). A massive cathedral bell rings at essentially the same note no matter what the air does. We traded a nimble, twitchy qubit for a heavy, steady one, and steadiness is what coherence needs.
 
-> **Misconception check.** $n_g$ does **not** disappear from the Hamiltonian. Its *effect* on the frequency is exponentially suppressed. The qubit still has an $n_g$ in it; you just can't measure the resulting frequency wobble.
+> **Misconception check.** $n_g$ does **not** disappear from the Hamiltonian. Its *effect* on the frequency is exponentially suppressed. The residual frequency wobble can still be measured, and matters when comparing it with a linewidth or coherence budget.
 
 ## The spectrum: one expansion, all the results
 
@@ -114,9 +116,9 @@ And $\alpha_r$ falls only as a **power law**, while charge dispersion falls **ex
 | 50  | 20.0 | $\sim 2\times10^{-9}$  | $-0.050$ |
 | 100 | 28.3 | $\sim 5\times10^{-13}$ | $-0.035$ |
 
-*All values illustrative.* As $E_J/E_C$ goes $1\to100$, charge dispersion drops by **eleven orders of magnitude** while $\alpha_r$ only shrinks by a factor of $\sim10$. **Exponential beats power law → a wide usable window.**
+*These are asymptotic scaling factors, not calculated charge dispersions.* The exponential column omits the level-dependent prefactor, and neither transmon approximation is quantitative at $E_J/E_C=1$. Use [lab 09](../hands-on/09-transmon-spectrum/) to compare the full spectrum with these approximations.
 
-> **Misconception check.** Bigger $E_J/E_C$ is *not* always better. By $E_J/E_C\sim 50$-$100$ the charge dispersion is already utterly negligible; pushing higher buys essentially no *useful* extra charge protection (the suppression is still exponential, but charge noise is by then far below every other noise source) while it keeps eroding anharmonicity and slowing your gates. There is an optimum window, not a monotonic "more is better."
+> **Misconception check.** The useful $E_J/E_C$ depends on which energy scale changes. Raising $E_J$ at fixed $E_C$ leaves absolute anharmonicity approximately fixed, while lowering $E_C$ reduces it. Compare residual charge dispersion to the coherence budget, not merely to the GHz carrier frequency. There is no universal optimum ratio.
 
 ## A worked example (illustrative numbers)
 
@@ -130,7 +132,7 @@ Pick generic teaching values: $E_C/h = 0.25$ GHz and $E_J/h = 15$ GHz, so $E_J/E
 
 **4 · Charge dispersion.** Exponent $-\sqrt{8\times60} = -\sqrt{480}\approx -21.9$, so $e^{-21.9}\approx 3\times10^{-10}$. For the ground level, $\epsilon_0/h\approx25$ Hz. The qubit transition dispersion is dominated by the first excited level; here $|\epsilon_1-\epsilon_0|/h\approx2.2$ kHz, still negligible next to a 5 GHz qubit.
 
-**The quantitative heart of the chapter.** At $E_J/E_C=60$, $\alpha_r\approx-4.6\%$ (healthy) while dispersion $\sim10^{-10}$. Double the ratio to 120: $\alpha_r$ only shrinks to $\sim-3.2\%$ (power law), but the exponent becomes $-\sqrt{960}\approx-31$, so dispersion $\sim e^{-31}\sim 3\times10^{-14}$, **four more orders of magnitude** for a tiny anharmonicity cost. That asymmetry *is* the transmon.
+**The quantitative heart of the chapter.** At $E_J/E_C=60$, $\alpha_r\approx-4.6\%$ (healthy) while the exponential factor alone is $\sim10^{-10}$. Double the ratio to 120: $\alpha_r$ only shrinks to $\sim-3.2\%$ (power law), but the exponent becomes $-\sqrt{960}\approx-31$, so the exponential factor is $\sim e^{-31}\sim 3\times10^{-14}$, **four more orders of magnitude** for a tiny anharmonicity cost. That asymmetry *is* the transmon.
 
 ## Making it tunable: the SQUID transmon
 
@@ -162,7 +164,7 @@ At a flux sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\o
 ## Common pitfalls
 
 - **"It's a different circuit from the CPB."** No, same circuit, same Hamiltonian; only $E_J/E_C$ changes.
-- **"Maximize $E_J/E_C$."** No, there's an optimum window (~50-100); beyond it you only lose anharmonicity and gate speed.
+- **"Maximize $E_J/E_C$."** The useful ratio depends on the design constraints. Raising $E_J$ at fixed $E_C$ mainly reduces relative anharmonicity; lowering $E_C$ also reduces absolute anharmonicity and can slow selective gates.
 - **"$\alpha<0$ is a defect."** No, it just means upper levels are more closely spaced; the sign matters for choosing DRAG parameters.
 - **"$n_g$ vanishes."** No, only its *effect* on the frequency is exponentially suppressed.
 - **"These formulas are exact."** No, $\hbar\omega_{01}=\sqrt{8E_JE_C}-E_C$ and $\alpha_E=-E_C$ are leading-order teaching approximations; for design you diagonalize the full Hamiltonian (Mathieu functions / numerics).

@@ -14,9 +14,11 @@ excited state. Everything runs in QuTiP with no hardware involved.
 
 ## Run it
 
+Run these commands from the **repository root**, using the environment from the [shared setup](../README.md).
+
 ```bash
-pip install qutip matplotlib numpy scipy
-python bloch.py
+python -m pip install -r hands-on/requirements.txt
+python hands-on/01-bloch-sphere/bloch.py
 ```
 
 The script prints the expectation values and the Rabi checkpoints, then opens
