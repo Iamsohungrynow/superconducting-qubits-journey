@@ -14,13 +14,16 @@ excited state. Everything runs in QuTiP with no hardware involved.
 
 ## Run it
 
+Run these commands from the **repository root**, using the environment from the [shared setup](../README.md).
+
 ```bash
-pip install qutip matplotlib numpy scipy
-python bloch.py
+python -m pip install -r hands-on/requirements.txt
+python hands-on/01-bloch-sphere/bloch.py
 ```
 
 The script prints the expectation values and the Rabi checkpoints, then opens
-two interactive Bloch spheres and saves a copy under `figures/bloch.png`.
+one figure with two Bloch spheres side by side and saves a copy under
+`figures/bloch.png`.
 
 ## The code explained
 
@@ -68,8 +71,10 @@ population flips from ground to excited.
 
 ![Qubit states and the Bloch sphere](figures/bloch.png)
 
-The left sphere shows the four named states as points; the right sphere shows
-the X drive carrying the state from the north pole down through the equator.
+The left sphere shows the four named states as arrows, one colour per state
+in the order they were added (QuTiP's default cycle: green `|0>`, orange
+`|1>`, blue plus, red plus_i); the right sphere shows the X drive carrying
+the state from the north pole down through the equator.
 
 ## Try this
 
