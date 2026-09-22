@@ -1,5 +1,7 @@
 # 08 · Two-Qubit Gates
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 Single-qubit gates are "easy": drive one qubit with a shaped microwave pulse and you can rotate it anywhere on the Bloch sphere. But a quantum computer needs qubits to *talk* to each other. To create entanglement you need a gate whose action on one qubit depends on the state of another, and that requires a physical interaction between them. Engineering that interaction, turning it on cleanly, and turning it *off* again, is where most of the hard work in superconducting hardware lives. This chapter is about how we get two transmons to interact on purpose.
 
 A theme that runs through everything below: **the same coupling $g$ that lets you build a gate also produces an always-on error.** The same exchange Hamiltonian that gives idle $ZZ$ also creates the avoided crossings used for CZ, but the idle shift and the pulsed gate phase are not the same measured quantity. Different two-qubit gates are mostly different answers to one question, *which* resonance do I bring into play, and *when*?
@@ -46,6 +48,10 @@ Derivation in words:
 4. **Combine.** The two signed contributions give the compact form with $(\alpha_1+\alpha_2)$ on top.
 5. **The crucial limit.** As $\alpha \to \infty$ (ideal two-level systems), $\zeta \to 0$. **$ZZ$ is a transmon effect**, it exists precisely *because* transmons are weakly anharmonic. Anharmonicity is essential, not incidental.
 
+![Residual ZZ shift versus qubit-qubit detuning on a symmetric log scale: small far from the poles, diverging at the two avoided crossings where 11 meets 02 and 20, the same curve that is an idle error far away and the CZ resource at the pole](figures/08-zz-vs-detuning.png)
+
+*The chapter's central theme in one curve: $\zeta_{ZZ}(\Delta)$ for $g/2\pi=12$ MHz, $\alpha_{1,2}/2\pi=-300$ MHz. Far from the poles it is a small, always-on idle **error**. It diverges at $\Delta=\alpha_2$ (the $|11\rangle$-$|02\rangle$ crossing, where the CZ gate deliberately operates) and at $\Delta=-\alpha_1$ ($|11\rangle$-$|20\rangle$). The idle nuisance and the gate resource are the same physics at different detunings.*
+
 The same exchange Hamiltonian that gives idle $ZZ$ also creates the avoided crossings used for CZ, but the idle shift and the pulsed gate phase are not the same measured quantity. Near a CZ operating point, compute $\zeta_{ZZ}(t)$ from the instantaneous dressed eigenenergies instead of using the far-detuned perturbative expression above.
 
 ## The CZ gate via the $|11\rangle$-$|02\rangle$ avoided crossing
@@ -56,25 +62,9 @@ $$\Delta_\text{gap} = 2\sqrt 2\, g \quad\text{at resonance.}$$
 
 (Note the $2\sqrt 2$, not $2g$: the $\sqrt 2$ is the $1\to 2$ bosonic matrix element, easy to drop.)
 
-```
- E                          |11⟩ (diabatic, rising)
- │        ╲                 ╱
- │         ╲      ___      ╱   ← upper branch (solid)
- │          ╲    /   \    ╱
- │           ╲  / gap  \  /        gap = 2√2 g
- │            ╲/ 2√2 g  \/
- │            /\        /\
- │           /  \  ___ /  ╲   ← lower branch (solid)
- │          ╱    ‾‾‾‾    ╲
- │     |02⟩ (diabatic, falling)
- │
- │ ───────────────────────────  |10⟩  (flat reference, unaffected)
- │ ───────────────────────────  |01⟩  (flat reference, unaffected)
- │ ───────────────────────────  |00⟩  (flat reference, unaffected)
- └─────────────────────────────────────► control flux / detuning
-   trajectory: park → approach crossing → return
-   conditional phase from |11> branch  =  -integral zeta dt  =  pi mod 2pi
-```
+![Avoided crossing between the two-excitation states 11 and 02: dashed diabatic lines cross while the coupled solid branches repel with a minimum gap of two root two g, with the flat single-excitation reference levels below and the worked-example dwell point marked](figures/08-cz-crossing.png)
+
+*The $\{|11\rangle,|02\rangle\}$ block vs. the detuning $\delta$ of $|11\rangle$ from $|02\rangle$ ($g/2\pi=12$ MHz). Dashed: bare (diabatic) states. Solid: hybridized branches, repelling with minimum gap $2\sqrt2\,g/2\pi\approx34$ MHz. The gate trajectory parks far away, approaches the crossing (the worked example dwells at $\delta/2\pi=50$ MHz, dot), and returns; the level repulsion $\zeta$ picked up along the way integrates to the conditional phase $\pi$. The $|01\rangle,|10\rangle$ references are unaffected.*
 
 Now bring the qubits adiabatically toward the crossing and back. Along the path all computational states acquire dynamical phases, including large one-qubit phases on $|01\rangle$ and $|10\rangle$. Calibration or virtual-Z frame updates remove those single-qubit phases; the entangling content is the signed conditional angular frequency $\zeta_{ZZ}(t)$. The accumulated **conditional phase** includes the Schrodinger phase sign, and the gate condition is
 
@@ -99,8 +89,12 @@ Two flux-tunable transmons, $g/2\pi = 12$ MHz, $\alpha/2\pi = -300$ MHz each, $T
 | 1, avoided-crossing gap | $\Delta_\text{gap}/2\pi = 2\sqrt 2\,g/2\pi$ | $2(1.414)(12) \approx 34$ MHz |
 | 2, conditional shift at dwell | $\zeta/2\pi \approx (\sqrt 2 g)^2/\delta$, $\delta/2\pi=50$ MHz | $(16.97)^2/50 \approx 5.8$ MHz |
 | 3, gate time for $\pi$ phase | $t_\text{gate}\approx 1/(2\,\zeta_\text{Hz})$ | $1/(2\cdot 5.8\times10^6) \approx 86$ ns |
-| 4, leakage (Landau-Zener) | $P_\text{LZ}\sim \exp[-\pi \Delta_\text{gap}^2/(2|\dot\epsilon|)]$ | $<10^{-3}$ *only if shaped* |
+| 4, leakage (Landau-Zener) | $P_\text{LZ}\sim \exp[-\pi \Delta_\text{gap}^2/(2\vert\dot\epsilon\vert)]$ | requires the actual trajectory; shaping alone does not specify a number |
 | 5, decoherence floor | $\varepsilon_\text{dec}\sim \frac{t_\text{gate}}{2}(1/T_1+1/T_2)$ | $86\text{e-}9\cdot 25000/2 \approx 1.1\times10^{-3}$ |
+
+(In step 2, $\delta$ is the *dwell detuning*: how far $|11\rangle$ is parked from $|02\rangle$ at the closest approach, not to be confused with the qubit-qubit detuning $\Delta$. In step 3, $\zeta_\text{Hz}=\zeta/2\pi$ is the conditional shift as an ordinary frequency, which is why the $2\pi$ disappears.)
+
+The dwell estimate is perturbative: the isolated two-state block instead gives $(\sqrt{50^2+4(16.97)^2}-50)/2\approx5.22$ MHz and a dwell of about 96 ns. Neither includes ramp phases, the spectator level, or pulse-dependent leakage.
 
 **Takeaway:** the *same* $g$ sets the gap (1), the conditional shift that powers the gate (2), the gate time (3), and the leakage risk (4); and coherence (5) puts a hard $\sim10^{-3}$ floor under all of it. That is why two-qubit gates dominate the error budget and sit near the surface-code threshold.
 
@@ -135,7 +129,7 @@ Tunable approaches need flux lines. The **cross-resonance (CR)** gate avoids the
 
 $$H_\text{CR} \approx \underbrace{\Omega_d\,\frac{J\alpha_c}{\Delta(\Delta+\alpha_c)}}_{\mu_{ZX}}\frac{ZX}{2} \;+\; \nu\, IX \;+\;\text{(IY, ZI, ZZ terms)}.$$
 
-Derivation sketch: drive the control off-resonantly; it barely moves, but the dispersive coupling makes the target see a control-state-dependent X drive. Schrieffer-Wolff expansion in $J/\Delta$ and $\Omega_d/\Delta$ gives the leading $ZX$ rate up to sign and frame conventions, where $\alpha_c$ is the driven control qubit's anharmonicity. The perturbative formula fails near the collision $\Delta+\alpha_c\approx0$.
+Derivation sketch: drive the control off-resonantly; it barely moves, but the dispersive coupling makes the target see a control-state-dependent X drive. Schrieffer-Wolff expansion in $J/\Delta$ and $\Omega_d/\Delta$ gives the leading $ZX$ rate up to sign and frame conventions, where $\alpha_c$ is the driven control qubit's anharmonicity and, in this formula, $\Delta = \omega_\text{control}-\omega_\text{target}$ (the labeling matters: the pole sits at the *control's* $|1\rangle\!\to\!|2\rangle$ collision). The perturbative formula fails near the collision $\Delta+\alpha_c\approx0$.
 
 The raw gate is **not** a clean $ZX$, calibration must remove spurious terms:
 
@@ -187,7 +181,7 @@ The leading prefactor (here $1/2$) is an order-unity number that depends on the 
 | Error channel | Scaling | Illustrative size | Mitigation |
 |---|---|---|---|
 | Decoherence | $\frac{t_\text{gate}}{2}(1/T_1+1/T_2)$ | $\sim 1\text{ to }3\times10^{-3}$ | shorter gates, better $T_1/T_2$ |
-| Leakage to $|02\rangle$ | adiabaticity | $\sim 10^{-4}\text{ to }10^{-3}$ | fast-adiabatic / DRAG pulses |
+| Leakage to $\vert 02\rangle$ | adiabaticity | $\sim 10^{-4}\text{ to }10^{-3}$ | fast-adiabatic / DRAG pulses |
 | Residual $ZZ$ | unwanted phase $\sim \zeta t_\text{gate}$; infidelity $O[(\zeta t_\text{gate})^2]$ | variable | tunable coupler / echo |
 | Coherent miscalibration | amplitude/phase error | $\sim 10^{-4}$ | interleaved RB tune-up |
 
@@ -199,14 +193,14 @@ The leading prefactor (here $1/2$) is an order-unity number that depends on the 
 
 | Gate | Native interaction | Tunable elements | What you sweep/drive | Speed (illustrative) | Main error channel | Platform |
 |---|---|---|---|---|---|---|
-| CZ (avoided crossing) | $ZZ$ / $|11\rangle$-$|02\rangle$ | flux on qubit/coupler | frequency into crossing | fast (tens of ns) | leakage to $|02\rangle$ | flux-tunable transmons |
-| iSWAP / $\sqrt{\text{iSWAP}}$ | exchange | resonant tuning / coupler | $|01\rangle$-$|10\rangle$ resonant | fast | residual $ZZ$ | tunable-coupler chips |
+| CZ (avoided crossing) | $ZZ$ / $\vert 11\rangle$-$\vert 02\rangle$ | flux on qubit/coupler | frequency into crossing | fast (tens of ns) | leakage to $\vert 02\rangle$ | flux-tunable transmons |
+| iSWAP / $\sqrt{\text{iSWAP}}$ | exchange | resonant tuning / coupler | $\vert 01\rangle$-$\vert 10\rangle$ resonant | fast | residual $ZZ$ | tunable-coupler chips |
 | Cross-resonance | $ZX$ | none (fixed freq) | $\mu$wave on control@target | slower (hundreds of ns) | spurious $IX/ZZ$, collisions | fixed-frequency transmons |
 
 ## Common pitfalls
 
 - **"$ZZ$ is separate from CZ."** They share avoided-crossing physics: idle $ZZ$ is the small perturbative always-on conditional phase rate, while CZ deliberately changes the spectrum to accumulate a calibrated conditional phase.
-- **"This residual-$ZZ$ and avoided-crossing CZ mechanism would survive in ideal two-level qubits."** No: this transmon mechanism vanishes as the noncomputational levels are pushed away. Exchange-coupled two-level qubits can still make iSWAP-like entanglers, and CZ can be synthesized with one-qubit gates or generated by a true longitudinal coupling.
+- **"This residual-$ZZ$ and avoided-crossing CZ mechanism would survive in ideal two-level qubits."** No: this transmon mechanism vanishes as the noncomputational levels are pushed away. Exchange-coupled two-level qubits can still make iSWAP-like entanglers, and CZ can then be synthesized from two iSWAP-family entanglers plus one-qubit rotations, or generated directly by a true longitudinal coupling.
 - **"The avoided-crossing gap is $2g$."** It is $2\sqrt 2\,g$; the $\sqrt 2$ is the $\langle 2|a^\dagger|1\rangle$ bosonic factor.
 - **"Cross-resonance gives a clean $ZX$."** Raw CR also produces $IX$, $ZI/IZ$, and $ZZ$; a usable CNOT needs an echo and calibration.
 - **"Faster is always better."** Speed fights adiabaticity, go too fast and you leak into $|02\rangle$. The optimum is a *shaped* trajectory.
@@ -224,7 +218,7 @@ The leading prefactor (here $1/2$) is an order-unity number that depends on the 
 ## Go deeper
 
 - DiCarlo et al., "Demonstration of two-qubit algorithms with a superconducting quantum processor," *Nature* (2009), the adiabatic CZ via $|11\rangle$-$|02\rangle$ ([arXiv:0903.2030](https://arxiv.org/abs/0903.2030)).
-- Yan et al., "A Tunable Coupling Scheme for Implementing High-Fidelity Two-Qubit Gates," *Phys. Rev. Applied* (2018) ([arXiv:1803.09813](https://arxiv.org/abs/1803.09813)), direct+indirect path cancellation, simultaneous $g_\text{eff}$/$ZZ$ nulling.
+- Yan et al., "Tunable Coupling Scheme for Implementing High-Fidelity Two-Qubit Gates," *Phys. Rev. Applied* (2018) ([arXiv:1803.09813](https://arxiv.org/abs/1803.09813)), direct+indirect path cancellation, simultaneous $g_\text{eff}$/$ZZ$ nulling.
 - Magesan & Gambetta, "Effective Hamiltonian models of the cross-resonance gate," *Phys. Rev. A* (2020) ([arXiv:1804.04073](https://arxiv.org/abs/1804.04073)), the $ZX/IX/ZZ$ decomposition and $J\Omega/\Delta\cdot\alpha/(\alpha+\Delta)$ scaling.
 - Krantz et al., "A Quantum Engineer's Guide to Superconducting Qubits," *Appl. Phys. Rev.* (2019) ([arXiv:1904.06560](https://arxiv.org/abs/1904.06560)), the lumped-element $g$, the CZ crossing, CR, iSWAP, and the error budget.
 - Blais, Grimsmo, Girvin, Wallraff, "Circuit Quantum Electrodynamics," *Rev. Mod. Phys.* (2021) ([arXiv:2005.12667](https://arxiv.org/abs/2005.12667)), rigorous coupling-Hamiltonian, dispersive-shift, and $ZZ$ derivations.

@@ -1,5 +1,7 @@
 # 09 · Coherence, Noise & Decoherence
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 A perfect qubit would hold whatever state you put into it forever. Real qubits do not. Couple a quantum system to its environment, wiring, dielectrics, stray fields, the chip itself, and that environment slowly leaks information out and noise in. The state you carefully prepared decays. Understanding *how* it decays, and what causes it, is the whole game when you try to build a useful processor. This chapter is about the two clocks that govern that decay, $T_1$ and $T_2$, the noise that sets them, and the surprisingly beautiful machinery, power spectral densities and filter functions, that connects the two.
 
 ## The open-quantum-system picture
@@ -16,7 +18,7 @@ flowchart TD
     P --> B["Phase scramble<br/>w_q jitter, no energy<br/>(sigma_z bath)"]
     A --> A1["T1 relaxation<br/>P1 = exp(-t/T1)<br/>inversion recovery"]
     B --> B1["T_phi dephasing<br/>Ramsey (T2*)<br/>or echo (T2E)"]
-    A1 --> C["1/T2 =<br/>1/2T1 + 1/T_phi<br/>bound: T2 <= 2T1"]
+    A1 --> C["1/T2 =<br/>1/(2 T1) + 1/T_phi<br/>bound: T2 <= 2T1"]
     B1 --> C
 ```
 
@@ -40,13 +42,13 @@ Why does relaxation contribute *half* its rate to the transverse decay? Here is 
 2. **Relaxation empties $|1\rangle$ at rate $\Gamma_1$.** The amplitude in $|1\rangle$ scales like the square root of its population, so it decays at rate $\Gamma_1/2$, the "adiabatic" or geometric-mean factor. This is relaxation's *unavoidable* contribution to transverse decay.
 3. **Pure dephasing adds independently.** A fluctuating $\omega_q$ randomizes the relative phase of $\rho_{01}$ at rate $\Gamma_\phi$, exchanging no energy.
 4. **Rates of independent channels add.** Acting on the same coherence, the two channels give $\Gamma_2 = \Gamma_1/2 + \Gamma_\phi$, i.e. $\tfrac{1}{T_2} = \tfrac{1}{2T_1} + \tfrac{1}{T_\phi}$.
-5. **Take the limit.** Set $\Gamma_\phi \to 0$ and you reach the rigorous ceiling $T_2 = 2T_1$. You can never do better.
+5. **Take the limit within this stationary Markovian model.** Set $\Gamma_\phi \to 0$ and you reach the rigorous ceiling $T_2 = 2T_1$. You can never do better.
 
 So the headline relation is a *result*, not an assertion:
 
 $$\boxed{\;\frac{1}{T_2} = \frac{1}{2T_1} + \frac{1}{T_\phi}, \qquad T_2 \le 2T_1.\;}$$
 
-> **Common pitfall.** A *fitted* $T_2$ above $2T_1$ is physically impossible, it always signals a measurement or fitting artifact (drift, the wrong decay model, leakage). Treat it as a bug, not a discovery.
+> **Scope of the bound.** $T_2\le2T_1$ applies to a stationary Markovian qubit with exponential decay and nonnegative pure-dephasing rate. Independently fitted times from drifting data or nonexponential envelopes need not obey that simple comparison; check the model, fit, and measurement conditions before interpreting them.
 
 ## Noise as a random process: the power spectral density
 
@@ -87,21 +89,9 @@ $$W_R(f,t) = \frac{\sin^2(\pi f t)}{(\pi f t)^2}, \qquad W_E(f,t) = \frac{\sin^4
 
 For **Ramsey**, $g = +1$ throughout, giving a low-pass filter $W_R$ that lets DC noise straight through. For **Hahn echo**, the mid-sequence $\pi$ pulse flips $g$, so $W_E(0,t) = 0$: any noise constant over the sequence is perfectly refocused. *That* is why echo beats $1/f$.
 
-```
-  log S, filter
-   ^
-   |  *                         S(ω) ~ 1/f  (noise lives here, low f)
-   |    *
-   |      *  __                 Ramsey filter W_R: low-pass lobe
-   |   ((((  * ))))             ── big OVERLAP with 1/f → fast dephasing
-   |  __ ___  *
-   |    /    \  *  __
-   |   / echo \  *(    )        Echo filter W_E: NOTCH at ω=0,
-   |  /  W_E   \__*__(  )___     passband pushed up → little overlap
-   +--+---------+------+----------> log ω
-     ω=0     slow     fast
-        overlap area = dephasing
-```
+![Log-log plot of the one-over-f noise spectrum together with the Ramsey and echo filter functions: the Ramsey low-pass lobe overlaps the noise peak at low frequency, while the echo filter has a notch at zero frequency and its passband sits where the noise is weak](figures/09-filter-functions.png)
+
+*Where the rain falls vs. where the bucket sits: $S(f)\propto 1/f$ concentrates its power at low frequency (shaded). The Ramsey filter $W_R$ is a low-pass lobe parked right under it, so the overlap (= dephasing) is large. The echo filter $W_E$ is exactly zero at $f=0$ and its passband sits near $f\sim 1/t$, where the $1/f$ sky is nearly dry.*
 
 > **Intuition.** Think of $S(\omega)$ as where the rain falls and the filter as where your bucket sits. Ramsey leaves the bucket right under the downpour at low $f$; echo moves it to higher $f$ where the $1/f$ sky is nearly dry.
 
@@ -150,13 +140,18 @@ Different mechanisms limit different clocks, with different spectral fingerprint
 time →
 Ramsey:  [π/2]───── τ ─────[π/2]·(measure)
 Echo:    [π/2]── τ/2 ──[π]── τ/2 ──[π/2]
-CPMG:    [π/2]-(t)-[πy]-(2t)-[πy]-(2t)-...-[πy]-(t)-[π/2]
+CPMG:    [π/2]-(δ)-[πy]-(2δ)-[πy]-(2δ)-...-[πy]-(δ)-[π/2]
                      └─────── N π-pulses (Y phase) ───────┘
+         (pulse half-spacing δ; total sequence time t = 2Nδ)
 ```
 
-**Ramsey** ($\pi/2$ - wait - $\pi/2$) reads out the accumulated phase; its signal oscillates at the qubit-drive detuning $\delta\omega$ and decays with $T_2^*$, sensitive to all noise down to DC:
+![The three decay measurements with this chapter's worked-example numbers: exponential T1 relaxation over 100 microseconds, fast Gaussian-enveloped Ramsey fringes decaying in about 11 microseconds, and the slower Gaussian echo envelope near 45 microseconds](figures/09-decays.png)
 
-$$\langle\sigma_x\rangle(t) \propto e^{-(t/T_2^*)^p}\cos(\delta\omega\, t),$$
+*The three clocks side by side, drawn with the worked example's numbers: $T_1$ relaxation is exponential ($e^{-t/100\,\mu s}$), the Ramsey fringe oscillates at the deliberate detuning inside a **Gaussian** envelope ($T_2^*\approx11\,\mu$s, quasi-static $1/f$), and the echo envelope survives to $T_2^E\approx45\,\mu$s by refocusing the slow noise. Note the shape difference, not just the timescale.*
+
+**Ramsey** ($\pi/2$ - wait - $\pi/2$) reads out the accumulated phase; its signal oscillates at the deliberate qubit-drive detuning $\Delta_d$ (not to be confused with the *random* frequency noise $\delta\omega(t)$ of the filter-function derivation) and decays with $T_2^*$, sensitive to all noise down to DC:
+
+$$\langle\sigma_x\rangle(t) \propto e^{-(t/T_2^*)^p}\cos(\Delta_d\, t),$$
 
 with $p\!=\!1$ for white noise and $p\!=\!2$ (Gaussian) when quasi-static $1/f$ noise dominates, the case for most flux-tunable qubits off the sweet spot.
 
@@ -196,7 +191,7 @@ Because TLS and dielectric loss live at surfaces, coherence has improved largely
 |---|---|---|
 | Early Nb/Al transmons | ~1-10 µs | illustrative |
 | 2D transmons, surface treatment | tens of µs | illustrative |
-| 3D / tantalum transmons | $>0.3$ ms (Place 2021); ~0.5 ms (Wang 2022) | published, representative not record |
+| Planar (2D) tantalum transmons | $>0.3$ ms (Place 2021); ~0.5 ms (Wang 2022) | published, representative not record; both are 2D devices, the gain came from the film material |
 
 The lesson: the qubit Hamiltonian was solved long ago; the frontier is the dirty physics of the materials it is made from.
 
@@ -204,7 +199,7 @@ The lesson: the qubit Hamiltonian was solved long ago; the frontier is the dirty
 
 - **"$T_2$ is always exponential."** Under quasi-static $1/f$ noise the Ramsey envelope is **Gaussian**, $e^{-(t/T_2^*)^2}$; fitting a single exponential gives a misleading number.
 - **"Echo always crushes Ramsey."** Echo only helps against noise *slow* compared to the sequence. For white noise it barely helps; the $T_2^E/T_2^*$ ratio is a probe of noise color, not a guaranteed win.
-- **"$T_2 > 2T_1$ is possible."** It is not, that bound is rigorous.
+- **"$T_2 > 2T_1$ is possible."** It is excluded by the stationary exponential-decay model above; fits outside that model require separate interpretation.
 - **"Sweet spots eliminate noise."** They remove only first-order sensitivity.
 - **"More CPMG pulses are always better."** Pulse errors accumulate; past an optimum, added pulses inject more error than the noise they remove.
 - **"Published record times are typical."** Quoted 0.3-0.5 ms numbers are best-in-class under specific conditions, a trend, not a spec.
@@ -212,7 +207,7 @@ The lesson: the qubit Hamiltonian was solved long ago; the frontier is the dirty
 ## Key takeaways
 
 - A qubit decoheres because it is weakly coupled to a bath: transverse coupling drives $T_1$, while longitudinal $\sigma_z$ coupling drives $T_\phi$.
-- Bloch-Redfield gives $1/T_2 = 1/2T_1 + 1/T_\phi$ as a *result*, with the hard ceiling $T_2 \le 2T_1$.
+- Bloch-Redfield gives $1/T_2 = 1/(2T_1) + 1/T_\phi$ as a *result*, with the hard ceiling $T_2 \le 2T_1$.
 - Noise is characterized by its PSD $S(\omega)$; flux and charge noise are $1/f$, with most power at low frequency.
 - The filter-function formula $\chi(t)=\tfrac12\int_0^\infty(d\omega/\pi)\,S_{\delta\omega}(\omega)|G_N(\omega,t)|^2$ unifies Ramsey, echo, and CPMG and explains *why* echo works.
 - Noise color sets decay *shape*: quasi-static $1/f$ → Gaussian, white → exponential.
@@ -226,7 +221,7 @@ The lesson: the qubit Hamiltonian was solved long ago; the frontier is the dirty
 - J. Bylander *et al.*, "Noise spectroscopy through dynamical decoupling with a superconducting flux qubit," Nat. Phys. **7**, 565 (2011), [arXiv:1101.4707](https://arxiv.org/abs/1101.4707), CPMG-as-spectrometer and the ~50x dynamical-decoupling improvement.
 - G. Ithier *et al.*, "Decoherence in a superconducting quantum bit circuit," Phys. Rev. B **72**, 134519 (2005), [arXiv:cond-mat/0508588](https://arxiv.org/abs/cond-mat/0508588), free-induction vs echo under $1/f$ noise, sweet spots, and the Gaussian-vs-exponential distinction.
 - A. P. M. Place *et al.*, "New material platform for superconducting transmon qubits with coherence times exceeding 0.3 milliseconds," Nat. Commun. **12**, 1779 (2021), [arXiv:2003.00024](https://arxiv.org/abs/2003.00024), the tantalum-transmon materials result.
-- C. Wang *et al.*, "Transmon qubit with relaxation time exceeding 0.5 milliseconds," npj Quantum Inf. **8**, 3 (2022), [arXiv:2105.09890](https://arxiv.org/abs/2105.09890), tantalum transmon, $T_1$ approaching 0.5 ms.
+- C. Wang *et al.*, "Towards practical quantum computers: transmon qubit with a lifetime approaching 0.5 milliseconds," npj Quantum Inf. **8**, 3 (2022), [arXiv:2105.09890](https://arxiv.org/abs/2105.09890) (preprint title differs), tantalum transmon, $T_1$ approaching 0.5 ms.
 
 ---
 

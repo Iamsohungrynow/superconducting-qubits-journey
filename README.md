@@ -19,6 +19,8 @@ If you find it useful, a ⭐ genuinely makes my day, and corrections are always 
 Start with the index, then work through the chapters in order. Each one builds on the last.
 
 - 📑 [**Tutorial index**](tutorial/README.md)
+- 🧭 [**Guided learning path, exercises and answers**](tutorial/learning-path.md)
+- 🔎 [**Notation and units**](tutorial/00-notation.md) · [**Map to Krantz et al.**](tutorial/paper-map.md)
 
 | # | Chapter |
 |---|---------|
@@ -39,7 +41,7 @@ Start with the index, then work through the chapters in order. Each one builds o
 
 ## 🧪 Hands-on labs
 
-Reading is good, but doing sticks. The [**hands-on/**](hands-on/README.md) track lets you simulate the physics on your own laptop with [QuTiP](https://qutip.org), each lab paired with the chapter it brings to life:
+Reading is good, but doing sticks. The [**hands-on/**](hands-on/README.md) track lets you simulate the physics on your own laptop with NumPy/SciPy and [QuTiP](https://qutip.org), each lab paired with the chapter it brings to life:
 
 | Lab | You simulate | Theory |
 |---|---|---|
@@ -47,8 +49,21 @@ Reading is good, but doing sticks. The [**hands-on/**](hands-on/README.md) track
 | [Rabi oscillations](hands-on/02-rabi/) | a qubit flipping under a drive | ch07 |
 | [T1 and T2](hands-on/03-t1-t2/) | relaxation and Ramsey dephasing | ch09 |
 | [Dispersive readout](hands-on/04-dispersive-readout/) | IQ separation of the qubit states | ch06 |
+| [Leakage & DRAG](hands-on/05-drag-leakage/) | a three-level transmon under fast pulses | ch07 |
+| [CZ gate](hands-on/06-cz-gate/) | the \|11>-\|20> avoided crossing and conditional phase | ch08 |
+| [Randomized benchmarking](hands-on/07-randomized-benchmarking/) | error per Clifford from an RB decay | ch11 |
+| [Repetition code](hands-on/08-repetition-code/) | majority-vote error correction and break-even | ch12 |
 
-Every script runs as-is after `pip install qutip matplotlib numpy scipy`. Running on real hardware with Qiskit and Qibocal is on the roadmap.
+Four additional labs cover [transmon spectra](hands-on/09-transmon-spectrum/), [Jaynes–Cummings physics](hands-on/10-jaynes-cummings/), [noise and echo](hands-on/11-noise-echo/), and the [microwave chain](hands-on/12-microwave-chain/).
+
+Follow the [environment setup](hands-on/README.md), then run all twelve labs with numerical checks:
+
+```bash
+python -m pip install -r hands-on/requirements.txt
+python hands-on/run_labs.py --all --check
+```
+
+The [review notes](REVIEW.md) record corrections, validation, and scope limits. Running on real hardware with Qiskit and Qibocal is on the roadmap.
 
 ---
 

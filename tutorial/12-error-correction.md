@@ -1,5 +1,7 @@
 # 12 · A First Look at Quantum Error Correction
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 By now you've met the transmon, learned how it decoheres with timescales $T_1$ and $T_2$, and seen how we read it out dispersively. Here's the uncomfortable truth: even our best superconducting qubits hold quantum information for only tens-to-hundreds of microseconds (illustrative), and gate errors sit around $10^{-3}$ (illustrative). A useful algorithm needs *billions* of reliable operations, $10^{9}$ or more. We're off by orders of magnitude. Quantum error correction (QEC) is how we bridge that gap, not by building better qubits, but by building a *better-behaved logical qubit* out of many imperfect physical ones.
 
 ## Why you can't just copy a qubit
@@ -56,6 +58,12 @@ Why these work, step by step:
 
 *Footnote:* the syndrome columns never depend on $\alpha,\beta$, the encoded amplitudes are untouched. The logical operators here are $Z_L = Z_1$ and $X_L = X_1X_2X_3$; both commute with $S_1,S_2$, so correction never disturbs the stored information.
 
+And does the encoding actually *help*? Quantitatively: if each qubit flips independently with probability $p$, correction fails only when **two or more** qubits flip, with probability $3p^2 - 2p^3$. That beats the bare, unencoded error $p$ whenever $p < \tfrac12$, and at small $p$ the suppression is *quadratic*: at $p = 1\%$, the logical error is $\approx 3\times10^{-4}$, thirty times better. That quadratic kill is the entire point of redundancy.
+
+![Failure probability of the three-qubit code versus the physical flip probability: the curve 3 p squared minus 2 p cubed sits below the bare error line for p below one half, crossing it at the break-even point, with a log-log inset showing the quadratic slope](figures/12-repetition-breakeven.png)
+
+*The three-qubit code's failure probability $3p^2-2p^3$ vs. the unencoded error $p$. Below the break-even point $p=\tfrac12$ encoding wins, quadratically so at small $p$ (log-log inset: slope 2). Above break-even, redundancy actively hurts, majority vote amplifies bad hardware. ([Lab 08](../hands-on/08-repetition-code/) simulates exactly this, out to distance 7.)*
+
 > **Intuition aside.** Stabilizers are like the parity bits on a Sudoku grid. You never reveal the hidden numbers; you only check "does this row still add up?" A violated check localizes the mistake without exposing the solution. QEC is continuous, gentle Sudoku-checking on your quantum data.
 
 ### Digitizing continuous errors, the conceptual heart of QEC
@@ -71,7 +79,7 @@ $$E = c_I\, I + c_X\, X + c_Y\, Y + c_Z\, Z.$$
 
 So the analog noise of the lab gets **digitized** into a discrete $\{X,Y,Z\}$ the moment we look at the syndrome. In a full single-qubit-error-correcting code, correcting those three corrects arbitrary single-qubit errors. This is why a finite code can tame continuous noise.
 
-> **The exception: leakage.** Digitization assumes every error stays inside the computational $\{|0\rangle,|1\rangle\}$ subspace, where the Paulis are a complete basis. A transmon can instead **leak** to $|2\rangle$ and higher (recall the weak anharmonicity of [Chapter 4](04-transmon.md) and the DRAG story of [Chapter 7](07-single-qubit-gates.md)). A leaked state is *not* any combination of $\{I,X,Y,Z\}$, so it escapes the Pauli-digitization argument and corrupts every stabilizer it touches. Real QEC stacks therefore add **leakage-reduction units** or explicit **reset** to pump population back into the qubit subspace, on top of the Pauli correction.
+> **The exception: leakage.** Digitization assumes every error stays inside the computational $\{|0\rangle,|1\rangle\}$ subspace, where the Paulis are a complete basis. A transmon can instead **leak** to $|2\rangle$ and higher (recall the weak anharmonicity of [Chapter 4](04-transmon.md) and the DRAG story of [Chapter 7](07-single-qubit-gates.md)). An error that sends population to $|2\rangle$ cannot be written as a combination of the qubit Paulis (they act only within the $\{|0\rangle,|1\rangle\}$ subspace), so it escapes the Pauli-digitization argument and corrupts every stabilizer it touches. Real QEC stacks therefore add **leakage-reduction units** or explicit **reset** to pump population back into the qubit subspace, on top of the Pauli correction.
 
 ## A genuine code: phase-flips, then Shor's nine
 
@@ -138,13 +146,14 @@ flowchart TD
 ```
 *One QEC cycle, repeated as long as the memory or computation requires.*
 
-In repeated syndrome extraction, a **defect** or detection event is a change in a check outcome between adjacent rounds, not merely a single $-1$ stabilizer value. A data error usually creates a space-like pair of detection events; a measurement error creates a time-like pair on the same check in neighboring rounds; a boundary can absorb one endpoint. The decoder, classically **minimum-weight perfect matching (MWPM)**, increasingly correlated or neural decoders, infers the most likely chain and applies (or just bookkeeps) a correction. Doing this fast enough is a real frontier: real-time decoding latency must keep pace with the rounds (illustrative ~tens of microseconds).
+In repeated syndrome extraction, a **defect** or detection event is a change in a check outcome between adjacent rounds, not merely a single $-1$ stabilizer value. A data error usually creates a space-like pair of detection events; a measurement error creates a time-like pair on the same check in neighboring rounds; a boundary can absorb one endpoint. The decoder, classically **minimum-weight perfect matching (MWPM)**, increasingly correlated or neural decoders, infers the most likely chain and applies (or just bookkeeps) a correction. Decoder throughput must keep up with incoming syndrome rounds; latency is a separate quantity and can span several rounds when corrections are tracked in a Pauli frame. For example, [Acharya et al.](https://arxiv.org/abs/2408.13687) report 1.1 us cycles and 63 us average decoding latency at distance 5.
 
 ```
 defect pair (harmless, local):     spanning chain (logical FAILURE):
   o-o-*-e-*-o-o                       *-e-e-e-e-e-e-*
-        ↑ one data error              defects only at the two boundaries,
-   two flipped checks bracket it      error of weight d crosses undetected
+        ↑ one data error              chain terminates on the two boundaries
+   two flipped checks bracket it      (* = virtual boundary nodes), so NO check
+                                      fires anywhere: weight-d error crosses undetected
 ```
 
 ## The threshold theorem, why this is allowed to work
@@ -175,6 +184,10 @@ Numbers chosen for clean arithmetic, **not** measured values. Take $p_{\text{th}
 - **Step 4: qubit cost.** Reaching $p_L \sim 10^{-5}$ costs $\sim81$ rotated-layout data qubits plus $\sim80$ measure ancillas before leakage/helper qubits. In the larger unrotated planar count the data-qubit number would be $d^2+(d-1)^2=145$.
 - **Step 5: contrast above threshold.** If instead $p = 2\% > p_{\text{th}}$, the below-threshold scaling no longer gives a valid probability; its formal growth signals that larger distance no longer provides exponential suppression, so logical errors approach order-one rather than improving. Adding qubits now makes things **worse**, the qualitative meaning of being above threshold.
 
+![Logical error rate versus physical error rate on log-log axes for code distances 3, 5, 7, and 9: curves stop at the one-percent threshold, with the invalid above-threshold extrapolation shaded](figures/12-threshold.png)
+
+*A below-threshold scaling illustration, not a simulated surface code. Curves stop at $p_{\rm th}$: extrapolating this ansatz above threshold would give impossible probabilities greater than one. The worked example uses an arbitrary prefactor $A=1$; being below threshold means improvement with distance, not necessarily beating a bare qubit at every small distance.*
+
 The same scaling picture explains why below-threshold operation wins exponentially and why above-threshold operation loses; within its valid domain it converts a target $p_L$ into a concrete qubit budget.
 
 ## From memory to computation
@@ -185,7 +198,7 @@ A **logical qubit** is the protected two-level subspace, manipulated *only* thro
 - **Lattice surgery** merges and splits surface-code patches to realize two-qubit logical operations (e.g. logical $\mathrm{CNOT}$) using only the same nearest-neighbour checks.
 - **Magic-state distillation** supplies the non-Clifford gates (the $T$ gate) that no transversal surface-code operation provides, and it is typically the *dominant* resource cost in fault-tolerant estimates.
 
-A recent superconducting milestone (2024-2025) demonstrated $\Lambda > 1$, an illustrative reported $\approx 2.14$, across increasing distances up to $d=7$, with the logical memory *outliving the best physical qubit*. That's the first clear evidence that scaling up suppresses errors as predicted. Treat the numbers as illustrative of the milestone, not values to reproduce. Demonstrating $\Lambda>1$ for a memory is *necessary but not sufficient* for a fault-tolerant computer, universal computation still needs the logical gates above.
+[Acharya et al. (2024 preprint; Nature 2025)](https://arxiv.org/abs/2408.13687) report $\Lambda=2.14\pm0.02$ and a distance-7 logical memory lifetime $2.4\pm0.3$ times that of its best physical qubit. These are measured results from that experiment, not illustrative inputs to the scaling model above. Below-threshold memory is an important step; universal fault-tolerant computation additionally needs logical gates and their supporting resources.
 
 ## Common pitfalls
 

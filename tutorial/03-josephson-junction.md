@@ -1,5 +1,7 @@
 # 03 · The Josephson Junction & Anharmonicity
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 In the previous chapter we built an LC oscillator out of superconducting circuit elements. It has a beautiful, clean problem: it is *harmonic*. Its energy levels are perfectly evenly spaced, like rungs on a ladder where every step is the same height. That sounds nice, but for a qubit it is fatal. If you send in a microwave pulse tuned to drive the $0 \to 1$ transition, the exact same photon also drives $1 \to 2$, $2 \to 3$, and so on. You cannot isolate a clean two-level system. You need one circuit element that breaks this even spacing, and that element is the Josephson junction.
 
 A junction is almost embarrassingly simple to picture: two superconductors separated by a thin (~1 nm) insulating barrier. Classically nothing should flow. But the superconducting condensate on each side is described by a *single macroscopic wavefunction* $\psi = \sqrt{n_s}\,e^{i\theta}$ with a well-defined phase $\theta$. Only the **gauge-invariant phase difference**
@@ -31,7 +33,7 @@ $$ \frac{d\varphi}{dt} = \frac{2e}{\hbar}\,V \qquad\text{(AC / second relation)}
 
 **Where the first relation comes from.** Each superconductor carries a condensate with phase $\theta_{L,R}$. Coupling the two through the barrier (Feynman's two-mode tunnelling model) makes the supercurrent depend *only* on the phase difference, and the simplest such periodic, odd function is $\sin\varphi$. The amplitude is the **critical current** $I_c$, set by the barrier transparency and the gap. Plain meaning: push a phase across the junction and a dissipationless current flows *with no voltage*, until you try to exceed $I_c$.
 
-**Where the second relation comes from.** Each condensate phase evolves as $\dot\theta = -E/\hbar$, where $E$ is the energy of a charge carrier on that side. A voltage $V$ biases the two sides by an energy $2eV$, note the $2e$, because the carriers are Cooper **pairs**, not single electrons. So the *difference* winds at $\dot\varphi = 2eV/\hbar$. Integrated, a DC voltage produces an AC supercurrent at the Josephson frequency $f = 2eV/h$, with the universal slope $2e/h \approx 483.6\ \text{MHz}/\mu\text{V}$. That factor of $2e$ is the experimental fingerprint of Cooper pairing.
+**Where the second relation comes from.** Each condensate phase evolves as $\dot\theta = -E/\hbar$, where $E$ is the energy of a charge carrier on that side. A voltage $V$ biases the two sides by an energy $2eV$, note the $2e$, because the carriers are Cooper **pairs**, not single electrons. So the *difference* winds at $\dot\varphi = 2eV/\hbar$ (the overall sign is fixed by the same branch convention chosen above). Integrated, a DC voltage produces an AC supercurrent at the Josephson frequency $f = 2eV/h$, with the universal slope $2e/h \approx 483.6\ \text{MHz}/\mu\text{V}$. That factor of $2e$ is the experimental fingerprint of Cooper pairing.
 
 **The nonlinear inductance.** Differentiate the first relation and substitute the second:
 
@@ -57,22 +59,9 @@ $$ -E_J\cos\varphi \approx -E_J + \tfrac{1}{2}E_J\varphi^2 - \tfrac{1}{24}E_J\va
 
 Using $\Phi=(\Phi_0/2\pi)\varphi$, the $\varphi^2$ term reproduces a harmonic oscillator: $\tfrac12E_J\varphi^2=\Phi^2/(2L_{J0})$, so $L_{J0}=(\Phi_0/2\pi)^2/E_J=\Phi_0/(2\pi I_c)$. The $\varphi^4$ term is the crucial correction: it is **negative**, so the cosine well is *flatter* than a parabola away from the bottom. A flatter well means the energy rungs get closer together as you climb, the ladder is no longer evenly spaced.
 
-```
- U(φ)
-   │      .                              .
-   │       \           parabola         /     ← harmonic approx (steeper)
-   │        \  (½E_Jφ²)               /
-   │   ──────\───────────────────── E₂   ⎫ ħω₁₂  (smaller)
-   │     ─────\─────────────────── E₁    ⎬ ─────
-   │       ────\─────────────── E₀       ⎭ ħω₀₁  (larger)
-   │            \....         ..../        gaps shrink as you climb
-   │             `-._ -E_Jcosφ _.-'        = anharmonicity
-   │                  `-._____.-'  ← min at φ=0, U=-E_J; barrier height 2E_J
-   └──────────────┴───────┴──────────── φ
-                 -π/2     0    +π/2
-```
+![The cosine Josephson potential with its harmonic parabola approximation dashed on top, and the lowest four exact energy levels drawn inside the well with visibly shrinking spacings; barrier maxima sit at plus and minus pi](figures/03-cosine-well.png)
 
-The cosine (solid) hugs the parabola (the steeper arms) only at the bottom; the levels $E_0, E_1, E_2$ live in the flatter cosine, so $\hbar\omega_{12} < \hbar\omega_{01}$.
+*The cosine potential $-E_J\cos\varphi$ (solid) against its harmonic approximation (dashed parabola), drawn for the worked example's $E_J/E_C=50$. The lowest levels, computed by exact diagonalization, live in the flatter cosine, so their spacings visibly shrink as you climb: $\hbar\omega_{12} < \hbar\omega_{01}$. The well minimum is $-E_J$ at $\varphi=0$ and the barrier maxima sit at $\varphi=\pm\pi$, height $2E_J$ above the minimum.*
 
 > **Intuition aside.** Think of the cosine as a pendulum. Small swings are nearly harmonic and isochronous; but a real pendulum slows for large swings, its period grows with amplitude. That amplitude-dependent frequency *is* anharmonicity. Tilt the cosine by adding a bias current and you get the **tilted washboard**: the bob can roll over barriers (phase slips) once $I \to I_c$. A qubit lives in the lowest swings of this superconducting pendulum.
 
@@ -86,13 +75,13 @@ The cosine (solid) hugs the parabola (the steeper arms) only at the bottom; the 
 
 ## The Hamiltonian in the charge basis
 
-Pair the cosine potential with the electrostatic charging energy of the island's effective capacitance $C_\Sigma$ (junction plus gate/shunt/network capacitances). The island charge is $Q = 2e(\hat n - n_g)$, so $Q^2/(2C_\Sigma)$ gives the full Hamiltonian:
+Pair the cosine potential with the electrostatic charging energy of the island's effective capacitance $C_\Sigma$ (junction plus gate/shunt/network capacitances). The island's excess charge is $Q = 2e\,\hat n$ and the gate induces an offset $Q_g = 2e\,n_g$ (generally fractional, it is an induced bias, not charge sitting on the island), so $(Q-Q_g)^2/(2C_\Sigma)$ gives the full Hamiltonian:
 
 $$ H = 4E_C\,(\hat n - n_g)^2 - E_J\cos\hat\varphi, \qquad E_C = \frac{e^2}{2C_\Sigma}, \qquad [\hat\varphi,\hat n] = i. $$
 
 Here $\hat n$ counts excess Cooper pairs, $n_g$ is the dimensionless **offset (gate) charge**, and $E_C$ is the **charging energy**, the single-electron scale $e^2/2C_\Sigma$ that sets the cost of moving charge onto the island (one full Cooper pair costs $4E_C$ at $n_g=0$). The $4E_C(\hat n - n_g)^2$ term is the "kinetic" energy; $-E_J\cos\hat\varphi$ is the "potential." Their ratio $E_J/E_C$ governs everything.
 
-The chapter title promised "in the charge basis," so let's make it concrete. Because $\hat\varphi$ and $\hat n$ are conjugate, $e^{\pm i\hat\varphi}$ shift Cooper-pair number by one. Therefore $\cos\hat\varphi$ is the Hermitian nearest-neighbor hopping operator:
+The section heading promised "in the charge basis," so let's make it concrete. Because $\hat\varphi$ and $\hat n$ are conjugate, $e^{\pm i\hat\varphi}$ shift Cooper-pair number by one. Therefore $\cos\hat\varphi$ is the Hermitian nearest-neighbor hopping operator:
 
 $$ \cos\hat\varphi = \tfrac{1}{2}\sum_n \big(|n\rangle\langle n{+}1| + |n{+}1\rangle\langle n|\big). $$
 
@@ -144,20 +133,9 @@ $$ \epsilon_m \simeq (-1)^m\,E_C\,\frac{2^{4m+5}}{m!}\sqrt{\frac{2}{\pi}}\Big(\f
 
 The physics: making the band depend on $n_g$ requires the phase to *tunnel* between adjacent cosine wells ($\varphi\to\varphi+2\pi$). A WKB/instanton estimate of that tunnelling action gives the $e^{-\sqrt{8E_J/E_C}}$ factor (the exact problem maps onto **Mathieu's equation**, which supplies the algebraic prefactor). Flat bands mean $df_q/dn_g \approx 0$: stray $1/f$ charge noise barely shifts the qubit frequency, so dephasing is suppressed and $T_2$ is long. *This is the transmon's defining payoff*, and it costs only a weak power-law penalty in anharmonicity.
 
-```
- E_m(n_g)   small E_J/E_C                   large E_J/E_C (transmon)
-   │   __        __        __          │
-   │  /  \      /  \      /  \  m=2     │  ────────────────────  m=2
-   │ /    \    /    \    /    \         │
-   │ \    /\  /    /\  /                │  ────────────────────  m=1
-   │  \__/  \/    /  \/      m=1        │
-   │   /\    /\    /\                   │  ────────────────────  m=0
-   │  /  \  /  \  /  \       m=0        │   ε_m shrinks ~ e^(-√(8E_J/E_C))
-   └──┴────┴────┴──── n_g               └────────────────────── n_g
-      0   0.5    1                          0        0.5        1
-   strongly curved bands              nearly flat ⇒ df_q/dn_g ≈ 0
-   (big ε_m, charge-sensitive)        ⇒ insensitive to charge noise ⇒ long T₂
-```
+![Exact energy bands versus offset charge for two regimes: at small Josephson-to-charging ratio the bands wiggle strongly with gate charge, while in the transmon regime they are visually flat](figures/03-charge-dispersion.png)
+
+*Exact charge-basis diagonalization of $H$ for the lowest three levels. Left, $E_J/E_C=1$ (Cooper-pair-box regime): the bands swing strongly with $n_g$, so any charge noise directly modulates the qubit frequency. Right, $E_J/E_C=50$ (transmon): the same bands are flat to the eye, $df_q/dn_g\approx0$ (the residual $\sim$10 kHz wiggle computed below is far below the linewidth of this plot), which is exactly the charge-noise insensitivity that buys long $T_2$.*
 
 > **Pitfall.** "Charge-insensitive" does *not* mean $n_g$ vanishes from $H$, it still appears. The point is the *resulting bands* are exponentially flat. Likewise "non-dissipative" is an ideal-element statement; real junctions still suffer quasiparticle, dielectric, and radiative losses.
 
@@ -174,11 +152,11 @@ Pick two energy scales (round teaching values, *illustrative*, not any real devi
 
 **Step 3: anharmonicity.** Angular-frequency anharmonicity: $\alpha_\omega/2\pi \approx -E_C/h = -250\ \text{MHz}$, so $\omega_{12}/2\pi \approx 4.50\ \text{GHz}$, the $1\to2$ transition sits $250\ \text{MHz}$ *below* the $0\to1$. Relative: $\alpha_r \approx -(8\cdot 50)^{-1/2} = -1/\sqrt{400} = -0.05$, i.e. $-5\%$.
 
-**Step 4: charge dispersion (the payoff).** Exponent $\sqrt{8\cdot 50} = 20$, so $e^{-20}\approx 2.06\times10^{-9}$. The ground level barely moves: $\epsilon_0/h \approx (250\,\text{MHz})\cdot 32\cdot 0.798\cdot 25^{0.75}\cdot 2.06\times10^{-9} \approx 150\ \text{Hz}$. But the quantity you actually *measure* is the $0\to1$ transition, and its dispersion is set by the **upper** level: $\epsilon_m$ grows fast with $m$ (the $2^{4m+5}$ prefactor), so evaluating the formula at $m=1$ gives $|\epsilon_1|/h \approx 11.8\ \text{kHz}$, about $80\times$ larger than $\epsilon_0$. Because $\epsilon_0$ and $\epsilon_1$ alternate in sign (the $(-1)^m$), the $0\to1$ frequency wiggles peak-to-peak by $|\epsilon_1-\epsilon_0|/h \approx |\epsilon_0|/h+|\epsilon_1|/h \approx 11.9\ \text{kHz}$ across a full $n_g$ period, about one part in $5\times10^5$ of $4.75\ \text{GHz}$. *That* is why the transmon barely feels charge noise. (Diagonalizing the Mathieu problem directly confirms the $\sim 12\ \text{kHz}$ transition swing.)
+**Step 4: charge dispersion (the payoff).** Exponent $\sqrt{8\cdot 50} = 20$, so $e^{-20}\approx 2.06\times10^{-9}$. The ground level barely moves: $\epsilon_0/h \approx (250\,\text{MHz})\cdot 32\cdot 0.798\cdot 25^{0.75}\cdot 2.06\times10^{-9} \approx 150\ \text{Hz}$. But the quantity you actually *measure* is the $0\to1$ transition, and its dispersion is set by the **upper** level: $\epsilon_m$ grows fast with $m$ (the $2^{4m+5}$ prefactor), so evaluating the formula at $m=1$ gives $|\epsilon_1|/h \approx 11.8\ \text{kHz}$, about $80\times$ larger than $\epsilon_0$. Because $\epsilon_0$ and $\epsilon_1$ alternate in sign (the $(-1)^m$), the $0\to1$ frequency wiggles peak-to-peak by $|\epsilon_1-\epsilon_0|/h \approx |\epsilon_0|/h+|\epsilon_1|/h \approx 11.9\ \text{kHz}$ across a full $n_g$ period, about one part in $4\times10^5$ of $4.75\ \text{GHz}$. *That* is why the transmon barely feels charge noise. (Diagonalizing the charge-basis Hamiltonian exactly gives a $\approx 9.9\ \text{kHz}$ swing; the asymptotic formula overshoots by $\sim20\%$ at this moderate $E_J/E_C$, but the order of magnitude stands.)
 
 **Step 5: gate-speed sanity check.** With $|\alpha_\omega|/2\pi = 250\ \text{MHz}$, a plain resonant pulse must keep its spectral width $\sim 1/\tau$ well under $250\ \text{MHz}$, so $\tau\gtrsim$ a few ns; DRAG relaxes this.
 
-**Takeaways (all illustrative):** $\omega_q/2\pi\approx 4.75\ \text{GHz}$, $\alpha_\omega/2\pi\approx -250\ \text{MHz}$, $0\to1$ charge dispersion $\approx 12\ \text{kHz}$ (level-0 dispersion $\epsilon_0\approx 150\ \text{Hz}$), $C_\Sigma\approx 78\ \text{fF}$, $I_c\approx 25\ \text{nA}$, $L_{J0}\approx 13\ \text{nH}$.
+**Takeaways (all illustrative):** $\omega_q/2\pi\approx 4.75\ \text{GHz}$, $\alpha_\omega/2\pi\approx -250\ \text{MHz}$, $0\to1$ charge dispersion $\approx 10$-$12\ \text{kHz}$ (exact vs. asymptotic; level-0 dispersion $\epsilon_0\approx 150\ \text{Hz}$), $C_\Sigma\approx 78\ \text{fF}$, $I_c\approx 25\ \text{nA}$, $L_{J0}\approx 13\ \text{nH}$.
 
 ## Common pitfalls
 
