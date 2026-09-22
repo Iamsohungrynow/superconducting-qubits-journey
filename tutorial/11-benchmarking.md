@@ -1,5 +1,7 @@
 # 11 · Calibration & Benchmarking
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 We now have a transmon at frequency $\omega_q$, a dispersive readout (Ch. 6), and pulses that implement gates (Ch. 7). But "implement a gate" hides a question: *how good is it, really?* A pulse that looks perfect on an oscilloscope can still leave the qubit slightly over-rotated, slightly off-resonance, or leaking into the $|2\rangle$ state. **Calibration** is the loop that tunes the knobs; **benchmarking** is how we assign an honest number to what we built. This chapter is about both, and about how to read the resulting fidelities without fooling yourself.
 
 ## Calibration is a feedback loop, not a checklist
@@ -29,7 +31,7 @@ The individual steps:
 
 ### The engine underneath: error amplification
 
-A 1% amplitude error is invisible in one $\pi$ pulse but obvious after 50. If a gate over-rotates by a small angle $\epsilon$ per application, repeating it $N$ times grows the residual as $N\epsilon$, so you read the error off the **slope/curvature of survival vs $N$**, far below the single-shot noise floor. Rabi-amplitude fine-tuning, AllXY, and RB itself are all this same trick.
+A 1% amplitude error is invisible in one $\pi$ pulse but obvious after 50. If a gate over-rotates by a small angle $\epsilon$ per application, repeating it $N$ times grows the residual as $N\epsilon$, so you read the error off the **slope/curvature of survival vs $N$**, far below the single-shot noise floor. Repeated-gate tune-ups amplify coherent errors deliberately. AllXY diagnoses errors with pulse pairs, while RB randomizes gates to estimate average decay; they are complementary protocols.
 
 > **Intuition.** Tuning a gate by eye is like checking a clock against one tick. Run it for an hour (apply the gate hundreds of times) and a tiny rate error becomes minutes of visible drift you can correct.
 

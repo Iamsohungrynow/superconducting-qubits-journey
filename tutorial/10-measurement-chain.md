@@ -1,5 +1,7 @@
 # 10 · The Cryogenic & Microwave Chain
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 A superconducting qubit is, electrically, just a few-GHz microwave circuit. To read it out and control it, we send microwave tones down a wire to the chip and bring the reflected signal back up to a room-temperature amplifier and digitizer. The catch: the qubit lives near its ground state, with a transition energy $\hbar\omega_q$ that corresponds to a temperature of only $\hbar\omega_q/k_B \approx 0.24\,$K for a 5 GHz qubit. Room-temperature wires carry **thermal photons**, blackbody noise, that would scramble the qubit instantly. The entire cryogenic and microwave chain exists to deliver clean control signals while ruthlessly blocking that noise. This chapter is about how the plumbing achieves that, and why each piece is forced on us by physics rather than chosen for convenience.
 
 The single master figure of merit is the **mean thermal photon occupation** of a mode at frequency $\omega$ and temperature $T$. Everything else, attenuators, filters, isolators, amplifiers, is in service of driving this number, *referred to the chip*, down to $\sim 10^{-2}$ or below at the qubit frequency.
@@ -179,7 +181,9 @@ $$T_{\text{sys}} = 0.3 + \frac{5}{100} + \frac{75}{100\cdot 10^4} = 0.3 + 0.05 +
 
 The TWPA's 0.30 K **dominates**; the 5 K HEMT shrinks to 0.05 K once divided by the TWPA gain; the room-temp amp is utterly negligible. Interpreting $T_{\text{sys}}$ as amplifier-added noise temperature, excluding the input vacuum, the chain has $n_{\text{add,sys}} = k_B T_{\text{sys}}/\hbar\omega = 0.350/0.336 = 1.04$ photons. Adding the unavoidable half-photon of vacuum gives total input-referred noise $0.5 + 1.04 = 1.54$ photons, so the **measurement (quantum) efficiency** is
 
-$$\eta = \frac{0.5}{1.54} \approx 0.32 \quad (\sim 32\%, \text{ illustrative}).$$
+$$\eta_{\rm vac} = \frac{0.5}{1.54} \approx 0.32 \quad (\sim 32\%, \text{ illustrative}).$$
+
+Here $\eta_{\rm vac}=1/(1+2n_{\rm add})$ is normalized to vacuum quadrature noise; an ideal phase-preserving amplifier reaches $1/2$ in this convention. Normalizing instead to a phase-preserving receiver at the SQL gives $\eta_{\rm SQL}=1/(0.5+n_{\rm add})=2\eta_{\rm vac}\approx0.65$. Neither is the transmission-only $\eta$ used separately from $n_{\rm add}$ in Chapter 06. Do not insert $\eta_{\rm vac}$ there while also retaining the amplifier-noise denominator: that would count the noise twice.
 
 **Now delete the TWPA.** With the HEMT first, $T_{\text{sys}} = 5 + 75/10^4 = 5.0075\,$K $\Rightarrow n_{\text{add}} = 14.9$ photons, $\eta = 0.5/15.4 \approx 3\%$. The TWPA improves input-referred added noise by **~14x** and efficiency by **~10x**. Since the integration time to reach fixed single-shot SNR scales with the total input-referred measurement-noise denominator $0.5+n_{\rm add}$, this example shortens the readout time by $(0.5+14.9)/(0.5+1.04)\approx10\times$. The amplifier-added noise itself improves by $\sim14\times$.
 

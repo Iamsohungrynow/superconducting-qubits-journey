@@ -1,5 +1,7 @@
 # 09 · Coherence, Noise & Decoherence
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 A perfect qubit would hold whatever state you put into it forever. Real qubits do not. Couple a quantum system to its environment, wiring, dielectrics, stray fields, the chip itself, and that environment slowly leaks information out and noise in. The state you carefully prepared decays. Understanding *how* it decays, and what causes it, is the whole game when you try to build a useful processor. This chapter is about the two clocks that govern that decay, $T_1$ and $T_2$, the noise that sets them, and the surprisingly beautiful machinery, power spectral densities and filter functions, that connects the two.
 
 ## The open-quantum-system picture
@@ -40,13 +42,13 @@ Why does relaxation contribute *half* its rate to the transverse decay? Here is 
 2. **Relaxation empties $|1\rangle$ at rate $\Gamma_1$.** The amplitude in $|1\rangle$ scales like the square root of its population, so it decays at rate $\Gamma_1/2$, the "adiabatic" or geometric-mean factor. This is relaxation's *unavoidable* contribution to transverse decay.
 3. **Pure dephasing adds independently.** A fluctuating $\omega_q$ randomizes the relative phase of $\rho_{01}$ at rate $\Gamma_\phi$, exchanging no energy.
 4. **Rates of independent channels add.** Acting on the same coherence, the two channels give $\Gamma_2 = \Gamma_1/2 + \Gamma_\phi$, i.e. $\tfrac{1}{T_2} = \tfrac{1}{2T_1} + \tfrac{1}{T_\phi}$.
-5. **Take the limit.** Set $\Gamma_\phi \to 0$ and you reach the rigorous ceiling $T_2 = 2T_1$. You can never do better.
+5. **Take the limit within this stationary Markovian model.** Set $\Gamma_\phi \to 0$ and you reach the rigorous ceiling $T_2 = 2T_1$. You can never do better.
 
 So the headline relation is a *result*, not an assertion:
 
 $$\boxed{\;\frac{1}{T_2} = \frac{1}{2T_1} + \frac{1}{T_\phi}, \qquad T_2 \le 2T_1.\;}$$
 
-> **Common pitfall.** A *fitted* $T_2$ above $2T_1$ is physically impossible, it always signals a measurement or fitting artifact (drift, the wrong decay model, leakage). Treat it as a bug, not a discovery.
+> **Scope of the bound.** $T_2\le2T_1$ applies to a stationary Markovian qubit with exponential decay and nonnegative pure-dephasing rate. Independently fitted times from drifting data or nonexponential envelopes need not obey that simple comparison; check the model, fit, and measurement conditions before interpreting them.
 
 ## Noise as a random process: the power spectral density
 
@@ -197,7 +199,7 @@ The lesson: the qubit Hamiltonian was solved long ago; the frontier is the dirty
 
 - **"$T_2$ is always exponential."** Under quasi-static $1/f$ noise the Ramsey envelope is **Gaussian**, $e^{-(t/T_2^*)^2}$; fitting a single exponential gives a misleading number.
 - **"Echo always crushes Ramsey."** Echo only helps against noise *slow* compared to the sequence. For white noise it barely helps; the $T_2^E/T_2^*$ ratio is a probe of noise color, not a guaranteed win.
-- **"$T_2 > 2T_1$ is possible."** It is not, that bound is rigorous.
+- **"$T_2 > 2T_1$ is possible."** It is excluded by the stationary exponential-decay model above; fits outside that model require separate interpretation.
 - **"Sweet spots eliminate noise."** They remove only first-order sensitivity.
 - **"More CPMG pulses are always better."** Pulse errors accumulate; past an optimum, added pulses inject more error than the noise they remove.
 - **"Published record times are typical."** Quoted 0.3-0.5 ms numbers are best-in-class under specific conditions, a trend, not a spec.

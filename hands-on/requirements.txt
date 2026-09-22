@@ -1,9 +1,9 @@
 # Dependencies for the hands-on QuTiP simulation labs.
-# Verified with qutip 5.3 / numpy 2.x on Python 3.12. The labs use QuTiP's
-# core API, so other 5.x versions work fine too. (QuTiP 4.7 also runs labs
-# 01-04, but it needs Python <= 3.11 and numpy < 2.)
+# Verified with qutip 5.3 / numpy 2.4.4 / scipy 1.17.1 / matplotlib 3.11.0
+# on Python 3.12.10. NumPy 2+ supplies np.trapezoid. Other combinations
+# within these API bounds should be checked using run_labs.py --all --check.
 #   pip install -r hands-on/requirements.txt
 qutip>=5.0
-numpy>=1.24
+numpy>=2.0
 scipy>=1.10
 matplotlib>=3.5

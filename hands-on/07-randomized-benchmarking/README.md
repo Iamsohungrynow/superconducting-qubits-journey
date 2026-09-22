@@ -15,8 +15,7 @@ survival decays as
 
     F(m) = A * p**m + B
 
-because random Cliffords "twirl" whatever noise the gates have into an
-effective depolarizing channel. SPAM errors only rescale A and shift B; the
+under stationary, Markovian, gate-independent noise within the computational subspace: the Clifford twirl gives an effective depolarizing channel. SPAM errors only rescale A and shift B; the
 decay constant p belongs to the gates alone. The average error per Clifford
 for a single qubit is
 
@@ -29,8 +28,10 @@ r = lambda/2 = 0.01, and the fit recovers both.
 
 ## Run it
 
-    pip install qutip matplotlib numpy scipy
-    python rb.py
+Run these commands from the **repository root**, using the environment from the [shared setup](../README.md).
+
+    python -m pip install -r hands-on/requirements.txt
+    python hands-on/07-randomized-benchmarking/rb.py
 
 (Only numpy, scipy, and matplotlib are actually used here; gates are plain
 2x2 matrices.)

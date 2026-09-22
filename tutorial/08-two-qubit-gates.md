@@ -1,5 +1,7 @@
 # 08 · Two-Qubit Gates
 
+> **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
+
 Single-qubit gates are "easy": drive one qubit with a shaped microwave pulse and you can rotate it anywhere on the Bloch sphere. But a quantum computer needs qubits to *talk* to each other. To create entanglement you need a gate whose action on one qubit depends on the state of another, and that requires a physical interaction between them. Engineering that interaction, turning it on cleanly, and turning it *off* again, is where most of the hard work in superconducting hardware lives. This chapter is about how we get two transmons to interact on purpose.
 
 A theme that runs through everything below: **the same coupling $g$ that lets you build a gate also produces an always-on error.** The same exchange Hamiltonian that gives idle $ZZ$ also creates the avoided crossings used for CZ, but the idle shift and the pulsed gate phase are not the same measured quantity. Different two-qubit gates are mostly different answers to one question, *which* resonance do I bring into play, and *when*?
@@ -87,10 +89,12 @@ Two flux-tunable transmons, $g/2\pi = 12$ MHz, $\alpha/2\pi = -300$ MHz each, $T
 | 1, avoided-crossing gap | $\Delta_\text{gap}/2\pi = 2\sqrt 2\,g/2\pi$ | $2(1.414)(12) \approx 34$ MHz |
 | 2, conditional shift at dwell | $\zeta/2\pi \approx (\sqrt 2 g)^2/\delta$, $\delta/2\pi=50$ MHz | $(16.97)^2/50 \approx 5.8$ MHz |
 | 3, gate time for $\pi$ phase | $t_\text{gate}\approx 1/(2\,\zeta_\text{Hz})$ | $1/(2\cdot 5.8\times10^6) \approx 86$ ns |
-| 4, leakage (Landau-Zener) | $P_\text{LZ}\sim \exp[-\pi \Delta_\text{gap}^2/(2\vert\dot\epsilon\vert)]$ | $<10^{-3}$ *only if shaped* |
+| 4, leakage (Landau-Zener) | $P_\text{LZ}\sim \exp[-\pi \Delta_\text{gap}^2/(2\vert\dot\epsilon\vert)]$ | requires the actual trajectory; shaping alone does not specify a number |
 | 5, decoherence floor | $\varepsilon_\text{dec}\sim \frac{t_\text{gate}}{2}(1/T_1+1/T_2)$ | $86\text{e-}9\cdot 25000/2 \approx 1.1\times10^{-3}$ |
 
 (In step 2, $\delta$ is the *dwell detuning*: how far $|11\rangle$ is parked from $|02\rangle$ at the closest approach, not to be confused with the qubit-qubit detuning $\Delta$. In step 3, $\zeta_\text{Hz}=\zeta/2\pi$ is the conditional shift as an ordinary frequency, which is why the $2\pi$ disappears.)
+
+The dwell estimate is perturbative: the isolated two-state block instead gives $(\sqrt{50^2+4(16.97)^2}-50)/2\approx5.22$ MHz and a dwell of about 96 ns. Neither includes ramp phases, the spectator level, or pulse-dependent leakage.
 
 **Takeaway:** the *same* $g$ sets the gap (1), the conditional shift that powers the gate (2), the gate time (3), and the leakage risk (4); and coherence (5) puts a hard $\sim10^{-3}$ floor under all of it. That is why two-qubit gates dominate the error budget and sit near the surface-code threshold.
 

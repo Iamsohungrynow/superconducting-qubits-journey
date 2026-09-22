@@ -29,3 +29,5 @@ quantum hardware tutorial/
 # Python run artifacts from the hands-on labs
 __pycache__/
 *.pyc
+.venv/
+hands-on/run-report.json

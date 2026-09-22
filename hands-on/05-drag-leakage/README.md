@@ -29,8 +29,10 @@ transmon, and angular frequencies are in rad/us (2*pi x MHz), times in us.
 
 ## Run it
 
-    pip install qutip matplotlib numpy scipy
-    python drag.py
+Run these commands from the **repository root**, using the environment from the [shared setup](../README.md).
+
+    python -m pip install -r hands-on/requirements.txt
+    python hands-on/05-drag-leakage/drag.py
 
 ## The code explained
 

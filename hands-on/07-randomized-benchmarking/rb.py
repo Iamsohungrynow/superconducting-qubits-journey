@@ -14,8 +14,8 @@ without trusting state preparation and measurement (SPAM). The protocol:
 
        F(m) = A * p**m + B.
 
-Random Cliffords "twirl" any gate noise into an effective depolarizing
-channel, so errors accumulate exponentially with sequence length. SPAM only
+For stationary, Markovian, gate-independent in-subspace noise, a Clifford
+twirl yields a depolarizing channel. Under these assumptions static SPAM only
 moves A and B; the decay p isolates the gates themselves. The average error
 per Clifford for a single qubit (d = 2) is
 

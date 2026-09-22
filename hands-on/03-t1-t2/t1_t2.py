@@ -70,7 +70,8 @@ c_ops_T2 = [
 ]
 
 t2_times = np.linspace(0, 4 * T2_pred, 800)
-res_T2 = mesolve(H, psi_plus, t2_times, c_ops_T2, e_ops=[sx])
+res_T2 = mesolve(H, psi_plus, t2_times, c_ops_T2, e_ops=[sx],
+                 options={"atol": 1e-10, "rtol": 1e-8})
 Sx = np.real(res_T2.expect[0])
 
 # Extract the envelope by fitting log(|peaks|). Use the analytic-signal-free

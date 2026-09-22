@@ -21,7 +21,7 @@ The flux-tuned CZ gate in three steps:
    2*sqrt(2)*g (the sqrt(2) is the |1> -> |2> matrix-element enhancement).
 2. Sitting exactly on resonance for one full population cycle,
    t_CZ = pi/(sqrt(2)*g), sends |11> -> |20> -> |11>.
-3. The round trip imprints a phase of pi on |11> only: a controlled-Z, up to
+3. In the isolated two-state approximation, the round trip imprints a phase of pi on |11>: a controlled-Z, up to
    single-qubit phases that virtual-Z rotations absorb for free.
 
 The conditional phase is computed frame-independently as
@@ -29,8 +29,10 @@ phi_c = phi_11 - phi_10 - phi_01 + phi_00 with phi_ij = arg <ij|psi_ij(t)>.
 
 ## Run it
 
-    pip install qutip matplotlib numpy scipy
-    python cz_gate.py
+Run these commands from the **repository root**, using the environment from the [shared setup](../README.md).
+
+    python -m pip install -r hands-on/requirements.txt
+    python hands-on/06-cz-gate/cz_gate.py
 
 ## The code explained
 
@@ -43,7 +45,7 @@ swept from 150 to 350 MHz; the minimum numerical gap is compared against
 For the gate itself the system sits at Delta = -alpha1 and all four
 computational states |00>, |01>, |10>, |11> are evolved with sesolve. The
 |11> trace gives the population swap to |20> and back; the four phase traces
-combine into the conditional phase.
+combine into the conditional phase. The full 9x9 propagator is also projected into the computational basis to report mean leakage and a Haar-averaged overlap with CZ after local phase correction. For projected propagator K and ideal target U, this overlap is (Tr(K†K) + |Tr(U†K)|²)/20. It counts leakage as failure and does not renormalize leaked states.
 
 ## Expected output
 
@@ -55,14 +57,15 @@ combine into the conditional phase.
     at t_CZ:  P11 back to     = 0.9949
               residual P20    = 4.20e-06
               conditional phase = 3.2065 rad (target pi = 3.1416)
+              mean computational leakage = 0.001264
+              average CZ overlap after local Z correction = 0.997870
 
 ![CZ gate](figures/cz_gate.png)
 
 Left: the two-excitation energies vs detuning, with the bare |11> and |20>
 lines crossing and the coupled branches avoiding each other by 2*sqrt(2)*g.
 Middle: on resonance, the population leaves |11>, fully visits |20>, and
-returns after t_CZ = 23.6 ns. Right: the conditional phase grows and passes
-pi at t_CZ.
+returns after t_CZ = 23.6 ns. Right: the conditional phase approaches pi near the nominal t_CZ. During substantial leakage, return-amplitude phases do not define a computational gate.
 
 Why not exactly pi and exactly P11 = 1? Because the idealized two-level
 picture ignores the spectators: |11> is also pushed by |02> (500 MHz away),
@@ -78,5 +81,5 @@ calibration absorbs this by fine-tuning the interaction time and detuning.
    (Chapter 08) are popular.
 2. Detune slightly off resonance (Delta = -alpha1 + 2*pi*5.0). The swap is no
    longer complete: P20 does not return to zero at t_CZ, i.e. leakage.
-3. Track phi_c over several cycles (extend tlist to 5*t_cz): every odd
-   multiple of t_CZ is again a CZ point.
+3. Track phi_c over several cycles (extend tlist to 5*t_cz): test whether odd
+   multiples of t_CZ remain close to CZ. They are exact CZ points only in the isolated two-state approximation; spectator errors accumulate in this model.

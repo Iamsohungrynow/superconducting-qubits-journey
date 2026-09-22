@@ -25,9 +25,11 @@ You then numerically verify the coherence relation `1/T2 = 1/(2*T1) + 1/Tphi`.
 
 ## Run it
 
+Run these commands from the **repository root**, using the environment from the [shared setup](../README.md).
+
 ```bash
-pip install qutip matplotlib numpy scipy
-python t1_t2.py
+python -m pip install -r hands-on/requirements.txt
+python hands-on/03-t1-t2/t1_t2.py
 ```
 
 ## The code explained
@@ -75,9 +77,9 @@ measured `1/T2` matches `1/(2*T1) + 1/Tphi` to within about 0.1 percent:
   fitted T1            = 30.00 us
 === T2 Ramsey (dephasing) ===
   predicted T2         = 24.00 us
-  fitted    T2         = 23.99 us
+  fitted    T2         = 24.00 us
 === Consistency: 1/T2 = 1/(2 T1) + 1/Tphi ===
-  relative error       = 0.05 %
+  relative error       = 0.00 %
 ```
 
 The left panel shows the T1 population decay with the `exp(-t/T1)` reference; the
@@ -90,6 +92,6 @@ right panel shows the Ramsey fringes hugging their decaying envelope.
 1. **Dephasing-limited vs relaxation-limited.** Set `Tphi = 5.0` (much shorter
    than `2*T1`) and rerun. T2 should collapse toward `Tphi`, showing that fast
    dephasing dominates the coherence budget.
-2. **Spin echo intuition.** Increase `detuning` to `2*np.pi*2.0` and watch the
+2. **Detuning versus dephasing.** Increase `detuning` to `2*np.pi*2.0` and watch the
    fringes get denser while the envelope is unchanged: the decay time depends on
    the noise, not on the detuning you choose to read it out with.
