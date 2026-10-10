@@ -33,7 +33,7 @@ $$\frac{(2e)^2}{2C_\Sigma}(\hat n - n_g)^2 = \frac{2e^2}{C_\Sigma}(\hat n - n_g)
 
 The convention $E_C = e^2/2C_\Sigma$ is the charging energy *per single electron*, and the $(2e)^2$ from pairing produces the factor $4$. The junction contributes its Josephson potential $-E_J\cos\hat\varphi$. Promote $\hat n,\hat\varphi$ to conjugate operators and you have the Hamiltonian above.
 
-Charge qubits live around $E_J/E_C \sim 1$; transmons deliberately push it to $E_J/E_C \gtrsim 50$.
+Charge qubits live around $E_J/E_C \sim 1$; transmons deliberately push it to $E_J/E_C \gtrsim 20$, commonly about 50 to 100.
 
 ## Why charge noise dies exponentially
 
@@ -159,7 +159,7 @@ At a flux sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\o
 
 *Symmetric ($d=0$) vs. asymmetric ($d=0.3$) SQUID transmon. Sweet spots (dots) sit at integer flux where the slope vanishes; steep flanks between them are where flux noise bites. The symmetric curve plunges toward $E_{J,\mathrm{eff}}=0$ at $\Phi_0/2$ (dotted: transmon formula no longer valid), while the asymmetric one turns around smoothly at a second sweet spot.*
 
-> **Misconception check.** A sweet spot removes only the *first-order* flux sensitivity (slope $=0$); the *curvature* still couples second-order flux noise. That is why tunable transmons generally trail fixed-frequency ones in $T_2$, and why a symmetric SQUID tunes $E_{J,\mathrm{eff}}$ to zero at $\Phi_0/2$ but an asymmetric one never does.
+> **Misconception check.** A sweet spot removes only the *first-order* flux sensitivity (slope $=0$); the *curvature* still couples second-order flux noise. That is why tunable transmons generally trail fixed-frequency ones in $T_2$. Separately, a symmetric SQUID tunes $E_{J,\mathrm{eff}}$ to zero at $\Phi_0/2$, while an asymmetric one bottoms out at $|d|\,E_{J,\Sigma}$.
 
 ## Common pitfalls
 
@@ -171,7 +171,7 @@ At a flux sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\o
 
 ## Key takeaways
 
-- The transmon is a Cooper-pair box run at large $E_J/E_C$ ($\gtrsim50$), achieved with a big shunt capacitor, same circuit, one ratio changed.
+- The transmon is a Cooper-pair box run at large $E_J/E_C$ ($\gtrsim20$, commonly about 50 to 100), achieved with a big shunt capacitor, same circuit, one ratio changed.
 - One perturbative line, $E_m\simeq -E_J+\sqrt{8E_CE_J}(m+\tfrac12)-\tfrac{E_C}{12}(6m^2+6m+3)$, yields $\omega_{01}$, $\alpha_E$, and the level crowding.
 - Charge dispersion is suppressed **exponentially** as $e^{-\sqrt{8E_J/E_C}}$; anharmonicity falls only as a **power law** $\alpha_r=-(8E_J/E_C)^{-1/2}$, exponential beats power law, opening a wide usable window.
 - **Absolute** $\alpha_E\approx-E_C$ (set by the charging energy) differs from **relative** $\alpha_r$ (slowly shrinks with $E_J/E_C$). Finite anharmonicity limits leakage to $|2\rangle$ and motivates DRAG.

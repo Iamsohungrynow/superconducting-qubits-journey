@@ -91,7 +91,7 @@ For **Ramsey**, $g = +1$ throughout, giving a low-pass filter $W_R$ that lets DC
 
 ![Log-log plot of the one-over-f noise spectrum together with the Ramsey and echo filter functions: the Ramsey low-pass lobe overlaps the noise peak at low frequency, while the echo filter has a notch at zero frequency and its passband sits where the noise is weak](figures/09-filter-functions.png)
 
-*Where the rain falls vs. where the bucket sits: $S(f)\propto 1/f$ concentrates its power at low frequency (shaded). The Ramsey filter $W_R$ is a low-pass lobe parked right under it, so the overlap (= dephasing) is large. The echo filter $W_E$ is exactly zero at $f=0$ and its passband sits near $f\sim 1/t$, where the $1/f$ sky is nearly dry.*
+*Where the rain falls vs. where the bucket sits: $S(f)\propto 1/f$ concentrates its power at low frequency. The Ramsey filter $W_R$ is a low-pass lobe parked right under it, so the overlap (shaded, = dephasing) is large. The echo filter $W_E$ is exactly zero at $f=0$ and its passband sits near $f\sim 1/t$, where the $1/f$ sky is nearly dry.*
 
 > **Intuition.** Think of $S(\omega)$ as where the rain falls and the filter as where your bucket sits. Ramsey leaves the bucket right under the downpour at low $f$; echo moves it to higher $f$ where the $1/f$ sky is nearly dry.
 

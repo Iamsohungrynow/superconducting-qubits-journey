@@ -32,7 +32,7 @@ from qutip import basis, num, sigmax, sesolve
 # Parameters (illustrative, clearly labelled).
 # Frequencies are angular: Omega = 2*pi * f, with f in MHz and time in us.
 # A 5 MHz drive (f = 5) gives a Rabi period of 200 ns = 0.2 us.
-# We use slower, easier-to-read drives so the oscillations span ~microseconds.
+# We use modest, easy-to-read drives so several oscillations fit in 0.5 us.
 # ---------------------------------------------------------------------------
 omegas = [2 * np.pi * 5.0,    # 5 MHz Rabi drive  (Omega in rad/us)
           2 * np.pi * 10.0,   # 10 MHz Rabi drive

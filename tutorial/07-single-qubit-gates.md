@@ -66,15 +66,16 @@ The rotation **angle is the pulse *area*** $\theta$; the **axis is the phase** $
 | Virtual-Z | $\theta_z$ | $z$-rotation via phase | any | $Z(\theta_z)$ |
 
 ```text
-        |0⟩ (north)
+        |0> (north)
          |        X90: 90 degree rotation about +x
-         |   ___       takes |0> -> equator (-y)
-         |  /   \
-   ------+--•----→ +y     • leakage arrow escaping toward |2⟩,
-        /|   x          curved "DRAG" arrow bending it back
+   .-----|             takes |0> -> equator (-y)
+  /      |
+ v       |
+ *-------+-------> +y     * = |0> after X90 (on the -y axis)
+-y      /|
        / |
      +x  |
-        |1⟩ (south)
+        |1> (south)
 ```
 
 ## Off resonance: the generalized Rabi formula

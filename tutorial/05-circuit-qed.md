@@ -131,7 +131,7 @@ Two limiting checks make the physics vivid:
 
 ![Dispersive shift chi versus detuning for a two-level atom and for a transmon: the transmon curve is suppressed at negative detuning and enhanced between its two divergences at Delta = 0 and Delta = minus alpha, with the worked example point at Delta of minus 2 GHz marked](figures/05-chi-vs-detuning.png)
 
-*Two-level $\chi=g^2/\Delta$ vs. the transmon $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$ for $g/2\pi=100$ MHz, $\alpha/2\pi=-300$ MHz. The transmon formula diverges at $\Delta=0$ **and** at $\Delta=-\alpha$ (the resonator hitting $|e\rangle\!\to\!|f\rangle$); inside the straddling interval it can be enhanced or change sign; suppression is specific to the common negative-detuning regime. The dot marks the worked example below: $-5$ MHz naive vs $-0.65$ MHz real.*
+*Two-level $\chi=g^2/\Delta$ vs. the transmon $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$ for $g/2\pi=100$ MHz, $\alpha/2\pi=-300$ MHz. The transmon formula diverges at $\Delta=0$ **and** at $\Delta=-\alpha$ (the resonator hitting $|e\rangle\!\to\!|f\rangle$); inside the straddling interval it is enhanced with the same sign as $g^2/\Delta$; above $\Delta=-\alpha$ the sign flips, and beyond $\Delta=-2\alpha$ the magnitude is suppressed too, so suppression is not limited to the common negative-detuning regime. The dot marks the worked example below: $-5$ MHz naive vs $-0.65$ MHz real.*
 
 ## Resonators as readout, and as buses
 
@@ -183,7 +183,7 @@ All values chosen for teaching, not from any device.
 
 **Step 3: transmon correction.** Factor $\alpha/(\Delta+\alpha) = -0.3/(-2.3) = 0.130$. So $\chi_\text{transmon}/2\pi = -5.0\times0.130 = -0.65$ MHz, about **8x smaller** than the two-level estimate. (Had $\alpha/2\pi=-2.0$ GHz, the factor would be $0.5$ and $\chi=-2.5$ MHz, the result is *very* sensitive to $\alpha/\Delta$.)
 
-**Step 4: readout matching.** $2|\chi_\text{transmon}|/2\pi = 1.3$ MHz vs $\kappa/2\pi=5$ MHz. Here $2|\chi|<\kappa$: the peaks sit inside one linewidth and are only marginally resolvable, a $\kappa$-limited corner. Fixes: raise $g$, reduce $|\Delta|$, or reduce $\kappa$ toward $2|\chi|\sim\kappa$. (Trusting the two-level $\chi=5$ MHz you'd wrongly conclude $2|\chi|=10\text{ MHz}\gg\kappa$, comfortable readout, which is *false*. This is why the multilevel formula matters.)
+**Step 4: readout matching.** $2|\chi_\text{transmon}|/2\pi = 1.3$ MHz vs $\kappa/2\pi=5$ MHz. Here $2|\chi|<\kappa$: the peaks sit inside one linewidth and are only marginally resolvable, a $\kappa$-limited corner. Fixes: raise $g$, reduce $|\Delta|$, or reduce $\kappa$ toward $2|\chi|\sim\kappa$. (Trusting the two-level $|\chi|=5$ MHz you'd wrongly conclude $2|\chi|=10\text{ MHz}=2\kappa$, comfortable readout, which is *false*. This is why the multilevel formula matters.)
 
 **Step 5: Purcell decay.** $\Gamma_\text{Purcell} = \kappa(g/\Delta)^2 = (2\pi\times5\text{ MHz})(0.05)^2 = 2\pi\times12.5$ kHz. As a $T_1$ ceiling, $T_1^\text{Purcell}=1/\Gamma_\text{Purcell}\approx12.7\ \mu$s, short enough to matter, which is exactly why a Purcell filter is added to push it toward the millisecond scale.
 

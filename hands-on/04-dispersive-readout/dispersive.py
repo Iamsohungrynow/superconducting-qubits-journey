@@ -7,7 +7,7 @@ cavity are far detuned, the interaction reduces to a dispersive coupling:
     H_disp = -chi * sigmaz * a.dag() * a
 
 The cavity frequency is pulled by -chi or +chi depending on whether the qubit
-is in |0> (ground) or |1> (excited). If we drive the cavity on resonance, the
+is in |0> (ground) or |1> (excited). If we drive the cavity midway between the two pulled frequencies, the
 steady-state coherent field <a> lands at a DIFFERENT point in the IQ plane for
 each qubit state. Measuring that field IS the qubit readout.
 

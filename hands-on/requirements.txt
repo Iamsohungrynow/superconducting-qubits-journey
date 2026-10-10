@@ -5,5 +5,5 @@
 #   pip install -r hands-on/requirements.txt
 qutip>=5.0.3
 numpy>=2.0
-scipy>=1.10
-matplotlib>=3.5
+scipy>=1.13
+matplotlib>=3.8.4

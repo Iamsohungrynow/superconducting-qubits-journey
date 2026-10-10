@@ -30,7 +30,7 @@ QuTiP's `sigmam()` uses a spin convention and is not that matrix.
 Chapter 05 uses the common atomic convention
 $\sigma_z=|e\rangle\langle e|-|g\rangle\langle g|=-Z$.
 Substitute $\sigma_z=-Z$ to translate its Hamiltonians into the code.
-Chapters 06 to 07 use computational $Z$ directly.
+Chapters 06 to 07 use computational $Z$ directly; Chapter 07 writes it as $\hat\sigma_z$ (with $\hat\sigma_z|0\rangle=+|0\rangle$), so its $\hat\sigma_z$ is $Z$, not Chapter 05's $\hat\sigma_z$.
 
 Detuning is always a **signed difference**, but the pair being compared changes:
 

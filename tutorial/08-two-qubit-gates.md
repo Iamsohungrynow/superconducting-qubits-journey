@@ -62,9 +62,9 @@ $$\Delta_\text{gap} = 2\sqrt 2\, g \quad\text{at resonance.}$$
 
 (Note the $2\sqrt 2$, not $2g$: the $\sqrt 2$ is the $1\to 2$ bosonic matrix element, easy to drop.)
 
-![Avoided crossing between the two-excitation states 11 and 02: dashed diabatic lines cross while the coupled solid branches repel with a minimum gap of two root two g, with the flat single-excitation reference levels below and the worked-example dwell point marked](figures/08-cz-crossing.png)
+![Avoided crossing between the two-excitation states 11 and 02: dashed and dotted diabatic lines cross while the coupled solid branches repel with a minimum gap of two root two g, with the flat single-excitation reference levels below and the worked-example dwell point marked](figures/08-cz-crossing.png)
 
-*The $\{|11\rangle,|02\rangle\}$ block vs. the detuning $\delta$ of $|11\rangle$ from $|02\rangle$ ($g/2\pi=12$ MHz). Dashed: bare (diabatic) states. Solid: hybridized branches, repelling with minimum gap $2\sqrt2\,g/2\pi\approx34$ MHz. The gate trajectory parks far away, approaches the crossing (the worked example dwells at $\delta/2\pi=50$ MHz, dot), and returns; the level repulsion $\zeta$ picked up along the way integrates to the conditional phase $\pi$. The $|01\rangle,|10\rangle$ references are unaffected.*
+*The $\{|11\rangle,|02\rangle\}$ block vs. the detuning $\delta$ of $|11\rangle$ from $|02\rangle$ ($g/2\pi=12$ MHz). Dashed ($|11\rangle$) and dotted ($|02\rangle$): bare (diabatic) states. Solid: hybridized branches, repelling with minimum gap $2\sqrt2\,g/2\pi\approx34$ MHz. The gate trajectory parks far away, approaches the crossing (the worked example dwells at $\delta/2\pi=50$ MHz, dot), and returns; the level repulsion $\zeta$ picked up along the way integrates to the conditional phase $\pi$. The $|01\rangle,|10\rangle$ references are unaffected.*
 
 Now bring the qubits adiabatically toward the crossing and back. Along the path all computational states acquire dynamical phases, including large one-qubit phases on $|01\rangle$ and $|10\rangle$. Calibration or virtual-Z frame updates remove those single-qubit phases; the entangling content is the signed conditional angular frequency $\zeta_{ZZ}(t)$. The accumulated **conditional phase** includes the Schrodinger phase sign, and the gate condition is
 
@@ -153,16 +153,16 @@ $$U_\text{exch}(t)=\exp\!\big[-i g t\,(\sigma_+^{(1)}\sigma_-^{(2)}+\text{h.c.})
 The only knob is dwell time $\theta = gt$:
 
 ```
- pop │  |01⟩ = cos²gt        |10⟩ = sin²gt
- 1.0 │●╲              ╱‾‾╲              ╱
-     │  ╲           ╱      ╲          ╱
- 0.5 │   ╲╳        ╱        ╲╳       ╱
-     │   ╱  ╲    ╱   |   ╲   ╱  ╲   ╱
- 0.0 │  ╱     ‾‾‾    |    ‾‾‾     ‾‾
-     └──────────────┼───────────────► t
-              gt=π/4 │   gt=π/2
-            √iSWAP    iSWAP
-        (max entangling)  (full swap, -i phase)
+ pop |  o: |01> = cos^2(gt)      x: |10> = sin^2(gt)
+ 1.0 |oooooooo                 xxxxxxxx
+     |        oooooo     xxxxxx
+ 0.5 |              XXXXX
+     |        xxxxxx     oooooo
+ 0.0 |xxxxxxxx                 oooooooo
+     +----------------+---------------+-> gt
+      0             pi/4            pi/2
+                 sqrt(iSWAP)        iSWAP
+              (max entangling)  (full swap, -i phase)
 ```
 
 - $gt=\pi/2$: full swap, the `-i` version of iSWAP for the positive-$g$ Hamiltonian above: $|01\rangle\to -i|10\rangle,\;|10\rangle\to -i|01\rangle$. The sign convention for $g$ and single-qubit phases determines whether this is written as iSWAP or iSWAP$^\dagger$.

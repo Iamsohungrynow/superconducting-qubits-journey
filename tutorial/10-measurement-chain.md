@@ -45,7 +45,7 @@ A dilution refrigerator gives you a ladder of plates, each colder than the last,
 | Room | 300 K | (plant) | source / AWG | digitizer | Cu |
 | 50 K | 50 K | $\sim 30$ W | 0-20 dB | (none) | stainless |
 | 4 K | 4 K | $\sim 1$ W | 20 dB | HEMT amp | stainless |
-| Still | ~0.8 K | $\sim 10$ mW | 10-20 dB | (none) | NbTi |
+| Still | ~0.8 K | $\sim 10$ mW | 0-20 dB | (none) | NbTi |
 | Cold | ~0.1 K | $\sim 100\ \mu$W | 10-20 dB | (none) | NbTi |
 | MXC | ~10 mK base | model-dependent; $\sim 10$-$50\ \mu$W only at elevated MXC temperature, e.g. ~20 mK, not at base | 20 dB | TWPA, isolators, **chip** | NbTi |
 
@@ -88,7 +88,7 @@ input noise ~16 photons (from 4 K)
  (resets to 4 K)      (4 K leak through     (4 K leak through the
                        only 10 dB dominates) last 20 dB still dominates)
 ```
-*Each attenuator re-emits at its own temperature, but the surviving 4 K residual is suppressed only by the attenuation downstream of it. Here 50 dB total still leaves $\sim 0.017$ photon, set by residual 4 K leakage rather than the 10 mK stage's own $\sim 4\times10^{-11}$ emission, which is exactly why real input lines pile on 40-60 dB. Numbers illustrative.*
+*Each attenuator re-emits at its own temperature, but the surviving 4 K residual is suppressed only by the attenuation downstream of it. Here 50 dB total still leaves $\sim 0.017$ photon, set by residual 4 K leakage rather than the 10 mK stage's own $\sim 4\times10^{-11}$ emission, which is exactly why real input lines pile on about 60 dB. Numbers illustrative.*
 
 ![Staircase plot of the photon occupation propagating through the input attenuator chain for the 20-10-20 dB and 20-20-20 dB configurations, showing each attenuator resetting the line toward its own stage temperature and the warm residual setting the final floor](figures/10-attenuation-cascade.png)
 
@@ -126,7 +126,7 @@ $$\boxed{\;T_{\text{add}}^{\min} = \frac{\hbar\omega}{2 k_B}\qquad\Longleftright
 
 For a 7 GHz readout, $\hbar\omega/2k_B \approx 0.17\,$K. This is a *fundamental quantum limit*, not an engineering shortfall, **only a phase-sensitive amplifier (squeezing) can beat it, and only on one quadrature**, at the cost of the other.
 
-**The amplifier cascade.** First a near-quantum-limited Josephson parametric amplifier at the MXC: a **JPA** for narrowband readout, a **JPC** for nondegenerate phase-preserving gain, or a **TWPA** for broadband/multiplexed readout; then a **HEMT** at 4 K (high gain, but $\sim 5$-$10$ K noise temperature); then room-temperature amps. The order is decided by **Friis's formula**, which refers each stage's added noise back to the input:
+**The amplifier cascade.** First a near-quantum-limited Josephson parametric amplifier at the MXC: a **JPA** for narrowband readout, a **JPC** for nondegenerate phase-preserving gain, or a **TWPA** for broadband/multiplexed readout; then a **HEMT** at 4 K (high gain, but $\sim 2$-$5$ K noise temperature, more once line loss is included); then room-temperature amps. The order is decided by **Friis's formula**, which refers each stage's added noise back to the input:
 
 $$T_{\text{sys}} = T_1 + \frac{T_2}{G_1} + \frac{T_3}{G_1 G_2} + \cdots$$
 
@@ -197,7 +197,7 @@ The chain only works if you respect it. Heat-sink every cable and attenuator fir
 
 - **"A lossless cable is ideal."** No, it delivers 300 K noise to the qubit. You *want* controlled, well-thermalized cold loss on the input.
 - **"Attenuators only weaken the signal."** They also *emit* Johnson-Nyquist noise at their own temperature; a poorly heat-sunk attenuator is a warm noise source.
-- **"Put all attenuation at one stage."** The floor is set by the *coldest, last* attenuator, and each plate has a cooling-power budget, hence staging.
+- **"Put all attenuation at one stage."** The output occupation can never fall below the *coldest, last* attenuator's own $\bar n(T)$, and each plate has a cooling-power budget, hence staging.
 - **"GHz attenuators are enough."** High-frequency photons above the superconducting gap break Cooper pairs; you need separate IR/Eccosorb filtering.
 - **"The half-photon limit is a hardware flaw."** It is the fundamental Haus-Caves limit; only phase-sensitive squeezing beats it, on one quadrature.
 - **"The 5 K HEMT limits readout."** With a quantum-limited first stage, Friis divides the HEMT noise by $G_1$, the first amplifier dominates.

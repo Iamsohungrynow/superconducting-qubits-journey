@@ -110,7 +110,7 @@ amplifiers.
   dispersive readout, where the qubit state pulls the resonator frequency and is
   inferred from the transmitted microwave signal. https://arxiv.org/abs/cond-mat/0502645
 
-- **A Near-Quantum-Limited Josephson Traveling-Wave Parametric Amplifier**, Macklin, O'Brien, Hover, Schwartz, Bolkhovsky, Zhang, Oliver, Siddiqi (2015), Demonstrates the first practical broadband Josephson traveling-wave parametric
+- **A Near-Quantum-Limited Josephson Traveling-Wave Parametric Amplifier**, Macklin, O'Brien, Hover, Schwartz, Bolkhovsky, Zhang, Oliver, Siddiqi (2015), Demonstrates a practical broadband Josephson traveling-wave parametric
   amplifier (TWPA), which made fast, high-fidelity, multiplexed readout practical by
   amplifying near the quantum limit over a wide bandwidth. (no arXiv preprint; published in Science 350, 2015)
 
@@ -127,7 +127,7 @@ How single- and two-qubit operations are actually implemented on transmons.
   all-microwave two-qubit entangling gate widely used on fixed-frequency
   architectures. https://arxiv.org/abs/1106.0553
 
-- **Tunable Coupling Scheme for Implementing High-Fidelity Two-Qubit Gates**, Yan, Krantz, Sung, Kjaergaard, Campbell, Wang, Orlando, Gustavsson, Oliver (2018), Describes a tunable coupler that can turn qubit-qubit interactions on and off,
+- **Tunable Coupling Scheme for Implementing High-Fidelity Two-Qubit Gates**, Yan, Krantz, Sung, Kjaergaard, Campbell, Orlando, Gustavsson, Oliver (2018), Describes a tunable coupler that can turn qubit-qubit interactions on and off,
   suppressing residual coupling and enabling fast, high-fidelity two-qubit
   gates. https://arxiv.org/abs/1803.09813
 
@@ -209,7 +209,7 @@ threshold logical-qubit milestones.
 > Note on identifiers: the arXiv identifiers given inline have been verified
 > against the arXiv listing; where a paper's published title or author list
 > differs from its arXiv preprint (e.g. the Wallraff et al. 2004 experiment,
-> published in Nature), the published version is used. Two
+> published in Nature), the published version is used unless the entry says otherwise. Two
 > entries, the Bouchiat et al. (1998) Cooper-pair-box paper and the Macklin et
 > al. (2015) TWPA paper, have no arXiv preprint, and are cited by their
 > published venue instead.

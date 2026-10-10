@@ -180,7 +180,7 @@ flowchart TD
 
 ## 9. Why $2|\chi| \sim \kappa$, and the trade space
 
-Maximize integrated SNR per unit time at fixed photon number. The phase separation of the two coherent states is largest when the two Lorentzian responses (width $\kappa$, split by $2|\chi|$) are *just resolved*, too narrow a $\kappa$ imprints lots of phase but leaks slowly; too broad a $\kappa$ is fast but smears the phase contrast and worsens Purcell. A common design scale is $2|\chi|\sim\kappa$, but the exact optimum depends on drive frequency, photon number, integration time, filtering, and allowed measurement-induced transitions.
+Maximize integrated SNR per unit time at fixed photon number. The SNR rate $\propto\kappa|\alpha_0-\alpha_1|^2$ (escape rate times pointer separation) is largest when the two Lorentzian responses (width $\kappa$, split by $2|\chi|$) are *just resolved*, too narrow a $\kappa$ imprints lots of phase but leaks slowly; too broad a $\kappa$ is fast but smears the phase contrast and worsens Purcell. A common design scale is $2|\chi|\sim\kappa$, but the exact optimum depends on drive frequency, photon number, integration time, filtering, and allowed measurement-induced transitions.
 
 ![State-dependent resonator response for the worked example: two Lorentzian magnitude peaks of width kappa split by two chi, and the transmitted phase curves whose contrast is maximal for a probe at the midpoint of the two dressed resonator frequencies](figures/06-resonator-pull.png)
 

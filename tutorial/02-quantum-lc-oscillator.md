@@ -40,7 +40,7 @@ $$\mathcal{L} = \tfrac{1}{2}C\dot{\Phi}^2 - \frac{\Phi^2}{2L}.$$
 
 Line this up against the mechanical Lagrangian $\mathcal{L} = \tfrac12 m\dot x^2 - \tfrac12 m\omega^2 x^2$ and the dictionary writes itself: $\Phi \leftrightarrow x$, $C \leftrightarrow m$, $1/L \leftrightarrow m\omega^2$.
 
-> **Intuition aside.** Why call $\Phi$ the "position"? Because it's the variable whose *time-derivative* (the velocity $\dot\Phi = V$) carries the inertial energy. The capacitor resists changes in voltage just as a mass resists changes in velocity. That is the entire reason flux, not charge, is the coordinate.
+> **Intuition aside.** Why call $\Phi$ the "position"? Because it's the variable whose *time-derivative* (the velocity $\dot\Phi = V$) carries the inertial energy. The capacitor resists changes in voltage just as a mass resists changes in velocity. That is why flux makes a natural coordinate. (For a bare LC, charge would work equally well, with $L$ playing the mass; flux wins once the Josephson junction adds an energy that depends on flux.)
 
 ## Charge is the conjugate momentum
 
@@ -177,7 +177,7 @@ vanishes exactly. A pulse resonant with $0\to1$ is *equally* resonant with $1\to
    one drive climbs ALL rungs       drive at omega_01 misses 1->2
 ```
 
-To make a qubit we must *bend the ladder* so $0\to1$ and $1\to2$ sit at different frequencies. For scale, a real transmon deliberately introduces **(illustrative)** $\alpha/2\pi \approx -200$ to $-300~\text{MHz}$, a few percent of $f_q=\omega_q/2\pi$, so the $1\to2$ transition is detuned enough to avoid leakage (Chapter 03).
+To make a qubit we must *bend the ladder* so $0\to1$ and $1\to2$ sit at different frequencies. For scale, a real transmon deliberately introduces **(illustrative)** $\alpha/2\pi \approx -200$ to $-300~\text{MHz}$, a few percent of $f_q=\omega_q/2\pi$, so the $1\to2$ transition is detuned enough that suitably slow or shaped pulses keep leakage small (Chapter 03).
 
 Crucially, the nonlinear element must be (a) **non-dissipative** and Hamiltonian, because a resistor couples the mode to a lossy bath and broadens or thermalizes levels instead of producing a coherent anharmonic ladder, and (b) **functional at millikelvin**. The standard circuit element meeting both requirements is the **Josephson junction**, whose nonlinear inductance is the entire subject of the next chapter.
 
@@ -193,7 +193,7 @@ Crucially, the nonlinear element must be (a) **non-dissipative** and Hamiltonian
 ## Go deeper
 
 - M. H. Devoret, *Quantum Fluctuations in Electrical Circuits*, Les Houches Session LXIII (1997), the canonical foundational reference for node-flux circuit quantization.
-- P. Krantz et al., *A Quantum Engineer's Guide to Superconducting Qubits*, Appl. Phys. Rev. 6, 021318 (2019), [arXiv:1904.06560](https://arxiv.org/abs/1904.06560), accessible, thorough onboarding review; Section II mirrors this chapter.
+- P. Krantz et al., *A Quantum Engineer's Guide to Superconducting Qubits*, Appl. Phys. Rev. 6, 021318 (2019), [arXiv:1904.06560](https://arxiv.org/abs/1904.06560), accessible, thorough onboarding review; Section II.A ("From quantum harmonic oscillator to the transmon qubit") mirrors this chapter.
 - U. Vool & M. H. Devoret, *Introduction to Quantum Electromagnetic Circuits*, Int. J. Circ. Theor. Appl. 45, 897 (2017), [arXiv:1610.03438](https://arxiv.org/abs/1610.03438), the rigorous Lagrangian-to-Hamiltonian circuit-quantization procedure.
 - A. Blais, A. L. Grimsmo, S. M. Girvin, A. Wallraff, *Circuit Quantum Electrodynamics*, Rev. Mod. Phys. 93, 025005 (2021), [arXiv:2005.12667](https://arxiv.org/abs/2005.12667), authoritative modern cQED review; excellent on impedance, ZPF, and microwave-photon language.
 

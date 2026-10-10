@@ -66,7 +66,7 @@ beta = 1, a sweep of gate times from 8 to 50 ns, and a scan of beta from
 
 Left panel: leakage P2 during the pulse, with DRAG several orders of
 magnitude lower at the end. Middle: final leakage vs gate time; the plain
-Gaussian deteriorates quickly below ~20 ns while DRAG stays far lower.
+Gaussian deteriorates sharply below ~12 ns while DRAG stays far lower.
 Right: leakage vs beta, with a sharp minimum at beta = 1, exactly where
 first-order DRAG theory puts it.
 
