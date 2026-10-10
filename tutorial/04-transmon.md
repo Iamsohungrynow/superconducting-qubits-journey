@@ -157,7 +157,7 @@ At a flux sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\o
 
 ![Flux tuning of a SQUID transmon: the symmetric SQUID tunes over the full band and dives toward zero at half-integer flux, while an asymmetric SQUID (d = 0.3) has a smaller but flatter, flux-noise-friendlier tuning curve; sweet spots sit at integer flux](figures/04-squid-tuning.png)
 
-*Symmetric ($d=0$) vs. asymmetric ($d=0.3$) SQUID transmon. Sweet spots (dots) sit at integer flux where the slope vanishes; steep flanks between them are where flux noise bites. The symmetric curve plunges toward $E_{J,\mathrm{eff}}=0$ at $\Phi_0/2$ (dashed: transmon formula no longer valid), while the asymmetric one turns around smoothly at a second sweet spot.*
+*Symmetric ($d=0$) vs. asymmetric ($d=0.3$) SQUID transmon. Sweet spots (dots) sit at integer flux where the slope vanishes; steep flanks between them are where flux noise bites. The symmetric curve plunges toward $E_{J,\mathrm{eff}}=0$ at $\Phi_0/2$ (dotted: transmon formula no longer valid), while the asymmetric one turns around smoothly at a second sweet spot.*
 
 > **Misconception check.** A sweet spot removes only the *first-order* flux sensitivity (slope $=0$); the *curvature* still couples second-order flux noise. That is why tunable transmons generally trail fixed-frequency ones in $T_2$, and why a symmetric SQUID tunes $E_{J,\mathrm{eff}}$ to zero at $\Phi_0/2$ but an asymmetric one never does.
 
@@ -175,7 +175,7 @@ At a flux sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\o
 - One perturbative line, $E_m\simeq -E_J+\sqrt{8E_CE_J}(m+\tfrac12)-\tfrac{E_C}{12}(6m^2+6m+3)$, yields $\omega_{01}$, $\alpha_E$, and the level crowding.
 - Charge dispersion is suppressed **exponentially** as $e^{-\sqrt{8E_J/E_C}}$; anharmonicity falls only as a **power law** $\alpha_r=-(8E_J/E_C)^{-1/2}$, exponential beats power law, opening a wide usable window.
 - **Absolute** $\alpha_E\approx-E_C$ (set by the charging energy) differs from **relative** $\alpha_r$ (slowly shrinks with $E_J/E_C$). Finite anharmonicity limits leakage to $|2\rangle$ and motivates DRAG.
-- A SQUID makes $E_{J,\mathrm{eff}}(\Phi)$ flux-tunable; junction asymmetry $d$ trades tuning range for flux-noise robustness; operate at a sweet spot where $\partial\omega_q/\partial\Phi=0$ for best $T_2$.
+- A SQUID makes $E_{J,\mathrm{eff}}(\Phi)$ flux-tunable; junction asymmetry $d$ trades tuning range for flux-noise robustness; operate at a sweet spot where $\partial\omega_q/\partial\Phi=0$ to suppress first-order flux-noise dephasing.
 
 ## Go deeper
 

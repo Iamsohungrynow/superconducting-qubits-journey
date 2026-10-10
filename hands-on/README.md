@@ -50,7 +50,7 @@ before translating equations into code.
 | [06-cz-gate/](06-cz-gate/) | A CZ gate from the \|11> <-> \|20> avoided crossing | [tutorial/08-two-qubit-gates.md](../tutorial/08-two-qubit-gates.md) |
 | [07-randomized-benchmarking/](07-randomized-benchmarking/) | Randomized benchmarking (error per Clifford) | [tutorial/11-benchmarking.md](../tutorial/11-benchmarking.md) |
 | [08-repetition-code/](08-repetition-code/) | Bit-flip repetition code and break-even | [tutorial/12-error-correction.md](../tutorial/12-error-correction.md) |
-| [09-transmon-spectrum/](09-transmon-spectrum/) | Exact spectrum, charge dispersion, cutoff convergence | Chapters 03–04 |
+| [09-transmon-spectrum/](09-transmon-spectrum/) | Exact spectrum, charge dispersion, cutoff convergence | Chapters 03 to 04 |
 | [10-jaynes-cummings/](10-jaynes-cummings/) | Avoided crossing, vacuum-Rabi exchange, perturbative limits | Chapter 05 |
 | [11-noise-echo/](11-noise-echo/) | Ramsey/echo filters integrated against a noise PSD | Chapter 09 |
 | [12-microwave-chain/](12-microwave-chain/) | Thermal attenuators and amplifier noise budget | Chapter 10 |

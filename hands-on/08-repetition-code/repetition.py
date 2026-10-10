@@ -24,7 +24,7 @@ Two lessons drop out immediately:
 This is a one-round toy model with perfect syndrome measurement, and it only
 fights X (bit-flip) errors; a phase flip on ANY single qubit flips the
 logical phase, which is why real codes (like the surface code) must protect
-both quadratures at once. Chapter 12 takes it from here.
+against both bit and phase flips at once. Chapter 12 takes it from here.
 
 Convention
 ----------

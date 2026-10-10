@@ -17,7 +17,7 @@ The first command opens a plot. The second runs without a display and fails if a
 
 ## Expected result
 
-At 7 GHz, the 20–10–20 dB chain gives n = 0.02055; the 20–20–20 dB chain gives n = 0.002379. The amplifier budget is 0.350075 K of added noise.
+At 7 GHz, the 20-10-20 dB chain gives n = 0.02055; the 20-20-20 dB chain gives n = 0.002379. The amplifier budget is 0.350075 K of added noise.
 
 ![Thermal photons and amplifier noise](figures/chain.png)
 
@@ -25,7 +25,7 @@ At 7 GHz, the 20–10–20 dB chain gives n = 0.02055; the 20–20–20 dB chain
 
 Move the middle attenuator from 100 mK to 4 K without changing total attenuation. Does the same total dB give the same noise? Then lower first-stage amplifier gain from 20 dB to 10 dB and recompute the budget.
 
-Record your prediction, changed parameter, numerical result, and physical explanation. Edit one parameter at a time. The automated checks target the documented defaults; restore them before running the full verification suite.
+Record your prediction, changed parameter, numerical result, and physical explanation. Edit one parameter at a time. The script's own `assert` on the default occupations stops it after printing them and before plotting when the chain changes; comment it out while experimenting, and restore the defaults before running the full verification suite.
 
 ## Model and numerical limits
 

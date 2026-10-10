@@ -41,7 +41,7 @@ kappa = 2 * np.pi * 5.0      # cavity decay rate, 5 MHz
 # cavity detuning of -chi or +chi, so the two steady-state fields land
 # symmetrically in the IQ plane. With fixed drive amplitude this midpoint is
 # convenient for teaching, not the global separation optimum for all chi.
-delta = 0.0                  # bare cavity detuning at the symmetric point
+delta = 0.0                  # dressed-midpoint cavity detuning at the symmetric point
 
 # Time grid for the trajectory plot. The coherent field amplitude relaxes as
 # exp(-(kappa/2) t), so its envelope settles on a timescale 2/kappa (here
@@ -58,7 +58,7 @@ a = tensor(qeye(2), destroy(N))   # cavity lowering operator
 sz = tensor(sigmaz(), qeye(N))    # qubit sigmaz
 
 # Hamiltonian in the frame rotating at the drive frequency:
-#   H = delta * a.dag() a          (bare cavity detuning from the drive)
+#   H = delta * a.dag() a          (dressed-midpoint detuning from the drive)
 #       - chi * sigmaz * a.dag() a (qubit-state-dependent cavity pull)
 #       + drive * (a + a.dag())    (coherent cavity drive)
 # For each qubit state sigmaz = +/-1, so the cavity sees an effective detuning

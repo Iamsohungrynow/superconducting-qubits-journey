@@ -2,7 +2,7 @@
 
 Use this as your laboratory notebook. Read a chapter, calculate its checkpoint
 on paper, run the linked lab, then change one parameter and explain the result.
-Each session can take 45–90 minutes; the full course needs several sessions.
+Each session can take 45 to 90 minutes; the full course needs several sessions.
 
 Start with [notation and units](00-notation.md), the [paper map](paper-map.md),
 and the [Python setup](../hands-on/README.md). Commands below run from the

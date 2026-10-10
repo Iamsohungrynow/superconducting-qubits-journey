@@ -78,7 +78,7 @@ after compensating the one-qubit phases. That conditional sign flip is the contr
 
 **The central tradeoff.** Going fast risks Landau-Zener leakage into $|02\rangle$. For $H/\hbar=(\epsilon/2)\sigma_z+V\sigma_x$, with $\epsilon$ and $V$ in angular-frequency units,
 $$ P_\text{LZ} \approx \exp\!\left[-\frac{\pi \Delta_\text{gap}^2}{2|\dot\epsilon|}\right], \qquad \Delta_\text{gap}=2|V|. $$
-Faster gates need a larger integrated conditional shift, obtained by larger $g$, a closer approach to the crossing, or a longer dwell. For a fixed linear sweep, larger $g$ increases the gap and suppresses Landau-Zener transitions; leakage grows when the trajectory is made faster or closer without adequate shaping. The fix is not raw speed but a **shaped trajectory** (the "fast-adiabatic"/Martinis-style pulse, DRAG-like derivative shaping). Two ways to run CZ in practice: (a) adiabatic flux tuning into the crossing, and (b) diabatic/resonant and modern tunable-coupler "net-zero" approaches.
+Faster gates need a larger conditional shift $\zeta$, so the fixed integrated phase $\pi$ accumulates sooner; it is obtained by larger $g$ or a closer approach to the crossing. For a fixed linear sweep, larger $g$ increases the gap and suppresses Landau-Zener transitions; leakage grows when the trajectory is made faster or closer without adequate shaping. The fix is not raw speed but a **shaped trajectory** (the "fast-adiabatic"/Martinis-style pulse, DRAG-like derivative shaping). Two ways to run CZ in practice: (a) adiabatic flux tuning into the crossing, and (b) diabatic/resonant and modern tunable-coupler "net-zero" approaches.
 
 ### Worked example, adiabatic CZ (all numbers illustrative)
 
@@ -136,7 +136,7 @@ The raw gate is **not** a clean $ZX$, calibration must remove spurious terms:
 | Term | Origin | Useful? | How handled |
 |---|---|---|---|
 | $ZX$ | conditioned drive via coupling $J$ | **yes** (entangling) | keep, calibrate to $\pi/2$ |
-| $IX$ | classical crosstalk / direct bleed | no | cancel with target tone or echo |
+| $IX$ | drive transmitted via $J$ ($\propto J\Omega_d/(\Delta+\alpha_c)$) plus classical crosstalk | no | cancel with target tone or echo |
 | $ZI/IZ$ | Stark shifts | no | frame change / calibration |
 | $ZZ$ | higher levels | no | echo / tunable detuning |
 
@@ -218,7 +218,7 @@ The leading prefactor (here $1/2$) is an order-unity number that depends on the 
 ## Go deeper
 
 - DiCarlo et al., "Demonstration of two-qubit algorithms with a superconducting quantum processor," *Nature* (2009), the adiabatic CZ via $|11\rangle$-$|02\rangle$ ([arXiv:0903.2030](https://arxiv.org/abs/0903.2030)).
-- Yan et al., "Tunable Coupling Scheme for Implementing High-Fidelity Two-Qubit Gates," *Phys. Rev. Applied* (2018) ([arXiv:1803.09813](https://arxiv.org/abs/1803.09813)), direct+indirect path cancellation, simultaneous $g_\text{eff}$/$ZZ$ nulling.
+- Yan et al., "Tunable Coupling Scheme for Implementing High-Fidelity Two-Qubit Gates," *Phys. Rev. Applied* (2018) ([arXiv:1803.09813](https://arxiv.org/abs/1803.09813)), direct+indirect path cancellation that nulls $g_\text{eff}$.
 - Magesan & Gambetta, "Effective Hamiltonian models of the cross-resonance gate," *Phys. Rev. A* (2020) ([arXiv:1804.04073](https://arxiv.org/abs/1804.04073)), the $ZX/IX/ZZ$ decomposition and $J\Omega/\Delta\cdot\alpha/(\alpha+\Delta)$ scaling.
 - Krantz et al., "A Quantum Engineer's Guide to Superconducting Qubits," *Appl. Phys. Rev.* (2019) ([arXiv:1904.06560](https://arxiv.org/abs/1904.06560)), the lumped-element $g$, the CZ crossing, CR, iSWAP, and the error budget.
 - Blais, Grimsmo, Girvin, Wallraff, "Circuit Quantum Electrodynamics," *Rev. Mod. Phys.* (2021) ([arXiv:2005.12667](https://arxiv.org/abs/2005.12667)), rigorous coupling-Hamiltonian, dispersive-shift, and $ZZ$ derivations.

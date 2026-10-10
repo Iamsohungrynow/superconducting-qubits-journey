@@ -10,7 +10,7 @@ Keep their units separate. Read this page once, then keep it beside your editor.
 | $\omega,\Omega,g,\alpha,\chi$ | angular frequencies | Dynamics labs use rad/us, usually `2*np.pi*f_MHz` |
 | $H$ in the dynamics scripts | actually $H/\hbar$ | Multiply by time in us to obtain a dimensionless phase |
 | $\kappa$ | photon-number decay rate | Population decays as $e^{-\kappa t}$; field as $e^{-\kappa t/2}$ |
-| $T_1,T_2,T_\phi$ | time constants | us in labs 01–06; seconds in lab 11 |
+| $T_1,T_2,T_\phi$ | time constants | us in labs 01 to 06; seconds in lab 11 |
 | $n$ in a charge basis | signed Cooper-pair number | Integer charge states, including negative integers |
 | $a^\dagger a$ | excitation number | Nonnegative oscillator Fock number; different from Cooper-pair number |
 
@@ -30,13 +30,13 @@ QuTiP's `sigmam()` uses a spin convention and is not that matrix.
 Chapter 05 uses the common atomic convention
 $\sigma_z=|e\rangle\langle e|-|g\rangle\langle g|=-Z$.
 Substitute $\sigma_z=-Z$ to translate its Hamiltonians into the code.
-Chapters 06–07 use computational $Z$ directly.
+Chapters 06 to 07 use computational $Z$ directly.
 
 Detuning is always a **signed difference**, but the pair being compared changes:
 
 | Context | Definition |
 |---|---|
-| Qubit–cavity (05–06, lab 10) | $\Delta=\omega_q-\omega_r$ |
+| Qubit-cavity (05 to 06, lab 10) | $\Delta=\omega_q-\omega_r$ |
 | Driven qubit (07, Ramsey lab) | $\Delta_d=\omega_d-\omega_q$ |
 | Two qubits (08, CZ lab) | $\Delta=\omega_1-\omega_2$ |
 | Driven cavity (lab 04) | $\delta=\widetilde\omega_r-\omega_d$ |

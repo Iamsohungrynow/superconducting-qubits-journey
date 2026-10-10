@@ -56,7 +56,7 @@ beta = 1, a sweep of gate times from 8 to 50 ns, and a scan of beta from
 
     anharmonicity alpha/2pi =  -200.0 MHz
     gate time               =    20.0 ns, sigma = 5.0 ns
-    peak Rabi rate  A/2pi   =    46.7 MHz
+    peak Rabi rate  Ox/2pi  =    46.7 MHz
      no DRAG:  final P1 = 0.989863   final leakage P2 = 6.64e-05
         DRAG:  final P1 = 0.989504   final leakage P2 = 2.14e-09
     DRAG suppresses the final leakage by a factor of 31,035
@@ -79,7 +79,7 @@ and beta itself is calibrated rather than set to its textbook value.
 ## Try this
 
 1. Make the anharmonicity stronger (alpha = -300 MHz) or weaker (-100 MHz)
-   and watch the leakage move: leakage scales roughly as (Omega_peak/alpha)^2.
+   and watch the leakage move: the peak P2 during the pulse scales roughly as (Omega_peak/alpha)^2, while the final leakage falls much faster with |alpha|.
 2. Replace the Gaussian with a flat-top (square) pulse of the same area. Its
    sharp edges have a much broader spectrum, so leakage gets dramatically
    worse, and DRAG helps less.

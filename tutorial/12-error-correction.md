@@ -122,15 +122,15 @@ Why do these commute (so their eigenvalues can be extracted in the same QEC roun
    X     X     X         D = data qubit
  D --- D --- D --- D      X = X-type (vertex) check
    | Z  |  Z |  Z |       Z = Z-type (plaquette) check
- D --- D --- D --- D  · · · · · · · · ·  logical X  (length d)
+ D --- D --- D --- D  · · · · · · · · ·  logical Z  (length d)
    | Z  |  Z |  Z |
  D --- D --- D --- D      one Z-check binds its 4
    X     X     X          surrounding D's: Z_a Z_b Z_c Z_d
         :
-        :  logical Z  (a vertical chain of D's, length d)
+        :  logical X  (a vertical chain of D's, length d)
 ```
 
-A **logical operator** is a chain of single-qubit Paulis stretching all the way *across* the lattice; the shortest such chain has length $d$. Corrupting the logical qubit therefore requires an *undetected* error string spanning the full distance, and the probability of that falls exponentially as $d$ grows.
+A **logical operator** is a chain of single-qubit Paulis stretching all the way *across* the lattice; the shortest such chain has length $d$. Corrupting the logical qubit therefore requires errors that, *together with the decoder's correction*, form a string spanning the full distance (as few as $(d+1)/2$ faults can do it if the decoder completes the chain the wrong way), and the probability of that falls exponentially as $d$ grows.
 
 ### Syndromes live in spacetime
 
@@ -194,7 +194,7 @@ The same scaling picture explains why below-threshold operation wins exponential
 
 A **logical qubit** is the protected two-level subspace, manipulated *only* through logical and stabilizer-respecting operations, you never touch the bare physical state. Everything above protects a quantum *memory*. Computing needs **logical gates**, and they don't come for free:
 
-- **Transversal gates** apply the same single-qubit gate to every physical qubit, giving some Clifford operations cheaply and fault-tolerantly.
+- **Transversal gates** act qubit by qubit, for example the same single-qubit gate on every physical qubit or CNOTs between matching qubits of two code blocks, giving some Clifford operations cheaply and fault-tolerantly.
 - **Lattice surgery** merges and splits surface-code patches to realize two-qubit logical operations (e.g. logical $\mathrm{CNOT}$) using only the same nearest-neighbour checks.
 - **Magic-state distillation** supplies the non-Clifford gates (the $T$ gate) that no transversal surface-code operation provides, and it is typically the *dominant* resource cost in fault-tolerant estimates.
 
@@ -216,7 +216,7 @@ A **logical qubit** is the protected two-level subspace, manipulated *only* thro
 - A **stabilizer code** protects the joint $+1$ eigenspace of commuting Paulis; biased repetition codes lead to Shor $[[9,1,3]]$ and then surface codes, where formal $[[n,k,d]]$ distance gives $t=\lfloor(d-1)/2\rfloor$.
 - The **surface code** uses 2D nearest-neighbour local checks, weight-4 in the bulk and lower weight at boundaries; noisy syndromes force $(2{+}1)$D spacetime decoding.
 - The **threshold theorem**: under the assumed local-noise and decoder model, below $p_{\text{th}}$, $p_L$ drops exponentially with $d$; empirically $\Lambda>1$ across a controlled family of distances is operational evidence that scaling is winning for that memory experiment.
-- A **logical qubit** is the protected subspace; reaching computation needs lattice surgery and magic-state distillation, the dominant fault-tolerance cost.
+- A **logical qubit** is the protected subspace; reaching computation needs lattice surgery and magic-state distillation, often the dominant fault-tolerance cost.
 
 ## Go deeper
 

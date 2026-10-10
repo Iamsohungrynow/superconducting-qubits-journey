@@ -85,7 +85,7 @@ The section heading promised "in the charge basis," so let's make it concrete. B
 
 $$ \cos\hat\varphi = \tfrac{1}{2}\sum_n \big(|n\rangle\langle n{+}1| + |n{+}1\rangle\langle n|\big). $$
 
-It hops between adjacent charge states $n \leftrightarrow n\pm 1$, literally one Cooper pair tunnelling. In this basis $H$ is **tridiagonal**: diagonal entries $4E_C(n-n_g)^2$, off-diagonal entries $-E_J/2$. You could type that matrix into NumPy, truncate at $|n|\le 10$, and use `eigh` to get the spectrum; that is the standard numerical route for plots of the CPB/transmon spectrum. The sketches below are schematic, not generated data.
+It hops between adjacent charge states $n \leftrightarrow n\pm 1$, literally one Cooper pair tunnelling. In this basis $H$ is **tridiagonal**: diagonal entries $4E_C(n-n_g)^2$, off-diagonal entries $-E_J/2$. You could type that matrix into NumPy, truncate at $|n|\le 10$, and use `eigh` to get the spectrum; that is the standard numerical route for plots of the CPB/transmon spectrum. Both figures in this chapter were computed this way.
 
 ## $E_J/E_C$: the master control knob
 
@@ -144,7 +144,7 @@ The physics: making the band depend on $n_g$ requires the phase to *tunnel* betw
 Pick two energy scales (round teaching values, *illustrative*, not any real device): $E_C/h = 250\ \text{MHz}$ and $E_J/E_C = 50$, so $E_J/h = 12.5\ \text{GHz}$. All energies are quoted as frequencies by dividing by $h$.
 
 **Step 1: back out the hardware.**
-- Total island capacitance: $C_\Sigma = e^2/(2E_C) = e^2/(2h\cdot 250\,\text{MHz}) \approx 78\ \text{fF}$ (a large pad, how you *reach* big $E_J/E_C$).
+- Total island capacitance: $C_\Sigma = e^2/(2E_C) = e^2/(2h\cdot 250\,\text{MHz}) \approx 77\ \text{fF}$ (a large pad, how you *reach* big $E_J/E_C$).
 - Critical current: $I_c = 2eE_J/\hbar = 2e\,(h\cdot 12.5\,\text{GHz})/\hbar \approx 25\ \text{nA}$.
 - Zero-phase inductance: $L_{J0} = \hbar/(2eI_c) \approx 13\ \text{nH}$.
 
@@ -154,9 +154,9 @@ Pick two energy scales (round teaching values, *illustrative*, not any real devi
 
 **Step 4: charge dispersion (the payoff).** Exponent $\sqrt{8\cdot 50} = 20$, so $e^{-20}\approx 2.06\times10^{-9}$. The ground level barely moves: $\epsilon_0/h \approx (250\,\text{MHz})\cdot 32\cdot 0.798\cdot 25^{0.75}\cdot 2.06\times10^{-9} \approx 150\ \text{Hz}$. But the quantity you actually *measure* is the $0\to1$ transition, and its dispersion is set by the **upper** level: $\epsilon_m$ grows fast with $m$ (the $2^{4m+5}$ prefactor), so evaluating the formula at $m=1$ gives $|\epsilon_1|/h \approx 11.8\ \text{kHz}$, about $80\times$ larger than $\epsilon_0$. Because $\epsilon_0$ and $\epsilon_1$ alternate in sign (the $(-1)^m$), the $0\to1$ frequency wiggles peak-to-peak by $|\epsilon_1-\epsilon_0|/h \approx |\epsilon_0|/h+|\epsilon_1|/h \approx 11.9\ \text{kHz}$ across a full $n_g$ period, about one part in $4\times10^5$ of $4.75\ \text{GHz}$. *That* is why the transmon barely feels charge noise. (Diagonalizing the charge-basis Hamiltonian exactly gives a $\approx 9.9\ \text{kHz}$ swing; the asymptotic formula overshoots by $\sim20\%$ at this moderate $E_J/E_C$, but the order of magnitude stands.)
 
-**Step 5: gate-speed sanity check.** With $|\alpha_\omega|/2\pi = 250\ \text{MHz}$, a plain resonant pulse must keep its spectral width $\sim 1/\tau$ well under $250\ \text{MHz}$, so $\tau\gtrsim$ a few ns; DRAG relaxes this.
+**Step 5: gate-speed sanity check.** With $|\alpha_\omega|/2\pi = 250\ \text{MHz}$, a plain resonant pulse must keep its spectral width $\sim 1/\tau$ well under $250\ \text{MHz}$, so $\tau\gg 4$ ns; DRAG relaxes this.
 
-**Takeaways (all illustrative):** $\omega_q/2\pi\approx 4.75\ \text{GHz}$, $\alpha_\omega/2\pi\approx -250\ \text{MHz}$, $0\to1$ charge dispersion $\approx 10$-$12\ \text{kHz}$ (exact vs. asymptotic; level-0 dispersion $\epsilon_0\approx 150\ \text{Hz}$), $C_\Sigma\approx 78\ \text{fF}$, $I_c\approx 25\ \text{nA}$, $L_{J0}\approx 13\ \text{nH}$.
+**Takeaways (all illustrative):** $\omega_q/2\pi\approx 4.75\ \text{GHz}$, $\alpha_\omega/2\pi\approx -250\ \text{MHz}$, $0\to1$ charge dispersion $\approx 10$-$12\ \text{kHz}$ (exact vs. asymptotic; level-0 dispersion $\epsilon_0\approx 150\ \text{Hz}$), $C_\Sigma\approx 77\ \text{fF}$, $I_c\approx 25\ \text{nA}$, $L_{J0}\approx 13\ \text{nH}$.
 
 ## Common pitfalls
 

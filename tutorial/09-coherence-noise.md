@@ -39,7 +39,7 @@ $$\Gamma_1 = \frac{1}{T_1}, \qquad \Gamma_2 = \frac{1}{T_2} = \frac{\Gamma_1}{2}
 Why does relaxation contribute *half* its rate to the transverse decay? Here is the chain of reasoning:
 
 1. **Coherence needs two populations.** The off-diagonal $\rho_{01}$ is a product of amplitudes in $|0\rangle$ *and* $|1\rangle$. If either population vanishes, the coherence vanishes too.
-2. **Relaxation empties $|1\rangle$ at rate $\Gamma_1$.** The amplitude in $|1\rangle$ scales like the square root of its population, so it decays at rate $\Gamma_1/2$, the "adiabatic" or geometric-mean factor. This is relaxation's *unavoidable* contribution to transverse decay.
+2. **Relaxation empties $|1\rangle$ at rate $\Gamma_1$.** The amplitude in $|1\rangle$ scales like the square root of its population, so it decays at rate $\Gamma_1/2$, the "nonadiabatic" (energy-exchanging) or geometric-mean factor. This is relaxation's *unavoidable* contribution to transverse decay.
 3. **Pure dephasing adds independently.** A fluctuating $\omega_q$ randomizes the relative phase of $\rho_{01}$ at rate $\Gamma_\phi$, exchanging no energy.
 4. **Rates of independent channels add.** Acting on the same coherence, the two channels give $\Gamma_2 = \Gamma_1/2 + \Gamma_\phi$, i.e. $\tfrac{1}{T_2} = \tfrac{1}{2T_1} + \tfrac{1}{T_\phi}$.
 5. **Take the limit within this stationary Markovian model.** Set $\Gamma_\phi \to 0$ and you reach the rigorous ceiling $T_2 = 2T_1$. You can never do better.
@@ -64,7 +64,7 @@ $S(\omega)$ tells you how much noise power sits at each angular frequency. **Whi
 
 $$S_\Phi^{(1)}(f) = A_\Phi^2 \left(\frac{1\,\text{Hz}}{f}\right)^{\alpha}, \qquad f>0,\quad \alpha \approx 1,$$
 
-where $A_\Phi$ is the noise amplitude, usually quoted in micro-$\Phi_0/\sqrt{\text{Hz}}$ at 1 Hz. Convert explicitly before inserting it into a bilateral $S_\Phi(\omega)$ formula: if $S_\Phi^{(1)}(f)$ is one-sided in Hz, then the bilateral angular-frequency PSD used in the filter integral is $S_{\Phi,\omega}(\omega)=\tfrac12 S_\Phi^{(1)}(|\omega|/2\pi)$, and $S_{\delta\omega}(\omega)=(\partial\omega_q/\partial\Phi)^2S_{\Phi,\omega}(\omega)$. Microscopically, a $1/f$ spectrum is what you get when you sum many bistable fluctuators (e.g. surface spins) with a broad distribution of switching rates. The key feature is the **divergence at low frequency**: most of the noise power is in slow drifts. That is exactly why $T_2^*$ is drift-limited, and exactly what echo sequences are built to defeat.
+where $A_\Phi$ is the noise amplitude, usually quoted in micro-$\Phi_0/\sqrt{\text{Hz}}$ at 1 Hz. Convert explicitly before inserting it into a bilateral $S_\Phi(\omega)$ formula: if $S_\Phi^{(1)}(f)$ is one-sided in Hz, then the bilateral angular-frequency PSD used in the filter integral is $S_{\Phi,\omega}(\omega)=\tfrac12 S_\Phi^{(1)}(|\omega|/2\pi)$, and $S_{\delta\omega}(\omega)=(\partial\omega_q/\partial\Phi)^2S_{\Phi,\omega}(\omega)$. Microscopically, a $1/f$ spectrum is what you get when you sum many bistable fluctuators (e.g. surface spins) with a broad distribution of switching rates. The key feature is the **divergence at low frequency**: the noise spectral density is largest for slow drifts (for $\alpha=1$, every decade of frequency carries equal power). That is exactly why $T_2^*$ is drift-limited, and exactly what echo sequences are built to defeat.
 
 ## The filter-function picture: why echo works
 
@@ -103,7 +103,7 @@ A purely exponential story is incomplete: **the color of the noise sets the *sha
 - **Quasi-static $1/f$ noise** (frozen during one run, Gaussian-distributed across runs) makes the phase variance grow as $t^2$ rather than $t$, because $\varphi = \delta\omega\cdot t$ with $\delta\omega$ fixed per shot. Then $\langle e^{i\varphi}\rangle = e^{-\langle\varphi^2\rangle/2}$ gives a **Gaussian** envelope:
 
 $$\langle\sigma_x\rangle \propto e^{-(t/T_2^*)^2}, \qquad \frac{1}{T_2^*} \sim \left|\frac{\partial\omega_q}{\partial\Phi}\right| A_\Phi\sqrt{\ln(f_{\rm uv}/f_{\rm ir})},$$
-up to the stated one-sided/bilateral convention factors.
+where $f_{\rm ir}$ is set by the total averaging time and the effective upper cutoff is $f_{\rm uv}\sim1/t$ (the Ramsey filter averages away faster noise), up to the stated one-sided/bilateral convention factors.
 
 | Noise type | Regime | Envelope | Set by |
 |---|---|---|---|
@@ -145,9 +145,9 @@ CPMG:    [π/2]-(δ)-[πy]-(2δ)-[πy]-(2δ)-...-[πy]-(δ)-[π/2]
          (pulse half-spacing δ; total sequence time t = 2Nδ)
 ```
 
-![The three decay measurements with this chapter's worked-example numbers: exponential T1 relaxation over 100 microseconds, fast Gaussian-enveloped Ramsey fringes decaying in about 11 microseconds, and the slower Gaussian echo envelope near 45 microseconds](figures/09-decays.png)
+![The three decay measurements with this chapter's worked-example numbers: exponential T1 relaxation over 100 microseconds, fast Gaussian-enveloped Ramsey fringes decaying in about 11 microseconds, and the slower Gaussian echo envelope near 27 microseconds](figures/09-decays.png)
 
-*The three clocks side by side, drawn with the worked example's numbers: $T_1$ relaxation is exponential ($e^{-t/100\,\mu s}$), the Ramsey fringe oscillates at the deliberate detuning inside a **Gaussian** envelope ($T_2^*\approx11\,\mu$s, quasi-static $1/f$), and the echo envelope survives to $T_2^E\approx45\,\mu$s by refocusing the slow noise. Note the shape difference, not just the timescale.*
+*The three clocks side by side, drawn with the worked example's numbers: $T_1$ relaxation is exponential ($e^{-t/100\,\mu s}$), the Ramsey fringe oscillates at the deliberate detuning inside a **Gaussian** envelope ($T_2^*\approx11\,\mu$s, quasi-static $1/f$), and the echo envelope survives to $T_2^E\approx27\,\mu$s by refocusing the slow noise. Note the shape difference, not just the timescale.*
 
 **Ramsey** ($\pi/2$ - wait - $\pi/2$) reads out the accumulated phase; its signal oscillates at the deliberate qubit-drive detuning $\Delta_d$ (not to be confused with the *random* frequency noise $\delta\omega(t)$ of the filter-function derivation) and decays with $T_2^*$, sensitive to all noise down to DC:
 
@@ -175,11 +175,11 @@ Since $46\,\mu$s sits well below the ceiling $2T_1 = 200\,\mu$s, this qubit is *
 
 **Step 2: the prize.** Remove dephasing ($1/T_\phi\to0$) and $T_2 \to 200\,\mu$s. The $154\,\mu$s gap is exactly what better dephasing control (sweet spot + echo) can buy.
 
-**Step 3: flux-dephasing magnitude.** Take $A = 1\,\mu\Phi_0/\sqrt{\text{Hz}}$ at 1 Hz and operate *off* the sweet spot on a steep flank where $\partial f_q/\partial\Phi = 10\,\text{GHz}/\Phi_0$. The quasi-static flux std over a Ramsey window is $\sigma_\Phi \sim 2\,\mu\Phi_0$ (the log-bandwidth factor is order a few), so $\sigma_f = |\partial f_q/\partial\Phi|\,\sigma_\Phi = 10^{10} \times 2\times10^{-6} = 20\,\text{kHz}$. For a Gaussian envelope $e^{-(t/T_2^*)^2}$ the variance is $\langle\varphi^2\rangle = (2\pi\sigma_f)^2 t^2$, so $T_2^* = \sqrt{2}/(2\pi\sigma_f) \approx 11\,\mu$s. A tens-of-kHz wobble already caps $T_2^*$ near $10\,\mu$s, small fields matter.
+**Step 3: flux-dephasing magnitude.** Take $A = 1\,\mu\Phi_0/\sqrt{\text{Hz}}$ at 1 Hz and operate *off* the sweet spot on a steep flank where $\partial f_q/\partial\Phi = 10\,\text{GHz}/\Phi_0$. The quasi-static flux std over a Ramsey window is $\sigma_\Phi \sim 2\,\mu\Phi_0$ (a deliberately small, round log-bandwidth factor $\sqrt{\ln(f_{\rm uv}/f_{\rm ir})}\approx2$; a realistic band from $f_{\rm ir}\sim1$ Hz up to $f_{\rm uv}\sim1/t$ gives about 3.3 and $T_2^*\approx7\,\mu$s, as in lab 11), so $\sigma_f = |\partial f_q/\partial\Phi|\,\sigma_\Phi = 10^{10} \times 2\times10^{-6} = 20\,\text{kHz}$. For a Gaussian envelope $e^{-(t/T_2^*)^2}$ the variance is $\langle\varphi^2\rangle = (2\pi\sigma_f)^2 t^2$, so $T_2^* = \sqrt{2}/(2\pi\sigma_f) \approx 11\,\mu$s. A tens-of-kHz wobble already caps $T_2^*$ near $10\,\mu$s, small fields matter.
 
 **Step 4: move to the sweet spot.** With $\partial f_q/\partial\Phi = 0$ the linear term vanishes; the residual quadratic coupling shrinks $\sigma_f$ by orders of magnitude, so $T_2^*$ climbs from $\sim10\,\mu$s toward the $T_1$-limited ceiling. This is the single biggest lever for tunable qubits.
 
-**Step 5: echo gain.** Hahn echo zeroes the $f\to0$ part of the spectrum, so for $\alpha\approx1$ noise $T_2^*\sim11\,\mu\text{s} \to T_2^E \sim 40\text{ to }60\,\mu$s. CPMG with $N$ pulses pushes the passband to $\sim N/(2t)$ and extends it further, the basis of the ~50x improvement Bylander *et al.* demonstrated.
+**Step 5: echo gain.** Hahn echo zeroes the $f\to0$ part of the spectrum, so for $\alpha\approx1$ noise $T_2^*\sim11\,\mu\text{s} \to T_2^E\approx27\,\mu$s (for pure $1/f$ noise, $T_2^E=\sqrt{2/\ln2}/(2\pi|\partial f_q/\partial\Phi|A)$, independent of the infrared cutoff). CPMG with $N$ pulses pushes the passband to $\sim N/(2t)$ and extends it further, the basis of the ~50x improvement Bylander *et al.* demonstrated.
 
 **Step 6: Purcell sanity check.** With $\kappa/2\pi = 5\,$MHz, $g/2\pi = 100\,$MHz, $\Delta/2\pi = 1\,$GHz: $\Gamma_{\text{Purcell}} = 2\pi(5\times10^6)(0.1)^2 = 2\pi\times5\times10^4\,\text{s}^{-1}$, i.e. $T_{\text{Purcell}} \approx 3.2\,\mu$s, *far below* our assumed $T_1 = 100\,\mu$s. Without a Purcell filter, this readout choice alone would dominate $T_1$. A filter cutting effective $\kappa$ at $\omega_q$ by ~100x restores $T_{\text{Purcell}}\sim300\,\mu$s, comfortably above target. *(All numbers illustrative.)*
 
@@ -202,7 +202,7 @@ The lesson: the qubit Hamiltonian was solved long ago; the frontier is the dirty
 - **"$T_2 > 2T_1$ is possible."** It is excluded by the stationary exponential-decay model above; fits outside that model require separate interpretation.
 - **"Sweet spots eliminate noise."** They remove only first-order sensitivity.
 - **"More CPMG pulses are always better."** Pulse errors accumulate; past an optimum, added pulses inject more error than the noise they remove.
-- **"Published record times are typical."** Quoted 0.3-0.5 ms numbers are best-in-class under specific conditions, a trend, not a spec.
+- **"Published record times are typical."** Quoted 0.3-0.5 ms numbers (and the >1 ms planar transmons reported in 2025) are best-device results under specific conditions, a trend, not a spec.
 
 ## Key takeaways
 

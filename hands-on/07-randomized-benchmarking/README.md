@@ -72,13 +72,13 @@ scatter, which is why real RB averages over many sequences.
 ## Try this
 
 1. Add SPAM error: start from rho = 0.95*|0><0| + 0.05*|1><1| and/or corrupt
-   the final measurement. A and B change; the fitted p (and hence r) does
+   the final measurement. A changes (B moves only if the readout error is asymmetric); the fitted p (and hence r) does
    not. That robustness is the whole point of RB.
 2. Add a coherent error: follow every Clifford with a small fixed rotation
    Rx(0.05) instead of (or on top of) the depolarizing channel. The decay
    stays exponential on average, but individual sequences now scatter around
    it, and the extracted r reflects the average infidelity of the
    over-rotation.
-3. Interleaved RB: estimate the error of one specific gate G by inserting it
+3. Interleaved RB: estimate the error of one specific Clifford gate G by inserting it
    after every random Clifford and comparing the new decay p_int with the
    reference p: r_G ~ (1 - p_int/p)/2.

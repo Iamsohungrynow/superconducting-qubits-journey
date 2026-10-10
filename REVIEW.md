@@ -1,4 +1,4 @@
-# Repository review — 22 September 2026
+# Repository review, 22 September 2026
 
 The repository is now a twelve-chapter, twelve-lab transmon learning course
 with a [guided learning path](tutorial/learning-path.md), explicit conventions,

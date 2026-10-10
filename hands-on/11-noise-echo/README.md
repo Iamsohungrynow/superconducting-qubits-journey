@@ -25,7 +25,7 @@ The default grid gives approximately 6.75 us Ramsey and 25.50 us echo 1/e times.
 
 Raise the infrared cutoff from 1 Hz to 100 Hz: Ramsey should improve more than echo. Replace the PSD with a constant and use a sufficiently wide frequency interval: ideal echo should no longer substantially improve white-noise dephasing.
 
-Record your prediction, changed parameter, numerical result, and physical explanation. Edit one parameter at a time. The automated checks target the documented defaults; restore them before running the full verification suite.
+Record your prediction, changed parameter, numerical result, and physical explanation. Edit one parameter at a time. The script's own convergence check recomputes the integral with the default 1 Hz cutoff and 1/f PSD (`dense_f` and `1e8/dense_f`), so change those too or it stops before printing; restore the defaults before running the full verification suite.
 
 ## Model and numerical limits
 

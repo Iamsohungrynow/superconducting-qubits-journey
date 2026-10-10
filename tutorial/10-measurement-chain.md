@@ -46,7 +46,7 @@ A dilution refrigerator gives you a ladder of plates, each colder than the last,
 | 50 K | 50 K | $\sim 30$ W | 0-20 dB | (none) | stainless |
 | 4 K | 4 K | $\sim 1$ W | 20 dB | HEMT amp | stainless |
 | Still | ~0.8 K | $\sim 10$ mW | 10-20 dB | (none) | NbTi |
-| Cold | ~0.1 K | $\sim 100\ \mu$W | (light) | (none) | NbTi |
+| Cold | ~0.1 K | $\sim 100\ \mu$W | 10-20 dB | (none) | NbTi |
 | MXC | ~10 mK base | model-dependent; $\sim 10$-$50\ \mu$W only at elevated MXC temperature, e.g. ~20 mK, not at base | 20 dB | TWPA, isolators, **chip** | NbTi |
 
 There are **two distinct heat loads** on every coax line, and they pull cable design in opposite directions:
@@ -187,7 +187,7 @@ Here $\eta_{\rm vac}=1/(1+2n_{\rm add})$ is normalized to vacuum quadrature nois
 
 **Now delete the TWPA.** With the HEMT first, $T_{\text{sys}} = 5 + 75/10^4 = 5.0075\,$K $\Rightarrow n_{\text{add}} = 14.9$ photons, $\eta = 0.5/15.4 \approx 3\%$. The TWPA improves input-referred added noise by **~14x** and efficiency by **~10x**. Since the integration time to reach fixed single-shot SNR scales with the total input-referred measurement-noise denominator $0.5+n_{\rm add}$, this example shortens the readout time by $(0.5+14.9)/(0.5+1.04)\approx10\times$. The amplifier-added noise itself improves by $\sim14\times$.
 
-**Input-side sanity check.** A 7 GHz tone entering at 300 K carries $\bar n(7\text{ GHz}, 300\text{ K}) = 1/(e^{0.336/300}-1) \approx 892$ photons. The naive lower bound for reaching $0.01$ photon is $10\log_{10}(892/0.01)\approx49.5\,$dB, but real staged attenuation must include each attenuator's own re-emission. For example (taking no attenuation at 50 K, for simplicity), 20 dB at 4 K, 10 dB at 100 mK, and 20 dB at 10 mK gives $\bar n_{\rm out}\approx0.020$ at 7 GHz; changing the middle attenuator to 20 dB gives $\bar n_{\rm out}\approx0.0024$. Thus 50 dB is a lower bound, while about 60 dB is the usual target for few-$10^{-3}$ occupations.
+**Input-side sanity check.** A 7 GHz tone entering at 300 K carries $\bar n(7\text{ GHz}, 300\text{ K}) = 1/(e^{0.336/300}-1) \approx 892$ photons. The naive lower bound for reaching $0.01$ photon is $10\log_{10}(892/0.01)\approx49.5\,$dB, but real staged attenuation must include each attenuator's own re-emission. For example (taking no attenuation at 50 K, for simplicity), 20 dB at 4 K, 10 dB at 100 mK, and 20 dB at 10 mK gives $\bar n_{\rm out}\approx0.021$ at 7 GHz; changing the middle attenuator to 20 dB gives $\bar n_{\rm out}\approx0.0024$. Thus 50 dB is a lower bound, while about 60 dB is the usual target for few-$10^{-3}$ occupations.
 
 ## Wiring discipline as a coherence budget
 
@@ -207,7 +207,7 @@ The chain only works if you respect it. Heat-sink every cable and attenuator fir
 
 - The chain delivers control signals while blocking ~300 K thermal photons; the figure of merit is $\bar n(\omega,T)$, falling from ~1250 (300 K) to $\ll 1$ at the chip.
 - Two heat loads, passive conduction ($\dot Q = \frac{\mathcal A}{L}\int\kappa\,dT$) and active dissipation, force thin NbTi/stainless coax and aggressive heat-sinking.
-- **Input:** staged attenuators (40-60 dB, illustrative) reset the line to the coldest attenuator's temperature via $\bar n_{\text{out}} = \bar n_{\text{in}}/A + (1-1/A)\bar n(T)$; *separate* low-pass and IR/Eccosorb filters kill out-of-band and pair-breaking radiation.
+- **Input:** staged attenuators (40-60 dB, illustrative) push the line toward the coldest attenuator's temperature (residual warm leakage sets the actual floor) via $\bar n_{\text{out}} = \bar n_{\text{in}}/A + (1-1/A)\bar n(T)$; *separate* low-pass and IR/Eccosorb filters kill out-of-band and pair-breaking radiation.
 - **Output:** isolators block backward amplifier noise (back-action); then TWPA → HEMT → RT amps. Friis says the first amplifier dominates $T_{\text{sys}}$.
 - A phase-insensitive amplifier adds $\geq \tfrac12$ photon ($T_{\text{add}}^{\min} = \hbar\omega/2k_B$); efficiency $\eta$ links this to single-shot readout fidelity. The worked example shows TWPA-in vs TWPA-out: $\eta \approx 32\%$ vs $\approx 3\%$.
 
@@ -217,7 +217,7 @@ The chain only works if you respect it. Heat-sink every cable and attenuator fir
 - Krantz et al., "A Quantum Engineer's Guide to Superconducting Qubits," *Appl. Phys. Rev.* **6**, 021318 (2019), [arXiv:1904.06560](https://arxiv.org/abs/1904.06560), broad review with a strong measurement-chain section.
 - Blais, Grimsmo, Girvin, Wallraff, "Circuit Quantum Electrodynamics," *Rev. Mod. Phys.* **93**, 025005 (2021), [arXiv:2005.12667](https://arxiv.org/abs/2005.12667), dispersive readout, resonator $\kappa$, measurement back-action and efficiency.
 - Clerk, Devoret, Girvin, Marquardt, Schoelkopf, "Introduction to Quantum Noise, Measurement and Amplification," *Rev. Mod. Phys.* **82**, 1155 (2010), [arXiv:0810.4729](https://arxiv.org/abs/0810.4729), the definitive source for the standard quantum limit and noise temperature.
-- Macklin et al., "A near-quantum-limited Josephson traveling-wave parametric amplifier," *Science* **350**, 307 (2015), [DOI:10.1126/science.aaa8525](https://doi.org/10.1126/science.aaa8525), the original TWPA.
+- Macklin et al., "A near-quantum-limited Josephson traveling-wave parametric amplifier," *Science* **350**, 307 (2015), [DOI:10.1126/science.aaa8525](https://doi.org/10.1126/science.aaa8525), the widely used resonantly phase-matched Josephson TWPA.
 
 ---
 

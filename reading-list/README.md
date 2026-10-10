@@ -72,11 +72,11 @@ The conceptual core: how a circuit becomes a qubit, and how it couples to light.
 - **Charge-Insensitive Qubit Design Derived from the Cooper Pair Box**, Koch,
   Yu, Gambetta, Houck, Schuster, Majer, Blais, Devoret, Girvin, Schoelkopf
   (2007), *The* transmon paper. It shows that shunting the Cooper-pair box with
-  a large capacitor exponentially suppresses charge noise while retaining enough
+  a large capacitor exponentially suppresses its sensitivity to charge noise while retaining enough
   anharmonicity to act as a qubit. This design underlies the overwhelming
   majority of today's devices. https://arxiv.org/abs/cond-mat/0703002
 
-- **Cavity Quantum Electrodynamics for Superconducting Electrical Circuits**, Blais, Huang, Wallraff, Girvin, Schoelkopf (2004), The founding theory paper
+- **Cavity Quantum Electrodynamics for Superconducting Electrical Circuits: An Architecture for Quantum Computation**, Blais, Huang, Wallraff, Girvin, Schoelkopf (2004), The founding theory paper
   of circuit QED: it maps a superconducting qubit coupled to a microwave
   resonator onto the Jaynes-Cummings model, enabling dispersive readout and
   cavity-mediated coupling. https://arxiv.org/abs/cond-mat/0402216
@@ -105,8 +105,8 @@ clever measurement scheme (dispersive readout) and near-quantum-limited
 amplifiers.
 
 - **Approaching Unit Visibility for Control of a Superconducting Qubit with
-  Dispersive Readout**, Wallraff, Schuster, Blais, Frunzio, Majer,
-  Girvin, Schoelkopf (2005), An early, high-fidelity demonstration of
+  Dispersive Readout**, Wallraff, Schuster, Blais, Frunzio, Majer, Devoret,
+  Girvin, Schoelkopf (2005), An early time-domain, ensemble-averaged demonstration of
   dispersive readout, where the qubit state pulls the resonator frequency and is
   inferred from the transmitted microwave signal. https://arxiv.org/abs/cond-mat/0502645
 
@@ -123,7 +123,7 @@ How single- and two-qubit operations are actually implemented on transmons.
 - **Simple All-Microwave Entangling Gate for Fixed-Frequency Superconducting
   Qubits**, Chow, Córcoles, Gambetta, Rigetti, Johnson, Smolin, Rozen, Keefe,
   Rothwell, Ketchen, Steffen (2011), Demonstrates the cross-resonance gate
-  (proposed theoretically by Rigetti and Devoret in 2010), an
+  (proposed theoretically by Paraoanu in 2006 and by Rigetti and Devoret in 2010), an
   all-microwave two-qubit entangling gate widely used on fixed-frequency
   architectures. https://arxiv.org/abs/1106.0553
 
@@ -144,8 +144,8 @@ this thread covers how those are characterized and improved.
 
 - **New Material Platform for Superconducting Transmon Qubits with Coherence
   Times Exceeding 0.3 Milliseconds**, Place, Rodgers, Mundada, Smitham,
-  Fitzpatrick, Leng, Premkumar, Bryon, Sussman, Cheng, Madhavan,
-  Babla, Jäck, Gyenis, Yao, Cava, de Leon, Houck (2021), Demonstrates
+  Fitzpatrick, Leng, Premkumar, Bryon, Vrajitoarea, Sussman, Cheng, Madhavan,
+  Babla, Le, Gang, Jäck, Gyenis, Yao, Cava, de Leon, Houck (2021), Demonstrates
   tantalum-based transmons reaching markedly longer coherence than the
   then-standard niobium/aluminum devices, kicking off the "tantalum transmon"
   materials direction. https://arxiv.org/abs/2003.00024
@@ -153,7 +153,7 @@ this thread covers how those are characterized and improved.
 - **Transmon Qubit with Relaxation Time Exceeding 0.5 Milliseconds**, Wang, Li,
   Xu, Li, Wang, et al. (2021), A complementary tantalum-transmon result,
   reinforcing that careful materials and surface treatment substantially extend
-  energy-relaxation times. https://arxiv.org/abs/2105.09890
+  energy-relaxation times. https://arxiv.org/abs/2105.09890 (arXiv title and year; published in npj Quantum Inf. 8, 3 (2022) as "Towards practical quantum computers: transmon qubit with a lifetime approaching 0.5 milliseconds")
 
 ---
 
@@ -174,14 +174,14 @@ threshold logical-qubit milestones.
   repeated stabilizer-style error detection on a superconducting chip, an
   important proof of principle on the road to the surface code. https://arxiv.org/abs/1411.7403
 
-- **Exponential Suppression of Bit or Phase Flip Errors with Repetitive Error
+- **Exponential Suppression of Bit or Phase Errors with Cyclic Error
   Correction**, Google Quantum AI (2021), Shows that error rates can be
   suppressed exponentially as a repetition code is made larger, a key scaling
   signature on the path to fault tolerance. https://arxiv.org/abs/2102.06132
 
 - **Suppressing Quantum Errors by Scaling a Surface Code Logical Qubit**, Google Quantum AI (2023), A milestone showing that increasing surface-code
   distance can reduce the logical error rate, i.e. operating near the
-  break-even point where larger codes help rather than hurt. https://arxiv.org/abs/2207.06431
+  threshold, the crossover below which larger codes help rather than hurt. https://arxiv.org/abs/2207.06431
 
 - **Quantum Error Correction Below the Surface Code Threshold**, Google Quantum
   AI (2024), Reports a surface-code logical qubit operating *below* threshold,
@@ -207,9 +207,9 @@ threshold logical-qubit milestones.
    results.
 
 > Note on identifiers: the arXiv identifiers given inline have been verified
-> against the arXiv listing (title, authors, and year); where a paper's
-> published title differs from its arXiv preprint title (e.g. the Wallraff et
-> al. 2004 experiment, published in Nature), the published title is used. Two
+> against the arXiv listing; where a paper's published title or author list
+> differs from its arXiv preprint (e.g. the Wallraff et al. 2004 experiment,
+> published in Nature), the published version is used. Two
 > entries, the Bouchiat et al. (1998) Cooper-pair-box paper and the Macklin et
 > al. (2015) TWPA paper, have no arXiv preprint, and are cited by their
 > published venue instead.

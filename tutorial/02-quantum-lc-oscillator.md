@@ -100,7 +100,7 @@ Substituting these into $H = Q^2/2C + \Phi^2/2L$ and using $\Phi_{\rm zpf}^2/L =
 
 $$\hat{H} = \hbar\omega_q\left(\hat{a}^\dagger\hat{a} + \tfrac{1}{2}\right), \qquad \omega_q = \frac{1}{\sqrt{LC}}.$$
 
-The operator $\hat{n} = \hat{a}^\dagger\hat{a}$ counts **excitations**, quanta of microwave energy, genuine *microwave photons* living in the circuit. The eigenstates are number states $|0\rangle, |1\rangle, |2\rangle,\dots$ with energies
+The number operator $\hat{a}^\dagger\hat{a}$ counts **excitations**, quanta of microwave energy, genuine *microwave photons* living in the circuit. The eigenstates are number states $|0\rangle, |1\rangle, |2\rangle,\dots$ with energies
 
 $$E_n = \hbar\omega_q\left(n + \tfrac{1}{2}\right).$$
 

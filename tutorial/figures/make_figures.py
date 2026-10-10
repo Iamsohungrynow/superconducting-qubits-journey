@@ -259,7 +259,7 @@ ax.annotate("worked example:\n$-0.65$ MHz (vs $-5$ naive)", xy=(-2.0, -0.65),
 ax.set_xlabel(r"detuning $\Delta/2\pi$ (GHz)")
 ax.set_ylabel(r"dispersive shift $\chi/2\pi$ (MHz)")
 ax.set_title(r"The third level changes $\chi$ ($g/2\pi=100$ MHz, $\alpha/2\pi=-300$ MHz)")
-ax.set_yscale("symlog", linthresh=1)
+ax.set_yscale("symlog", linthresh=0.1)
 ax.set_ylim(-200, 200)
 ax.legend(loc="upper left", fontsize=9)
 ax.grid(True, alpha=0.3)
@@ -470,7 +470,7 @@ ax.text(0.06, 0.80, r"$\Delta=\alpha_2$:" "\n" r"$|11\rangle$-$|02\rangle$ cross
         "\n(CZ operating point)", fontsize=8, color="C3", transform=ax.transAxes)
 ax.text(0.78, 0.80, r"$\Delta=-\alpha_1$:" "\n" r"$|11\rangle$-$|20\rangle$" "\ncrossing",
         fontsize=8, color="C3", transform=ax.transAxes)
-ax.annotate("idle here: small always-on\nZZ error", xy=(0, zz[2000]),
+ax.annotate("dispersive idle (far from all\ncrossings): always-on ZZ error", xy=(-500, zz[333]),
             xytext=(-200, -30), fontsize=9,
             arrowprops=dict(arrowstyle="->", alpha=0.7))
 ax.set_xlabel(r"qubit-qubit detuning $\Delta/2\pi$ (MHz)")
@@ -484,14 +484,14 @@ save(fig, "08-zz-vs-detuning.png")
 # 09-decays: T1 exponential, Ramsey Gaussian fringe, echo envelope
 # ===========================================================================
 t9 = np.linspace(0, 150, 3000)              # us
-T1_, T2s, T2e = 100.0, 11.25, 45.0
+T1_, T2s, T2e = 100.0, 11.25, 27.0
 fig, ax = plt.subplots(figsize=(9, 5))
 ax.plot(t9, np.exp(-t9 / T1_), "C2", lw=2, label=r"$T_1$: $e^{-t/100\,\mu s}$ (exponential)")
 ram = np.exp(-(t9 / T2s) ** 2) * np.cos(2 * np.pi * 0.2 * t9)
 ax.plot(t9, ram, "C0", lw=1, label=r"Ramsey: $T_2^*\approx11\,\mu$s (Gaussian envelope)")
 ax.plot(t9, np.exp(-(t9 / T2s) ** 2), "C0", ls="--", lw=1, alpha=0.6)
 ax.plot(t9, np.exp(-(t9 / T2e) ** 2), "C3", lw=2,
-        label=r"echo envelope: $T_2^E\approx45\,\mu$s")
+        label=r"echo envelope: $T_2^E\approx27\,\mu$s")
 ax.set_xlabel(r"delay $t$ ($\mu$s)")
 ax.set_ylabel(r"signal ($P_1$ or $\langle\sigma_x\rangle$)")
 ax.set_title("The three clocks (worked-example numbers): note the shapes, not just the rates")
@@ -512,7 +512,7 @@ ax.loglog(ft, S, "0.4", lw=2, label=r"noise $S(f)\propto 1/f$")
 ax.loglog(ft, WR, "C1", lw=2, label=r"Ramsey filter $W_R$")
 ax.loglog(ft, WE, "C0", lw=2, label=r"echo filter $W_E$ (zero at $f=0$)")
 ax.fill_between(ft, 1e-6, np.minimum(S, WR), color="C1", alpha=0.25,
-                label=r"overlap $S\cdot W_R$ = dephasing")
+                label=r"overlap of $S$ and $W_R$ (dephasing)")
 ax.annotate("echo notch:\nslow noise refocused", xy=(0.012, WE[8]),
             xytext=(0.03, 3e-5), fontsize=9,
             arrowprops=dict(arrowstyle="->", alpha=0.7))

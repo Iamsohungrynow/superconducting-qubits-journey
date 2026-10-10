@@ -75,7 +75,7 @@ $$ \Lambda_{\text{dep}}(\rho) = p\,\rho + (1-p)\,\frac{\mathbb{I}}{d}, \qquad \o
 
 1. A general channel has many parameters (write it as a **Pauli transfer matrix**: the matrix recording how each of $I, X, Y, Z$ maps under the channel).
 2. Average it over the group (twirl).
-3. The Clifford group is a **unitary 2-design**, so by Schur's lemma the twirled channel must commute with every group element; on the traceless subspace it can only be a scalar multiple of the identity.
+3. By construction the twirled channel commutes with every group element. Because the Clifford group is a **unitary 2-design**, the traceless subspace is irreducible under this action, so by Schur's lemma the twirled channel can only be a scalar multiple of the identity there.
 4. Hence, under those assumptions, $\overline{\Lambda}$ is fixed by *one* number $p$: keep $\rho$ with probability $p$, replace it by $\mathbb{I}/d$ with probability $1-p$.
 5. Composing $m$ such steps multiplies the $p$'s $\Rightarrow p^m$. SPAM enters only as the constants $A$ (initial-state/readout contrast) and $B$ (asymptote, $\sim 1/d$).
 6. Leakage is outside this model; it must be measured separately, for example with leakage/seepage RB. With qutrit-sensitive readout, one often fits the leakage population as
@@ -172,7 +172,7 @@ Single qubit, $n=1$, $d=2$. Fit $F(m)=A\,p^m+B$ → $A=0.49$, $B=0.50$, $p=0.999
 - **Error per Clifford:** $r=\dfrac{(d-1)(1-p)}{d}=\dfrac{(1)(0.001)}{2}=5\times10^{-4}$, a "99.95%" Clifford. Check: $F_{\text{avg}}=p+(1-p)/d=0.999+0.0005=0.9995=1-r$. ✓
 - **Per physical gate:** if the compiler averages ~1.5 native gates/Clifford, per-gate error $\approx r/1.5 = 3.3\times10^{-4}$.
 - **Coherence-limited?** Take $T_1=80\,\mu$s, $T_2=60\,\mu$s, $\tau_g=30$ ns: $r_{\lim}\approx\frac{30\text{ ns}}{6}\left(\frac{1}{80\,\mu s}+\frac{2}{60\,\mu s}\right)=(5.0\times10^{-9})(45833)=2.3\times10^{-4}$ per 30 ns physical gate. Compare like with like: the inferred per-gate error $3.3\times10^{-4}$ is $\sim1.4\times$ this per-gate coherence floor. Equivalently, a 1.5-pulse Clifford has $r_{\lim,C}\approx1.5(2.3\times10^{-4})=3.5\times10^{-4}$, so the measured $5\times10^{-4}$ per Clifford is also $\sim1.4\times$ the Clifford floor. Pushing the pulse harder buys little; longer $T_1/T_2$ is the lever.
-- **IRB add-on:** $p_{\text{ref}}=0.999$, interleaved $X$-gate $p_{\overline C}=0.9982$ → $r_{\text{gate}}=\frac12\left(1-\frac{0.9982}{0.999}\right)=\frac12(0.0008)=4.0\times10^{-4}$, quoted with the Magesan bound $E$.
+- **IRB add-on:** $p_{\text{ref}}=0.999$, interleaved $X$-gate $p_{\overline C}=0.9982$ → $r_{\text{gate}}=\frac12\left(1-\frac{0.9982}{0.999}\right)=\frac12(0.0008)=4.0\times10^{-4}$. Here the smaller Magesan bound is $E=\frac12\left[\left|p_{\text{ref}}-p_{\overline C}/p_{\text{ref}}\right|+(1-p_{\text{ref}})\right]\approx6\times10^{-4}$, larger than the estimate itself, so quote $r_{\text{gate}}$ with that caveat.
 - **XEB sketch:** $n=20$, $2^n=1{,}048{,}576$. If $\langle P_{\text{ideal}}\rangle=1.9\times10^{-6}$, then $F_{\text{XEB}}=1{,}048{,}576\times1.9\times10^{-6}-1\approx1.992-1=0.992$. Uniform sampling ($\langle P\rangle=1/2^n$) gives exactly $0$.
 
 ## Disambiguating the fidelity zoo

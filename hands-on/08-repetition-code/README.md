@@ -62,7 +62,7 @@ uncoded d = 1 line at the break-even point p = 0.5.
 Keep the caveats in mind: this toy model has one round of errors, perfect
 syndrome measurement, and bit flips only. A phase flip on any single qubit
 flips the logical phase of the quantum version, which is why real codes
-(the surface code) must protect both quadratures at once — Chapter 12 picks
+(the surface code) must protect against both bit flips and phase flips at once; Chapter 12 picks
 up exactly there.
 
 ## Try this

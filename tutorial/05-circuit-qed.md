@@ -4,7 +4,7 @@
 
 A qubit sitting alone is useless, you need to talk to it (read out its state) and connect it to other qubits (entangle them). Circuit quantum electrodynamics (circuit QED) is how we do both, using a single, beautifully reusable trick: couple the qubit to a microwave **resonator** (an on-chip LC circuit, see Chapter 02). The resonator becomes your microphone for readout and your wire for coupling. The remarkable thing is that *one* coupling rate $g$ underlies **both** jobs. This chapter builds the physics from the dipole coupling up, derives the two regimes, resonant and dispersive, step by step, and ends with a fully worked numerical example.
 
-> **Conventions in this chapter.** Here $\hat\sigma_z=|e\rangle\langle e|-|g\rangle\langle g|=-Z$, where $Z=\mathrm{diag}(1,-1)$ is the computational Pauli operator used in Chapters 06–07 and all labs. Energy lowering is $\sigma_-=|g\rangle\langle e|=\texttt{destroy(2)}$. See the [notation guide](00-notation.md). We write the qubit term as $\frac{\hbar\omega_q}{2}\hat\sigma_z$ (not $\hbar\omega_q\hat\sigma_z$), define the detuning $\Delta = \omega_q - \omega_r$, and take the anharmonicity $\alpha = \omega_{ef}-\omega_{ge} < 0$. With these choices $\chi = g^2/\Delta$ for a two-level system. Sign and factor-of-2 conventions differ across textbooks, mixing them is the #1 source of spurious errors, so translate $\sigma_z=-Z$ when moving from this chapter to the code.
+> **Conventions in this chapter.** Here $\hat\sigma_z=|e\rangle\langle e|-|g\rangle\langle g|=-Z$, where $Z=\mathrm{diag}(1,-1)$ is the computational Pauli operator used in Chapters 06 to 07 and all labs. Energy lowering is $\sigma_-=|g\rangle\langle e|=\texttt{destroy(2)}$. See the [notation guide](00-notation.md). We write the qubit term as $\frac{\hbar\omega_q}{2}\hat\sigma_z$ (not $\hbar\omega_q\hat\sigma_z$), define the detuning $\Delta = \omega_q - \omega_r$, and take the anharmonicity $\alpha = \omega_{ef}-\omega_{ge} < 0$. With these choices $\chi = g^2/\Delta$ for a two-level system. Sign and factor-of-2 conventions differ across textbooks, mixing them is the #1 source of spurious errors, so translate $\sigma_z=-Z$ when moving from this chapter to the code.
 
 ## From dipole coupling to Jaynes-Cummings
 
@@ -79,7 +79,7 @@ $$P_e(t) = \cos^2(g t), \qquad T_\text{swap} = \frac{\pi}{2g}.$$
 
 At $t=T_\text{swap}=\pi/(2g)$, half a population-oscillation period, the qubit excitation is fully converted into a single photon. This is a **vacuum-Rabi oscillation**, the *time-domain* face of the same physics whose *frequency-domain* face is the $2g$ vacuum-Rabi splitting (an avoided crossing in spectroscopy). Same $g$, two different measurements; mind the factor-of-2 convention (some texts call $2g$ "the Rabi frequency").
 
-Fast state transfer is great, but on resonance the qubit is half-photon, so it leaks out the resonator port at the cavity rate, bad for storing or reading a state. For readout we go the other way.
+Fast state transfer is great, but on resonance the qubit is half-photon, so it leaks out the resonator port at half the cavity rate, $\kappa/2$, bad for storing or reading a state. For readout we go the other way.
 
 ## Dispersive regime: Schrieffer-Wolff and $\chi$
 
@@ -109,7 +109,7 @@ Crucially, within this effective dispersive model, $H_\text{disp}$ commutes with
 
 ![Dressed single-excitation frequencies vs qubit frequency: the bare qubit and cavity lines cross, the coupled branches avoid each other with a minimum gap of 2g at resonance, and far from resonance the cavity-like branch is pulled by g squared over the detuning](figures/05-avoided-crossing.png)
 
-*The single-excitation spectrum as the qubit is tuned through the resonator (here $\omega_r/2\pi=7$ GHz, $g/2\pi=100$ MHz). Dashed: bare $\omega_q$ and $\omega_r$. Solid: exact dressed branches, which avoid each other with minimum gap $2g$ at $\omega_q=\omega_r$. On the dispersive wings the cavity-like branch sits at $\omega_r + g^2/|\Delta|$ (left wing, $\Delta<0$, i.e. $\omega_r-\chi$ with $\chi<0$) and $\omega_r - g^2/|\Delta|$ (right wing) — keeping the signed convention straight is exactly why we fixed it at the top of the chapter.*
+*The single-excitation spectrum as the qubit is tuned through the resonator (here $\omega_r/2\pi=7$ GHz, $g/2\pi=100$ MHz). Dashed: bare $\omega_q$; dotted: bare $\omega_r$. Solid: exact dressed branches, which avoid each other with minimum gap $2g$ at $\omega_q=\omega_r$. On the dispersive wings the cavity-like branch sits at $\omega_r + g^2/|\Delta|$ (left wing, $\Delta<0$, i.e. $\omega_r-\chi$ with $\chi<0$) and $\omega_r - g^2/|\Delta|$ (right wing); keeping the signed convention straight is exactly why we fixed it at the top of the chapter.*
 
 ### Why a transmon needs anharmonicity: the realistic $\chi$
 
@@ -129,7 +129,7 @@ Two limiting checks make the physics vivid:
 - $\alpha\to-\infty$ (a true two-level atom): the factor $\to1$ and $\chi\to g^2/\Delta$. ✓
 - $\alpha\to0$ (a perfectly **harmonic** multilevel mode): the factor $\to0$, so the state-dependent pull $\chi\to0$. The two contributions **cancel exactly**: two linearly coupled oscillators can have state-independent normal-mode shifts, but they have no cross-Kerr / qubit-state-dependent dispersive shift to read out. Anharmonicity is what makes readout possible. *This is the single most important correction to the naive formula.*
 
-![Dispersive shift chi versus detuning for a two-level atom and for a transmon: the transmon curve is suppressed between its two divergences at Delta = 0 and Delta = minus alpha, with the worked example point at Delta of minus 2 GHz marked](figures/05-chi-vs-detuning.png)
+![Dispersive shift chi versus detuning for a two-level atom and for a transmon: the transmon curve is suppressed at negative detuning and enhanced between its two divergences at Delta = 0 and Delta = minus alpha, with the worked example point at Delta of minus 2 GHz marked](figures/05-chi-vs-detuning.png)
 
 *Two-level $\chi=g^2/\Delta$ vs. the transmon $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$ for $g/2\pi=100$ MHz, $\alpha/2\pi=-300$ MHz. The transmon formula diverges at $\Delta=0$ **and** at $\Delta=-\alpha$ (the resonator hitting $|e\rangle\!\to\!|f\rangle$); inside the straddling interval it can be enhanced or change sign; suppression is specific to the common negative-detuning regime. The dot marks the worked example below: $-5$ MHz naive vs $-0.65$ MHz real.*
 
@@ -187,7 +187,7 @@ All values chosen for teaching, not from any device.
 
 **Step 5: Purcell decay.** $\Gamma_\text{Purcell} = \kappa(g/\Delta)^2 = (2\pi\times5\text{ MHz})(0.05)^2 = 2\pi\times12.5$ kHz. As a $T_1$ ceiling, $T_1^\text{Purcell}=1/\Gamma_\text{Purcell}\approx12.7\ \mu$s, short enough to matter, which is exactly why a Purcell filter is added to push it toward the millisecond scale.
 
-**Step 6: resonant contrast.** If instead $\omega_q=\omega_r$ ($\Delta=0$), a full swap takes $T_\text{swap}=\pi/(2g)=\pi/(2\cdot2\pi\cdot100\text{ MHz})=2.5$ ns, fast, but now the qubit decays at $\kappa$.
+**Step 6: resonant contrast.** If instead $\omega_q=\omega_r$ ($\Delta=0$), a full swap takes $T_\text{swap}=\pi/(2g)=\pi/(2\cdot2\pi\cdot100\text{ MHz})=2.5$ ns, fast, but now the qubit decays at $\kappa/2$ (it is half photon, for $g\gg\kappa$).
 
 **Takeaway:** the *same* $g=100$ MHz gives a $\sim2.5$ ns swap on resonance but only a sub-MHz dispersive pull at $2$ GHz detuning, and the transmon factor cuts that pull $\sim8\times$.
 
@@ -210,7 +210,7 @@ All values chosen for teaching, not from any device.
 - **"The RWA is always fine."** Only for $g\ll\omega_q,\omega_r$. Near $g/\omega_r\sim0.1$ (ultrastrong) counter-rotating terms matter.
 - **"In the dispersive regime the cavity exchanges energy / stores the bus photon."** Real exchange is suppressed; shifts are virtual. The bus resonator stays in its ground state.
 - **"Bigger $\chi$ is always better."** Compare $2|\chi|$ with $\kappa$: $2|\chi|\sim\kappa$ is a common design point, but the optimum is measurement-chain and drive dependent.
-- **"Vacuum-Rabi splitting = vacuum-Rabi oscillation number."** Same physics, different measurements (frequency-domain $2g$ vs time-domain rate $g$); watch the factor-of-2.
+- **"Vacuum-Rabi splitting = coupling $g$."** The spectroscopic splitting is $2g$, and the time-domain population $P_e=\cos^2(gt)$ oscillates at that same angular frequency $2g$; $g$ itself is the amplitude (swap) rate. Watch the factor-of-2.
 - **"A Purcell filter kills readout too."** It blocks $\omega_q$ while passing $\omega_r$, it protects $T_1$ and keeps readout.
 
 ## Key takeaways
@@ -224,7 +224,7 @@ All values chosen for teaching, not from any device.
 
 ## Go deeper
 
-- A. Blais, R.-S. Huang, A. Wallraff, S. M. Girvin, R. J. Schoelkopf, *Cavity quantum electrodynamics for superconducting electrical circuits*, Phys. Rev. A 69, 062320 (2004), [arXiv:cond-mat/0402216](https://arxiv.org/abs/cond-mat/0402216), the founding circuit-QED proposal; introduces dispersive readout and the state-dependent cavity pull.
+- A. Blais, R.-S. Huang, A. Wallraff, S. M. Girvin, R. J. Schoelkopf, *Cavity quantum electrodynamics for superconducting electrical circuits: An architecture for quantum computation*, Phys. Rev. A 69, 062320 (2004), [arXiv:cond-mat/0402216](https://arxiv.org/abs/cond-mat/0402216), the founding circuit-QED proposal; introduces dispersive readout and the state-dependent cavity pull.
 - A. Blais, A. L. Grimsmo, S. M. Girvin, A. Wallraff, *Circuit Quantum Electrodynamics*, Rev. Mod. Phys. 93, 025005 (2021), [arXiv:2005.12667](https://arxiv.org/abs/2005.12667), comprehensive modern review; authoritative on JC, dressed states, the SW dispersive derivation, QND readout, and the bus.
 - J. Koch et al., *Charge-insensitive qubit design derived from the Cooper pair box*, Phys. Rev. A 76, 042319 (2007), [arXiv:cond-mat/0703002](https://arxiv.org/abs/cond-mat/0703002), the transmon paper; source of $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$ and the harmonic-cancellation argument.
 - P. Krantz et al., *A Quantum Engineer's Guide to Superconducting Qubits*, Appl. Phys. Rev. 6, 021318 (2019), [arXiv:1904.06560](https://arxiv.org/abs/1904.06560), practical design rules for $\chi$, $\kappa$, the $\chi\!\sim\!\kappa$ optimum, and Purcell filtering.

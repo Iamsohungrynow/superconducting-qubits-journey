@@ -1,6 +1,6 @@
 # Charge-basis transmon spectroscopy
 
-Pairs with tutorial chapter(s) 03–04; see the [learning path](../../tutorial/learning-path.md) and [notation](../../tutorial/00-notation.md).
+Pairs with tutorial chapter(s) 03 to 04; see the [learning path](../../tutorial/learning-path.md) and [notation](../../tutorial/00-notation.md).
 
 ## Predict, then run
 
@@ -25,7 +25,7 @@ At EC/h = 250 MHz and EJ/EC = 50, expect f01 = 4.73548 GHz, alpha/2pi = -287.31 
 
 Change EJ/EC from 50 to 20 and 80 at fixed EC. Compare absolute anharmonicity, relative anharmonicity, and charge dispersion. Increase the cutoff from 20 to 30: physical conclusions should not change.
 
-Record your prediction, changed parameter, numerical result, and physical explanation. Edit one parameter at a time. The automated checks target the documented defaults; restore them before running the full verification suite.
+Record your prediction, changed parameter, numerical result, and physical explanation. Edit one parameter at a time. The script's own `assert` on the default charge dispersion stops it after printing and before plotting when EJ/EC changes; comment it out while experimenting, and restore the defaults before running the full verification suite.
 
 ## Model and numerical limits
 

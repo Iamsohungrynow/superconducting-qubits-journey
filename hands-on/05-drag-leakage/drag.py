@@ -102,7 +102,7 @@ print("=" * 60)
 Ox, dOx, A = gaussian_envelope(t_gate, sigma)
 print(f"anharmonicity alpha/2pi = {alpha/2/np.pi:7.1f} MHz")
 print(f"gate time               = {t_gate*1e3:7.1f} ns, sigma = {sigma*1e3:.1f} ns")
-print(f"peak Rabi rate  A/2pi   = {Ox(t_gate/2)/2/np.pi:7.1f} MHz")
+print(f"peak Rabi rate  Ox/2pi  = {Ox(t_gate/2)/2/np.pi:7.1f} MHz")
 
 results = {}
 for beta, name in [(0.0, "no DRAG"), (1.0, "DRAG")]:
@@ -115,7 +115,7 @@ print(f"DRAG suppresses the final leakage by a factor of {supp:,.0f}")
 
 # ---------------------------------------------------------------------------
 # 2) Final leakage vs gate time: shorter gate -> broader spectrum -> more
-#    leakage; DRAG buys roughly two orders of magnitude.
+#    leakage; DRAG buys roughly two to six orders of magnitude here.
 # ---------------------------------------------------------------------------
 gate_times = np.linspace(0.008, 0.050, 22)    # 8 ns to 50 ns
 leak = {0.0: [], 1.0: []}

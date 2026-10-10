@@ -28,13 +28,13 @@ Roughly, the main contenders are trapped ions, neutral atoms, photonics, semicon
 | Neutral atoms | Ground hyperfine/clock states; transient Rydberg excitation for gates | $\sim$0.1-1 µs | $\sim$seconds for storage | Reconfigurable arrays | Rydberg lifetime/gate fidelity, atom loss |
 | Photonics | Polarization/path (flying) | $\sim$ns | transmission-limited | Natural for networking | Weak interactions, probabilistic gates |
 | Spin qubits (Si) | Electron/nuclear spin | $\sim$ns-µs | µs-ms | CMOS-compatible, tiny | Individual control, uniformity |
-| Superconducting | Transmon (charge/flux) | $\sim$10-50 ns | $\sim$100 µs | Engineerable, fast, lithographic | Coherence, wiring/heat |
+| Superconducting | Transmon (charge/flux) | $\sim$10-500 ns | $\sim$100 µs | Engineerable, fast, lithographic | Coherence, wiring/heat |
 
 *All numbers illustrative, order-of-magnitude, 2020s-era.*
 
 Superconducting qubits sit in a distinctive spot: not the most coherent, but uniquely **engineerable and fast**. They are *artificial atoms*, macroscopic electrical circuits whose collective degrees of freedom (charge on a capacitor, flux through a loop) are quantized when you cool them below the superconducting transition. You don't find them in a periodic table, you draw them in a CAD tool and pattern them with the same lithography that makes classical chips.
 
-> **Intuition aside: two different temperatures.** Aluminum superconducts already at $T_c \approx 1.2$ K, so why bother with a dilution fridge at $\sim$10 mK? Because of criteria 2 and 3. The qubit transition is typically $\omega_q/2\pi \sim 5$ GHz, and we need its environment quiet enough that it sits in its ground state: $k_B T \ll \hbar\omega_q$. The thermal photon occupation of a 5 GHz mode is $\bar n = 1/(e^{\hbar\omega_q/k_BT}-1)$, which is $\sim 10^{-11}$ at 10 mK but a sizeable $\sim 0.1$ already at 100 mK. Superconductivity is necessary; *cold* is what initializes the qubit and keeps it from being thermally scrambled.
+> **Intuition aside: two different temperatures.** Aluminum superconducts already at $T_c \approx 1.2$ K, so why bother with a dilution fridge at $\sim$10 mK? Because of criteria 2 and 3. The qubit transition is typically $\omega_q/2\pi \sim 5$ GHz, and we need its environment quiet enough that it sits in its ground state: $k_B T \ll \hbar\omega_q$. The thermal photon occupation of a 5 GHz mode is $\bar n = 1/(e^{\hbar\omega_q/k_BT}-1)$, which is $\sim 4\times10^{-11}$ at 10 mK but a sizeable $\sim 0.1$ already at 100 mK. Superconductivity is necessary; *cold* is what initializes the qubit and keeps it from being thermally scrambled.
 
 ## Why nonlinearity is mandatory
 
@@ -109,7 +109,7 @@ So $E_C/\hbar$ sets the angular anharmonicity, and the geometric mean of $E_J$ a
 
 ### Why push $E_J/E_C$ large? The trade-off that created the transmon
 
-Here is the conceptual heart of the chapter, and the thing the swing analogy alone can't tell you. In the charge basis the Hamiltonian with offset charge maps onto **Mathieu's equation**, and the eigenenergies $E_m(n_g)$ wobble as $n_g$ drifts (charge noise). The peak-to-peak wobble, the **charge dispersion** $\epsilon_m = E_m(n_g{=}\tfrac12) - E_m(n_g{=}0)$, has the asymptotic form (Koch *et al.* 2007)
+Here is the conceptual heart of the chapter, and the thing the cosine-well picture alone can't tell you. In the phase basis the eigenvalue equation with offset charge maps onto **Mathieu's equation**, and the eigenenergies $E_m(n_g)$ wobble as $n_g$ drifts (charge noise). The peak-to-peak wobble, the **charge dispersion** $\epsilon_m = E_m(n_g{=}\tfrac12) - E_m(n_g{=}0)$, has the asymptotic form (Koch *et al.* 2007)
 
 $$\frac{\epsilon_m}{E_C} \sim (-1)^m\,\frac{2^{4m+5}}{m!}\sqrt{\frac{2}{\pi}}\left(\frac{E_J}{2E_C}\right)^{\frac{m}{2}+\frac34}e^{-\sqrt{8E_J/E_C}}.$$
 
@@ -120,7 +120,7 @@ The punchline is the exponential $e^{-\sqrt{8E_J/E_C}}$. As you raise $E_J/E_C$:
 
 That asymmetry is the *entire justification* for the transmon: you pay a small, polynomial price in anharmonicity to buy exponential immunity to charge noise. (This also retroactively justifies dropping $n_g$ above, deep in the transmon regime the qubit's dependence on it is exponentially suppressed, though not zero.) A common design window lives around $E_J/E_C \sim 50$-$100$.
 
-![Semilog plot versus the ratio of Josephson to charging energy: the normalized charge dispersion plunges exponentially over many decades while the relative anharmonicity declines only gently as a power law, with the common design window shaded and the worked example at 39 marked](figures/01-tradeoff.png)
+![Semilog plot versus the ratio of Josephson to charging energy: the exponential factor of the charge dispersion plunges over many decades while the relative anharmonicity declines only gently as a power law, with the common design window shaded and the worked example at 39 marked](figures/01-tradeoff.png)
 
 *The whole transmon argument in one plot (log vertical axis): as $E_J/E_C$ grows, the exponential factor in charge dispersion (blue, omitting its prefactor) collapses **exponentially** while the relative anharmonicity you pay with (orange) shrinks only as a gentle power law. The shaded band is the common design window; the dot marks the worked example below at $E_J/E_C = 39$.*
 
@@ -131,10 +131,10 @@ That asymmetry is the *entire justification* for the transmon: you pay a small, 
 > 3. **$E_J$ from $\omega_q$.** Invert $\sqrt{8E_JE_C} = h(5.0+0.30)$ GHz $\Rightarrow E_J = (5.30)^2/(8\cdot0.30)\,h$ GHz $\approx h\cdot 11.7$ GHz.
 > 4. **Check the regime.** $E_J/E_C = 11.7/0.30 \approx 39 \gg 1$, the perturbative formulas are self-consistent. (39 sits a bit below the quoted 50-100 window, but step 6 shows the dispersion is already down to $\sim$100 kHz; lowering $E_C$ would buy more margin at the cost of anharmonicity.)
 > 5. **Relative anharmonicity.** $-300/5000 = -6\%$, matching $-(8\cdot39)^{-1/2}\approx-5.7\%$.
-> 6. **Charge-noise check.** The exponential alone is $e^{-\sqrt{8\cdot39}}\approx2\times10^{-8}$, but Koch's prefactor matters. The same asymptotic formula gives $\epsilon_0/E_C\sim5\times10^{-6}$ and $\epsilon_1/E_C\sim-3.5\times10^{-4}$, so the $0\to1$ charge dispersion is of order $10^5$ Hz for $E_C/h=300$ MHz: small next to a 5 GHz qubit, but not the bare exponential by itself.
-> 7. **The junction.** $E_J = I_c\Phi_0/2\pi \Rightarrow I_c = 2\pi(h\cdot11.7\times10^9)/(2.07\times10^{-15}) \approx 23$ nA, a typical Al/AlOₓ junction.
+> 6. **Charge-noise check.** The exponential alone is $e^{-\sqrt{8\cdot39}}\approx2\times10^{-8}$, but Koch's prefactor matters. The same asymptotic formula gives $\epsilon_0/E_C\sim5\times10^{-6}$ and $\epsilon_1/E_C\sim-3.6\times10^{-4}$, so the $0\to1$ charge dispersion is of order $10^5$ Hz for $E_C/h=300$ MHz: small next to a 5 GHz qubit, but not the bare exponential by itself.
+> 7. **The junction.** $E_J = I_c\Phi_0/2\pi \Rightarrow I_c = 2\pi(h\cdot11.7\times10^9)/(2.07\times10^{-15}) \approx 24$ nA, a typical Al/AlOₓ junction.
 >
-> **Takeaway:** two target numbers (frequency, anharmonicity) fix two circuit elements ($C\approx65$ fF, $I_c\approx23$ nA), and the design lands in the transmon regime with strongly reduced, though not literally exponent-only, charge dispersion.
+> **Takeaway:** two target numbers (frequency, anharmonicity) fix two circuit elements ($C\approx65$ fF, $I_c\approx24$ nA), and the design lands in the transmon regime with strongly reduced, though not literally exponent-only, charge dispersion.
 
 ## Reading the qubit: circuit QED
 
@@ -186,7 +186,7 @@ flowchart TD
 
 ## Common pitfalls
 
-- **"A transmon is a perfect two-level system."** It's a weakly anharmonic *multilevel* oscillator; $|2\rangle$ is only $\sim$5-6% away, so leakage is real and pulses must be shaped (e.g. DRAG).
+- **"A transmon is a perfect two-level system."** It's a weakly anharmonic *multilevel* oscillator; the $1\to2$ transition is only $\sim$5-6% away from $0\to1$, so leakage is real and pulses must be shaped (e.g. DRAG).
 - **"Bigger anharmonicity is always better."** Lowering $E_J/E_C$ to increase relative anharmonicity raises charge sensitivity; changing absolute anharmonicity alone does not specify that trade-off. The transmon deliberately trades anharmonicity for charge-noise immunity.
 - **"$T_2 = 2T_1$ always."** Only when $T_\phi\to\infty$. Real noise makes $T_\phi$ finite, so $T_2 < 2T_1$, and $T_2^* \le T_2$.
 - **"You read the qubit by absorbing its photon."** Dispersive readout is QND, you measure the cavity pull $\pm\chi$, not the qubit. That's the whole point of cQED.
@@ -197,7 +197,7 @@ flowchart TD
 
 - Superconducting qubits are *engineerable artificial atoms*: you set $\omega_q$, $\alpha$, $g$ by circuit design, not by nature.
 - One Hamiltonian, $H = 4E_C(\hat n-n_g)^2 - E_J\cos\hat\varphi$, describes the isolated Cooper-pair box/transmon; the ratio $E_J/E_C$ chooses between Cooper-pair box and transmon.
-- The transmon won because charge dispersion dies *exponentially* in $\sqrt{8E_J/E_C}$ while anharmonicity only weakens as a power law: $\omega_{01}\approx(\sqrt{8E_JE_C}-E_C)/\hbar$, $\alpha\approx-E_C/\hbar$.
+- The transmon won because charge dispersion dies *exponentially* in $\sqrt{8E_J/E_C}$ while relative anharmonicity only weakens as a power law: $\omega_{01}\approx(\sqrt{8E_JE_C}-E_C)/\hbar$, $\alpha\approx-E_C/\hbar$.
 - Readout is dispersive cQED: $\chi = g^2\alpha/[\Delta(\Delta+\alpha)]$, an approximately QND dressed-cavity pull with separation $2|\chi|$ against linewidth $\kappa$, traded against Purcell decay.
 - Coherence obeys $1/T_2 = 1/2T_1 + 1/T_\phi$, fought against TLS defects, quasiparticles, flux and photon noise.
 - The millikelvin fridge enforces $k_BT\ll\hbar\omega_q$ (initialization), a *different* requirement from superconducting $T_c$.

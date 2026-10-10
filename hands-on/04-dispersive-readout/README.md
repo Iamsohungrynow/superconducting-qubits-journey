@@ -27,7 +27,7 @@ python hands-on/04-dispersive-readout/dispersive.py
 **Operators and Hamiltonian.** We build the joint qubit-and-cavity space with
 `tensor`. The cavity lowering operator is `a = tensor(qeye(2), destroy(N))` with
 `N ~ 20` Fock states, and `sz = tensor(sigmaz(), qeye(N))`. Working in the frame
-rotating at the drive frequency, the Hamiltonian is a bare cavity detuning, the
+rotating at the drive frequency, the Hamiltonian is a cavity detuning (dressed midpoint minus drive), the
 dispersive pull, and a coherent drive:
 
 ```python

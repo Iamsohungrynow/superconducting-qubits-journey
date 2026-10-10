@@ -7,13 +7,13 @@ sections, so use the PDF contents when following this map.
 
 | Paper section | Course chapters | Numerical work |
 |---|---|---|
-| II.A: oscillator to transmon | 02–04 | 09: charge-basis spectrum |
+| II.A: oscillator to transmon | 02 to 04 | 09: charge-basis spectrum |
 | II.B: Hamiltonian engineering | 04 | 09; SQUID figure generator |
 | II.C: interactions | 05, 08 | 10: JC spectrum; 06: coupled transmons |
-| III: noise and mitigation | 09–10 | 03: Markovian decay; 11: echo; 12: thermal chain |
+| III: noise and mitigation | 09 to 10 | 03: Markovian decay; 11: echo; 12: thermal chain |
 | IV.D: single-qubit control | 07 | 01, 02, 05: Bloch, Rabi, DRAG |
-| IV.E–H: two-qubit control | 08 | 06: resonant CZ mechanism |
-| V.A–D: readout and Purcell filtering | 05–06 | 04: pointer fields; 10: dispersive limit |
+| IV.E to H: two-qubit control | 08 | 06: resonant CZ mechanism |
+| V.A to D: readout and Purcell filtering | 05 to 06 | 04: pointer fields; 10: dispersive limit |
 | V.E: amplification | 06, 10 | 12: amplifier noise budget |
 
 This is an original **transmon-focused companion**, not a complete reproduction

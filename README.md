@@ -54,7 +54,7 @@ Reading is good, but doing sticks. The [**hands-on/**](hands-on/README.md) track
 | [Randomized benchmarking](hands-on/07-randomized-benchmarking/) | error per Clifford from an RB decay | ch11 |
 | [Repetition code](hands-on/08-repetition-code/) | majority-vote error correction and break-even | ch12 |
 
-Four additional labs cover [transmon spectra](hands-on/09-transmon-spectrum/), [Jaynes–Cummings physics](hands-on/10-jaynes-cummings/), [noise and echo](hands-on/11-noise-echo/), and the [microwave chain](hands-on/12-microwave-chain/).
+Four additional labs cover [transmon spectra](hands-on/09-transmon-spectrum/), [Jaynes-Cummings physics](hands-on/10-jaynes-cummings/), [noise and echo](hands-on/11-noise-echo/), and the [microwave chain](hands-on/12-microwave-chain/).
 
 Follow the [environment setup](hands-on/README.md), then run all twelve labs with numerical checks:
 

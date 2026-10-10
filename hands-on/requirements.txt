@@ -3,7 +3,7 @@
 # on Python 3.12.10. NumPy 2+ supplies np.trapezoid. Other combinations
 # within these API bounds should be checked using run_labs.py --all --check.
 #   pip install -r hands-on/requirements.txt
-qutip>=5.0
+qutip>=5.0.3
 numpy>=2.0
 scipy>=1.10
 matplotlib>=3.5
