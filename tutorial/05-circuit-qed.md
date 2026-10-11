@@ -189,7 +189,7 @@ All values chosen for teaching, not from any device.
 
 **Step 6: resonant contrast.** If instead $\omega_q=\omega_r$ ($\Delta=0$), a full swap takes $T_\text{swap}=\pi/(2g)=\pi/(2\cdot2\pi\cdot100\text{ MHz})=2.5$ ns, fast, but now the qubit decays at $\kappa/2$ (it is half photon, for $g\gg\kappa$).
 
-**Takeaway:** the *same* $g=100$ MHz gives a $\sim2.5$ ns swap on resonance but only a sub-MHz dispersive pull at $2$ GHz detuning, and the transmon factor cuts that pull $\sim8\times$.
+**Takeaway:** the *same* $g=100$ MHz gives a $\sim2.5$ ns swap on resonance but only a $5$ MHz two-level dispersive pull at $2$ GHz detuning, which the transmon factor cuts $\sim8\times$ to a sub-MHz $0.65$ MHz.
 
 ## Resonant vs dispersive at a glance
 

@@ -68,7 +68,7 @@ Both are the *same physics*. Read the resonator, learn the qubit; but the same t
 
 ## 3. The transmon correction: why the third level matters
 
-The two-level result $\chi = g^2/\Delta$ is wrong for a transmon, because a transmon is a *weakly anharmonic oscillator*, not a true two-level system. Its $|1\rangle\!\to\!|2\rangle$ transition (detuning $\Delta + \alpha$, coupling enhanced by $\sqrt2$) **also pulls the cavity**, and in the opposite sense when the qubit sits in $|1\rangle$. The cavity pull is the difference $\chi_{01} - \chi_{12}/2$ of the two manifolds. Collecting them:
+The two-level result $\chi = g^2/\Delta$ is wrong for a transmon, because a transmon is a *weakly anharmonic oscillator*, not a true two-level system. Its $|1\rangle\!\to\!|2\rangle$ transition (detuning $\Delta + \alpha$, coupling enhanced by $\sqrt2$) **also pulls the cavity** when the qubit sits in $|1\rangle$, in the opposite sense unless the resonator lies between the two transitions (the straddling regime). The cavity pull is the difference $\chi_{01} - \chi_{12}/2$ of the two manifolds. Collecting them:
 
 $$
 \boxed{\;\chi = \frac{g^2}{\Delta}\,\frac{\alpha}{\Delta + \alpha}, \qquad \alpha < 0\;}
@@ -141,7 +141,7 @@ $$
 \Gamma_{\mathrm{Purcell}} = \kappa\left(\frac{g}{\Delta}\right)^2, \qquad T_1^{\mathrm{Purcell}} = 1/\Gamma_{\mathrm{Purcell}}.
 $$
 
-Note the same $g/\Delta$ that sets $\chi$ also sets this decay, so faster readout (bigger $\kappa$) directly threatens $T_1$. The fix is a **Purcell filter**: a frequency-selective impedance that allows strong coupling to the output continuum near $\omega_r$ while suppressing the dissipative admittance seen by the qubit near $\omega_q$ (the impedance description depends on circuit topology). It multiplies $\Gamma_{\mathrm{Purcell}}$ by the filter's out-of-band rejection $|H(\omega_q)|^2 \ll 1$, decoupling readout speed from $T_1$. It's not just "more bandwidth", it's a band-stop at the qubit frequency.
+Note the same $g/\Delta$ that sets $\chi$ also sets this decay, so faster readout (bigger $\kappa$) directly threatens $T_1$. The fix is a **Purcell filter**: a frequency-selective impedance that allows strong coupling to the output continuum near $\omega_r$ while suppressing the dissipative admittance seen by the qubit near $\omega_q$ (the impedance description depends on circuit topology). It multiplies $\Gamma_{\mathrm{Purcell}}$ by the filter's out-of-band rejection $|H(\omega_q)|^2 \ll 1$, decoupling readout speed from $T_1$. It's not just "more bandwidth", it's a stop band at the qubit frequency.
 
 ## 8. The amplifier chain and the quantum limit
 
