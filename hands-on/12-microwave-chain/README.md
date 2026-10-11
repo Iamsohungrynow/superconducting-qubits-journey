@@ -29,4 +29,4 @@ Record your prediction, changed parameter, numerical result, and physical explan
 
 ## Model and numerical limits
 
-Attenuators are matched and perfectly thermalized. This omits cable loss, amplifier saturation, pump leakage, and actual stage heat loads. Vacuum-normalized efficiency and phase-preserving SQL-normalized efficiency differ by two; both are printed explicitly.
+Attenuators are matched and perfectly thermalized. This omits cable loss, amplifier saturation, pump leakage, and actual stage heat loads. Vacuum-normalized efficiency and phase-preserving SQL-normalized efficiency differ by a factor of two; both are printed explicitly.
