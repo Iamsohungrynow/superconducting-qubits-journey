@@ -189,7 +189,7 @@ Numbers chosen for clean arithmetic, **not** measured values. Take $p_{\text{th}
 - **Step 4: qubit cost.** Reaching $p_L \sim 10^{-5}$ costs $\sim81$ rotated-layout data qubits plus $\sim80$ measure ancillas before leakage/helper qubits. In the larger unrotated planar count the data-qubit number would be $d^2+(d-1)^2=145$.
 - **Step 5: contrast above threshold.** If instead $p = 2\% > p_{\text{th}}$, the below-threshold scaling no longer gives a valid probability; its formal growth signals that larger distance no longer provides exponential suppression, so logical errors approach order-one rather than improving. Adding qubits now makes things **worse**, the qualitative meaning of being above threshold.
 
-![Logical error rate versus physical error rate on log-log axes for code distances 3, 5, 7, and 9: curves stop at the one-percent threshold, with the invalid above-threshold extrapolation shaded](figures/12-threshold.png)
+![Logical error rate versus physical error rate on log-log axes for code distances 3, 5, 7, and 9: curves stop at the one-percent threshold, with the above-threshold region, where the scaling model is invalid, shaded](figures/12-threshold.png)
 
 *A below-threshold scaling illustration, not a simulated surface code. Curves stop at $p_{\rm th}$: extrapolating this ansatz above threshold would give impossible probabilities greater than one. The worked example uses an arbitrary prefactor $A=1$; being below threshold means improvement with distance, not necessarily beating a bare qubit at every small distance.*
 

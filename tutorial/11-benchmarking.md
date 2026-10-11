@@ -26,7 +26,7 @@ The individual steps:
 - **Qubit frequency $\omega_q$: fine, plus $T_2^*$ (Ramsey).** Two $\pi/2$ pulses separated by a delay $\tau$ convert a small detuning into a beat. If the fitted beat is $\Delta f$ in Hz, then $\delta\omega=2\pi\Delta f$. This is kHz-level and is how you track drift.
 - **Pulse amplitude (Rabi).** Sweep drive amplitude (or duration), fit the Rabi oscillation, pick the amplitude giving exactly a $\pi$ rotation.
 - **DRAG & leakage.** A transmon is only weakly anharmonic ($\alpha/2\pi \sim -200$ MHz, illustrative), so a fast pulse has spectral weight at the $1\!\leftrightarrow\!2$ transition and *leaks* into $|2\rangle$. The **DRAG** technique adds a quadrature component proportional to the derivative of the main pulse to cancel that leakage and the associated phase error; the DRAG coefficient is itself a calibrated knob.
-- **AllXY fine-tuning.** A fixed sequence of 21 pulse pairs, each drawn from $\pi$ and $\pi/2$ rotations about the $X$ and $Y$ axes, whose ideal outcome is a known staircase. Different error types (amplitude, detuning, DRAG phase) deform the staircase in characteristic, distinguishable ways, a cheap, sensitive diagnostic for the residuals Rabi/Ramsey miss.
+- **AllXY fine-tuning.** A fixed sequence of 21 pulse pairs, each drawn from the identity and $\pi$ and $\pi/2$ rotations about the $X$ and $Y$ axes, whose ideal outcome is a known staircase. Different error types (amplitude, detuning, DRAG phase) deform the staircase in characteristic, distinguishable ways, a cheap, sensitive diagnostic for the residuals Rabi/Ramsey miss.
 - **Readout.** Calibrate $\chi$, choose the readout frequency and power that best separate the $|0\rangle$/$|1\rangle$ pointer states in the IQ plane, and fit the discrimination boundary. (More below, the full story is the *assignment matrix*.)
 
 ### The engine underneath: error amplification
@@ -94,7 +94,7 @@ $$ r = \frac{(d-1)(1-p)}{d}, \qquad d = 2^{n}, \qquad F_{\text{avg}} = p + \frac
 
 ### Interleaved RB (IRB): isolating one gate
 
-Run reference RB (decay $p_{\text{ref}}$), then a second experiment with the **target gate inserted after every random Clifford** (decay $p_{\overline{C}}$):
+Run reference RB (decay $p_{\text{ref}}$), then a second experiment with the **target gate (a Clifford) inserted after every random Clifford** (decay $p_{\overline{C}}$):
 
 $$ r_{\text{gate}} = \frac{d-1}{d}\left(1 - \frac{p_{\overline{C}}}{p_{\text{ref}}}\right), \qquad \left|\,r_{\text{gate}}^{\text{est}} - r_{\text{gate}}\,\right| \le E. $$
 
