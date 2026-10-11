@@ -54,7 +54,7 @@ Start with the simplest superconducting circuit: an inductor and a capacitor, an
   ✗ cannot isolate a qubit            1→2 by |α| ⇒ clean two-level qubit
 ```
 
-The fix is to make the inductor **nonlinear**, so the levels are no longer evenly spaced. The Josephson junction is the standard strongly nonlinear, nearly non-dissipative element in superconducting qubit circuits; dissipative nonlinearities such as resistors would add loss. We quantify the unevenness with the **anharmonicity**
+The fix is to make the inductor **nonlinear**, so the levels are no longer evenly spaced. The Josephson junction is the standard strongly nonlinear, nearly non-dissipative element in superconducting qubit circuits; dissipative elements such as resistors would add loss rather than a coherent nonlinearity. We quantify the unevenness with the **anharmonicity**
 
 $$\alpha = \omega_{12} - \omega_{01},$$
 
