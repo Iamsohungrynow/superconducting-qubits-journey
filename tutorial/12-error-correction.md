@@ -135,7 +135,7 @@ Why do these commute (so their eigenvalues can be extracted in the same QEC roun
 
 *A distance-3 rotated surface code. Bulk checks alternate $X$ and $Z$ like a checkerboard, so any $X$-check and $Z$-check share 0 or 2 data qubits. The two-body $X$ checks sit on the top and bottom edges and the two-body $Z$ checks on the left and right edges. A logical $Z$ (any full row) therefore commutes with every $X$ check, and a logical $X$ (any full column) with every $Z$ check.*
 
-A **logical operator** is a chain of single-qubit Paulis stretching all the way *across* the lattice; the shortest such chain has length $d$. Corrupting the logical qubit therefore requires errors that, *together with the decoder's correction*, form a string spanning the full distance (as few as $(d+1)/2$ faults can do it if the decoder completes the chain the wrong way), and the probability of that falls exponentially as $d$ grows.
+A **logical operator** is a chain of single-qubit Paulis stretching all the way *across* the lattice; the shortest such chain has length $d$. Corrupting the logical qubit therefore requires errors that, *together with the decoder's correction*, form a string spanning the full distance (as few as $(d+1)/2$ faults can do it if the decoder completes the chain the wrong way), and, provided the physical error rate is below threshold (see the threshold theorem below), the probability of that falls exponentially as $d$ grows.
 
 ### Syndromes live in spacetime
 
