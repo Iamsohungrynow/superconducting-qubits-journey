@@ -90,7 +90,7 @@ Here is the energy ladder, with the crucial detail that $E_{12}$ is *smaller* th
    │   │   spacing ≈ √(8E_J E_C) - 3E_C   (smallest)
    │   ├──────────────  |2⟩
    │   │   E_12 = √(8E_J E_C) - 2E_C
-   │   ├──────────────  |1⟩      ── α = E_12 - E_01 = -E_C
+   │   ├──────────────  |1⟩      ── alpha_E = E_12 - E_01 = -E_C
    │   │   E_01 = √(8E_J E_C) - E_C
    │   └──────────────  |0⟩
    │
