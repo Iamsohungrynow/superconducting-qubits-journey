@@ -32,7 +32,7 @@ on to error correction.
 
 ## Start here (reviews)
 
-These two reviews are the recommended on-ramp. Read them first; almost every
+The first two reviews below are the recommended on-ramp. Read them first; almost every
 later entry will make more sense afterwards.
 
 - **A Quantum Engineer's Guide to Superconducting Qubits**, Krantz, Kjaergaard,

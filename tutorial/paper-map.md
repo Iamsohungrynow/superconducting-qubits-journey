@@ -2,8 +2,8 @@
 
 Primary reading: [A Quantum Engineer's Guide to Superconducting Qubits, arXiv:1904.06560v5](https://arxiv.org/abs/1904.06560v5).
 The journal publication is from 2019; v5 is the 2021 arXiv revision. Section
-labels below follow the PDF. The experimental HTML rendering omits some later
-sections, so use the PDF contents when following this map.
+labels below follow the PDF. arXiv's HTML rendering numbers subsections (II.1)
+where the PDF letters them (II.A), so use the PDF contents when following this map.
 
 | Paper section | Course chapters | Numerical work |
 |---|---|---|
