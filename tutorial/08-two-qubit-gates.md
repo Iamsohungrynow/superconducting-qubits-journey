@@ -185,7 +185,7 @@ The leading prefactor (here $1/2$) is an order-unity number that depends on the 
 | Residual $ZZ$ | unwanted phase $\sim \zeta t_\text{gate}$; infidelity $O[(\zeta t_\text{gate})^2]$ | variable | tunable coupler / echo |
 | Coherent miscalibration | amplitude/phase error | $\sim 10^{-4}$ | interleaved RB tune-up |
 
-*(All numbers illustrative and hardware-dependent.)* Because $t_\text{gate}$ (tens of ns) is a non-negligible fraction of $T_1,T_2$ (tens-to-hundreds of $\mu$s), the decoherence floor alone is already $\sim10^{-3}$, which is why two-qubit errors dominate the budget and set the QEC threshold.
+*(All numbers illustrative and hardware-dependent.)* Because $t_\text{gate}$ (tens of ns) is a non-negligible fraction of $T_1,T_2$ (tens-to-hundreds of $\mu$s), the decoherence floor alone is already $\sim10^{-3}$, which is why two-qubit errors dominate the budget and largely decide whether a device operates below the QEC threshold.
 
 **How is the error actually measured?** The quoted $\sim$0.1-1% comes from **interleaved randomized benchmarking (RB)**: run random sequences of Clifford gates with and without the target two-qubit gate interleaved, fit the decay of survival probability versus sequence length, and divide out, isolating the gate's average error from state-prep and measurement errors.
 

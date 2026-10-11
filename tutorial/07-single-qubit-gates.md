@@ -178,14 +178,14 @@ Qubit $\omega_q/2\pi = 5.000$ GHz, $\alpha/2\pi = -250$ MHz (so $|1\rangle\!\to\
 - Don't confuse $\Omega$ (bare Rabi, the on-resonance rotation rate) with $\Omega_R=\sqrt{\Omega^2+\Delta^2}$.
 - For a resonant two-level drive with fixed phase under the RWA, the ideal rotation angle depends only on pulse **area**, not shape. Shape matters for *leakage/bandwidth*, and detuning, DRAG quadrature, Stark shifts, or time-dependent axes break the simple area rule.
 - The RWA is **not** exact, it drops $2\omega_d$ terms and leaves Bloch-Siegert shifts for calibration to absorb.
-- Don't conflate detuning $\Delta$ (qubit-vs-drive, sets axis) with anharmonicity $\alpha$ ($|1\rangle\!\to\!|2\rangle$ spacing, sets leakage). With $\alpha<0$, $|2\rangle$ is *below* $2\omega_q$.
+- Don't conflate detuning $\Delta$ (qubit-vs-drive, sets axis) with anharmonicity $\alpha$ (offset of the $|1\rangle\!\to\!|2\rangle$ transition from $\omega_q$, sets leakage). With $\alpha<0$, $|2\rangle$ is *below* $2\omega_q$.
 - Virtual-Z gates are exact and free, but only act on *subsequent* pulses and the final measurement basis.
 
 ## Key takeaways
 
 - A near-resonant microwave pulse drives **Rabi oscillations**; the full law is $P_1=\tfrac{\Omega^2}{\Omega_R^2}\sin^2(\Omega_R t/2)$, reducing to $\sin^2(\Omega t/2)$ on resonance.
 - In the **rotating frame** under the RWA, $H_\text{rot}=\tfrac{\Delta}{2}\hat\sigma_z+\tfrac{\Omega}{2}(\cos\phi\,\hat\sigma_x+\sin\phi\,\hat\sigma_y)$ with $\Delta=\omega_d-\omega_q$: drive **phase** picks the axis, pulse **area** picks the angle.
-- The transmon is **multilevel**; the nearby $|2\rangle$ at $\omega_q+\alpha$ causes **leakage**, worse for fast gates and small $|\alpha|$.
+- The transmon is **multilevel**; the nearby $|1\rangle\!\to\!|2\rangle$ transition at $\omega_q+\alpha$ causes **leakage**, worse for fast gates and small $|\alpha|$.
 - **DRAG** adds a derivative quadrature ($\propto-\dot\Omega/\alpha$) plus a small detuning correction to cancel leakage and phase error.
 - **Virtual-Z** gates are exact, zero-duration phase relabelings; two X90 + virtual-Z's generate the full gate set.
 - A **calibration loop** (Ramsey → Rabi → DRAG → RB) turns ideal formulas into real gates.
