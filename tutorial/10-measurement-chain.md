@@ -94,7 +94,7 @@ input noise ~16 photons (from 4 K)
 
 *The cascade as a staircase: each attenuator divides what arrives and re-emits at its own temperature (dotted levels), so the line keeps "resetting" toward the local $\bar n(T)$. The final floor is set by the warm residual leaking through the attenuation downstream of it, which is why upgrading the middle attenuator from 10 to 20 dB (orange) buys nearly a factor of 10.*
 
-Total staged input attenuation is typically 40-60 dB (illustrative), and the choice per stage is bounded **below by noise** (you need enough *cold* attenuation to reach the floor) and **above by heat** (each dB dumps power on a cold plate). That is why you can't just put 60 dB at one place.
+Total staged input attenuation is typically about 60 dB (illustrative), and the choice per stage is bounded **below by noise** (you need enough *cold* attenuation to reach the floor) and **above by heat** (each dB dumps power on a cold plate). That is why you can't just put 60 dB at one place.
 
 **Filtering is a separate job from attenuation**, and conflating the two is a common mistake. Attenuators are GHz-band devices; they do nothing about radiation far outside that band. Four roles:
 
@@ -207,7 +207,7 @@ The chain only works if you respect it. Heat-sink every cable and attenuator fir
 
 - The chain delivers control signals while blocking ~300 K thermal photons; the figure of merit is $\bar n(\omega,T)$, falling from ~1250 (300 K) to $\ll 1$ at the chip.
 - Two heat loads, passive conduction ($\dot Q = \frac{\mathcal A}{L}\int\kappa\,dT$) and active dissipation, force thin NbTi/stainless coax and aggressive heat-sinking.
-- **Input:** staged attenuators (40-60 dB, illustrative) push the line toward the coldest attenuator's temperature (residual warm leakage sets the actual floor) via $\bar n_{\text{out}} = \bar n_{\text{in}}/A + (1-1/A)\bar n(T)$; *separate* low-pass and IR/Eccosorb filters kill out-of-band and pair-breaking radiation.
+- **Input:** staged attenuators (about 60 dB, illustrative) push the line toward the coldest attenuator's temperature (residual warm leakage sets the actual floor) via $\bar n_{\text{out}} = \bar n_{\text{in}}/A + (1-1/A)\bar n(T)$; *separate* low-pass and IR/Eccosorb filters kill out-of-band and pair-breaking radiation.
 - **Output:** isolators block backward amplifier noise (back-action); then TWPA → HEMT → RT amps. Friis says the first amplifier dominates $T_{\text{sys}}$.
 - A phase-insensitive amplifier adds $\geq \tfrac12$ photon ($T_{\text{add}}^{\min} = \hbar\omega/2k_B$); efficiency $\eta$ links this to single-shot readout fidelity. The worked example shows TWPA-in vs TWPA-out: $\eta \approx 32\%$ vs $\approx 3\%$.
 

@@ -208,7 +208,7 @@ The lesson: the qubit Hamiltonian was solved long ago; the frontier is the dirty
 
 - A qubit decoheres because it is weakly coupled to a bath: transverse coupling drives $T_1$, while longitudinal $\sigma_z$ coupling drives $T_\phi$.
 - Bloch-Redfield gives $1/T_2 = 1/(2T_1) + 1/T_\phi$ as a *result*, with the hard ceiling $T_2 \le 2T_1$.
-- Noise is characterized by its PSD $S(\omega)$; flux and charge noise are $1/f$, with most power at low frequency.
+- Noise is characterized by its PSD $S(\omega)$; flux and charge noise are $1/f$, with spectral density largest at low frequency.
 - The filter-function formula $\chi(t)=\tfrac12\int_0^\infty(d\omega/\pi)\,S_{\delta\omega}(\omega)|G_N(\omega,t)|^2$ unifies Ramsey, echo, and CPMG and explains *why* echo works.
 - Noise color sets decay *shape*: quasi-static $1/f$ → Gaussian, white → exponential.
 - Sweet spots kill first-order noise sensitivity; CPMG doubles as noise spectroscopy.
