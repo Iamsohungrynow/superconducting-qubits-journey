@@ -78,7 +78,7 @@ after compensating the one-qubit phases. That conditional sign flip is the contr
 
 **The central tradeoff.** Going fast risks Landau-Zener leakage into $|02\rangle$. For $H/\hbar=(\epsilon/2)\sigma_z+V\sigma_x$, with $\epsilon$ and $V$ in angular-frequency units,
 $$ P_\text{LZ} \approx \exp\!\left[-\frac{\pi \Delta_\text{gap}^2}{2|\dot\epsilon|}\right], \qquad \Delta_\text{gap}=2|V|. $$
-Faster gates need a larger conditional shift $\zeta$, so the fixed integrated phase $\pi$ accumulates sooner; it is obtained by larger $g$ or a closer approach to the crossing. For a fixed linear sweep, larger $g$ increases the gap and suppresses Landau-Zener transitions; leakage grows when the trajectory is made faster or closer without adequate shaping. The fix is not raw speed but a **shaped trajectory** (the "fast-adiabatic"/Martinis-style pulse, DRAG-like derivative shaping). Two ways to run CZ in practice: (a) adiabatic flux tuning into the crossing, and (b) diabatic/resonant and modern tunable-coupler "net-zero" approaches.
+Faster gates need a larger conditional shift $\zeta$, so the fixed integrated phase $\pi$ accumulates sooner; it is obtained by larger $g$ or a closer approach to the crossing. For a fixed linear sweep, larger $g$ increases the gap and suppresses Landau-Zener transitions; leakage grows when the trajectory is made faster or closer without adequate shaping. The fix is not raw speed but a **shaped trajectory** (the "fast-adiabatic"/Martinis-style pulse, DRAG-like derivative shaping). Two ways to run CZ in practice: (a) adiabatic flux tuning into the crossing, and (b) diabatic/resonant approaches; refinements include bipolar "net-zero" flux pulses and tunable-coupler CZ gates.
 
 ### Worked example, adiabatic CZ (all numbers illustrative)
 
@@ -187,7 +187,7 @@ The leading prefactor (here $1/2$) is an order-unity number that depends on the 
 
 *(All numbers illustrative and hardware-dependent.)* Because $t_\text{gate}$ (tens of ns) is a non-negligible fraction of $T_1,T_2$ (tens-to-hundreds of $\mu$s), the decoherence floor alone is already $\sim10^{-3}$, which is why two-qubit errors dominate the budget and largely decide whether a device operates below the QEC threshold.
 
-**How is the error actually measured?** The quoted $\sim$0.1-1% comes from **interleaved randomized benchmarking (RB)**: run random sequences of Clifford gates with and without the target two-qubit gate interleaved, fit the decay of survival probability versus sequence length, and divide out, isolating the gate's average error from state-prep and measurement errors.
+**How is the error actually measured?** The quoted $\sim$0.1-1% comes from **interleaved randomized benchmarking (RB)**: run random sequences of Clifford gates with and without the target two-qubit gate interleaved (the target must itself be a Clifford, such as CZ or CNOT; see [Chapter 11](11-benchmarking.md)), fit each decay of survival probability versus sequence length, and take the ratio of the two decay parameters. The fitted decay rates are insensitive to state-prep and measurement errors, and the ratio removes the reference Cliffords' error, isolating the target gate's average error.
 
 ## Mechanism comparison
 
