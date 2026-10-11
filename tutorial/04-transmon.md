@@ -130,7 +130,7 @@ Pick generic teaching values: $E_C/h = 0.25$ GHz and $E_J/h = 15$ GHz, so $E_J/E
 
 **3 · Gate-speed intuition.** A square pulse of duration $\tau$ has spectral width $\sim 1/\tau$. To avoid driving $|1\rangle\to|2\rangle$ (detuned by $|\alpha_E|/h=250$ MHz) we need $1/\tau \ll 250$ MHz, i.e. $\tau \gg 4$ ns. That is exactly why few-ns single-qubit gates need pulse shaping (e.g. **DRAG**, covered later) to suppress leakage into $|2\rangle$.
 
-**4 · Charge dispersion.** Exponent $-\sqrt{8\times60} = -\sqrt{480}\approx -21.9$, so $e^{-21.9}\approx 3\times10^{-10}$. For the ground level, $\epsilon_0/h\approx25$ Hz. The qubit transition dispersion is dominated by the first excited level; here $|\epsilon_1-\epsilon_0|/h\approx2.2$ kHz, still negligible next to a 5 GHz qubit.
+**4 · Charge dispersion.** Exponent $-\sqrt{8\times60} = -\sqrt{480}\approx -21.9$, so $e^{-21.9}\approx 3\times10^{-10}$. For the ground level, $\epsilon_0/h\approx25$ Hz. The qubit transition dispersion is dominated by the first excited level; here $|\epsilon_1-\epsilon_0|/h\approx2.2$ kHz from the asymptotic formula (exact diagonalization: $\approx1.9$ kHz), tiny next to a 5 GHz qubit but comparable to the kHz-scale linewidth of a $T_2\sim100\ \mu$s qubit.
 
 **The quantitative heart of the chapter.** At $E_J/E_C=60$, $\alpha_r\approx-4.6\%$ (healthy) while the exponential factor alone is $\sim10^{-10}$. Double the ratio to 120: $\alpha_r$ only shrinks to $\sim-3.2\%$ (power law), but the exponent becomes $-\sqrt{960}\approx-31$, so the exponential factor is $\sim e^{-31}\sim 3\times10^{-14}$, **four more orders of magnitude** for a tiny anharmonicity cost. That asymmetry *is* the transmon.
 
