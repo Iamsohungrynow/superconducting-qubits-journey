@@ -69,7 +69,7 @@ returns after t_CZ = 23.6 ns. Right: the conditional phase approaches pi near th
 
 Why not exactly pi and exactly P11 = 1? Because the idealized two-level
 picture ignores the spectators: |11> is also pushed by |02> (500 MHz away),
-and |01> weakly mixes with |10> (250 MHz apart). These shift the phase by a
+and leaks into it (P02 ~ 0.005 at t_CZ); |01>-|10> mixing (250 MHz apart) only adds a small swap error. The |02> coupling shifts the phase by a
 few percent, the same physics behind residual ZZ crosstalk. A real
 calibration absorbs this by fine-tuning the interaction time and detuning.
 

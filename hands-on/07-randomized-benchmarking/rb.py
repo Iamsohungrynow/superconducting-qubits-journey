@@ -45,7 +45,7 @@ rng = np.random.default_rng(7)
 
 # ---------------------------------------------------------------------------
 # Build the 24-element single-qubit Clifford group by closing {H, S} under
-# multiplication. Matrices are canonicalized up to global phase so duplicates
+# multiplication. Matrices are compared up to global phase so duplicates
 # can be recognized.
 # ---------------------------------------------------------------------------
 H_gate = np.array([[1, 1], [1, -1]], dtype=complex) / np.sqrt(2)

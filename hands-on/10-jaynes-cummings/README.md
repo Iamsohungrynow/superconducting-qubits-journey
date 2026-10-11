@@ -23,7 +23,7 @@ For g/2pi = 100 MHz, the resonant splitting is 200 MHz and the full excitation s
 
 ## Experiment
 
-Double g and predict the splitting and swap time before running; also widen the detuning sweep past |Delta| = 10g, or the script's dispersive check finds no points and stops with a ValueError. Reduce |Delta|/g and identify where the perturbative cavity shift becomes unreliable.
+Double g and predict the splitting and swap time before running; also widen the detuning sweep well past |Delta| = 10g, or the script's dispersive check only sees the two sweep endpoints. Reduce |Delta|/g and identify where the perturbative cavity shift becomes unreliable.
 
 Record your prediction, changed parameter, numerical result, and physical explanation. Edit one parameter at a time. The automated checks target the documented defaults; restore them before running the full verification suite.
 

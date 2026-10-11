@@ -16,7 +16,7 @@ def main():
     np.testing.assert_allclose(energies[400, 1]-energies[400, 0], 2*g)
     # Pick the eigenvalue connected to the bare cavity at large |Delta|.
     cavity_shift = np.where(detunings < 0, energies[:, 1], energies[:, 0])
-    far = np.abs(detunings) >= 10*g
+    far = np.abs(detunings) >= 10*g*(1 - 1e-12)
     approx = -g*g/detunings[far]
     relative_error = np.max(np.abs((cavity_shift[far]-approx)/approx))
     assert relative_error < .011
