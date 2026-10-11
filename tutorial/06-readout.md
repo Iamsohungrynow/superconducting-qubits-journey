@@ -157,7 +157,7 @@ $$
 T_N^{\mathrm{sys}} = T_{N,1} + \frac{T_{N,2}}{G_1} + \dots
 $$
 
-A quantum-limited first stage with gain $G_1 \sim 100$ divides the HEMT's contribution by 100, making it negligible. So we place a JPA or TWPA *first*, it sets the system noise near the quantum limit. Order matters more than individual quality.
+A quantum-limited first stage with gain $G_1 \sim 100$ divides the HEMT's contribution by 100, to about $0.1$ to $0.2$ photons, so the first stage dominates. So we place a JPA or TWPA *first*, it sets the system noise near the quantum limit. Order matters more than individual quality.
 
 ```mermaid
 flowchart TD

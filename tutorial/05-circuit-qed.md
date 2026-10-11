@@ -116,7 +116,7 @@ Crucially, within this effective dispersive model, $H_\text{disp}$ commutes with
 The two-level $\chi=g^2/\Delta$ is **wrong for a transmon**. A transmon is a weakly anharmonic ladder $|g\rangle,|e\rangle,|f\rangle,\dots$, and the $|e\rangle\!\to\!|f\rangle$ transition also couples to the cavity (with matrix element $g_{ef}\approx\sqrt2\,g$). This perturbative formula assumes both relevant transitions are dispersive: $|g/\Delta|\ll1$ and $|g_{ef}/(\Delta+\alpha)|\ll1$; near $\Delta+\alpha\approx0$ it must be replaced by a fuller multilevel treatment. Summing the second-order SW contributions:
 
 - the $|g\rangle\!-\!|e\rangle$ coupling contributes $+g^2/\Delta$ to $\chi$,
-- the $|e\rangle\!-\!|f\rangle$ coupling contributes the **opposite** sign, $-g_{ef}^2/[2(\Delta+\alpha)]\approx -g^2/(\Delta+\alpha)$ (the factor $\tfrac12$ is how the *upper* transition enters the qubit's cavity shift, since it pulls the cavity only in $|e\rangle$, not $|g\rangle$).
+- the $|e\rangle\!-\!|f\rangle$ coupling contributes the **opposite** sign (except in the straddling regime $0<\Delta<-\alpha$, where the two terms add), $-g_{ef}^2/[2(\Delta+\alpha)]\approx -g^2/(\Delta+\alpha)$ (the factor $\tfrac12$ is how the *upper* transition enters the qubit's cavity shift, since it pulls the cavity only in $|e\rangle$, not $|g\rangle$).
 
 For a multilevel transmon, writing the cavity frequencies as $\omega_r\pm\chi$ also requires redefining $\omega_r$ as their midpoint: $\widetilde\omega_r=\omega_r^{\rm bare}-g^2/(\Delta+\alpha)$ to this order. The ground-state cavity shift relative to the **bare** cavity remains $-g^2/\Delta$. The transmon Lamb shift of the qubit is not obtained simply by replacing every two-level $\chi$ with the multilevel expression.
 
