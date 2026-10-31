@@ -2,9 +2,9 @@
 
 > **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
 
-In the previous chapter we met the Josephson junction and used it to build the charge qubit, the Cooper-pair box, a tiny superconducting island whose state is set by how many Cooper pairs have tunnelled across the junction. It made a beautiful two-level system, but it had a fatal flaw, it was painfully sensitive to stray electric charge. A single fluctuating charge near the island would smear out the qubit frequency and kill coherence in microseconds. The transmon is the fix, and it turned out to be such a good fix that it became the workhorse of nearly every superconducting quantum processor built today.
+In the previous chapter we met the Josephson junction and used it to build the charge qubit, the Cooper-pair box, a tiny superconducting island whose state is set by how many Cooper pairs have tunnelled across the junction. It made a beautiful two-level system, but it had a fatal flaw: it was painfully sensitive to stray electric charge. A single fluctuating charge near the island would smear out the qubit frequency and kill coherence in microseconds. The transmon is the fix, and it turned out to be such a good fix that it became the workhorse of nearly every superconducting quantum processor built today.
 
-The whole trick is one design choice: **make the Josephson energy $E_J$ much larger than the charging energy $E_C$.** Everything good (and the one thing we give up) follows from that single inequality. Here is the logical skeleton of the entire chapter, keep it in mind as we fill in each branch:
+The whole trick is one design choice: **make the Josephson energy $E_J$ much larger than the charging energy $E_C$.** Everything good (and the one thing we give up) follows from that single inequality. Here is the logical skeleton of the entire chapter; keep it in mind as we fill in each branch:
 
 ```mermaid
 flowchart TD
@@ -21,6 +21,10 @@ flowchart TD
 ## The circuit and its energy scales
 
 > **The single most important point:** the transmon is *not* a new circuit. It is the **same** Josephson-junction-plus-capacitor as the Cooper-pair box, with the **same** Hamiltonian. We only change one number, the ratio $E_J/E_C$, by adding a large shunt capacitor that lowers $E_C$.
+
+![Three circuit diagrams. (a) Cooper-pair box: a gate voltage source in series with a gate capacitor feeding an island node that connects to ground through a Josephson junction. (b) Transmon: the same circuit with a large shunt capacitor C_B in parallel with the junction. (c) Flux-tunable transmon: the single junction is replaced by two junctions in a loop threaded by external flux, still shunted by C_B](figures/04-transmon-circuits.png)
+
+*From Cooper-pair box to transmon. Panel (b) differs from (a) only by the shunt capacitor $C_B$, which raises $C_\Sigma$, lowers $E_C=e^2/2C_\Sigma$, and pushes $E_J/E_C$ from about 1 to about 50. Panel (c) replaces the junction with a dc SQUID so that an external flux tunes $E_J$; it is treated at the end of this chapter. In a real device $C_B$ is formed by large metal pads, and the gate capacitor is usually just the stray coupling to the environment that sets $n_g$.*
 
 $$H = 4 E_C\,(\hat{n} - n_g)^2 - E_J \cos\hat{\varphi}$$
 
@@ -44,7 +48,7 @@ The rigorous statement is a **Bloch-band** argument: $n_g$ enters exactly like a
 $$\epsilon_m \;\simeq\; (-1)^m\,E_C\,\frac{2^{4m+5}}{m!}\sqrt{\frac{2}{\pi}}\left(\frac{E_J}{2E_C}\right)^{\frac{m}{2}+\frac34}\,
 e^{-\sqrt{8 E_J/E_C}}.$$
 
-The decisive feature is the factor $e^{-\sqrt{8E_J/E_C}}$: charge sensitivity is suppressed **exponentially** in $\sqrt{E_J/E_C}$. Double the ratio and the charge sensitivity doesn't halve, it plummets by orders of magnitude. The growing prefactor shows higher levels disperse more, which is why we always use the lowest, most protected levels; the $(-1)^m$ says adjacent levels swing in *opposite* directions, so the $0\to1$ transition inherits both: $|\epsilon_1-\epsilon_0| = |\epsilon_0|+|\epsilon_1|$. This single exponential is what buys the transmon its long coherence and lets us forget $n_g$.
+The decisive feature is the factor $e^{-\sqrt{8E_J/E_C}}$: charge sensitivity is suppressed **exponentially** in $\sqrt{E_J/E_C}$. Double the ratio and the charge sensitivity doesn't halve; it plummets by orders of magnitude. The growing prefactor shows higher levels disperse more, which is why we always use the lowest, most protected levels; the $(-1)^m$ says adjacent levels swing in *opposite* directions, so the $0\to1$ transition inherits both: $|\epsilon_1-\epsilon_0| = |\epsilon_0|+|\epsilon_1|$. This single exponential is what buys the transmon its long coherence and lets us forget $n_g$.
 
 > **Intuition aside.** It's like tuning a heavy bell versus a light one. A featherweight bell rings at a pitch that changes with every breeze (every stray charge). A massive cathedral bell rings at essentially the same note no matter what the air does. We traded a nimble, twitchy qubit for a heavy, steady one, and steadiness is what coherence needs.
 
@@ -65,13 +69,13 @@ $$\hbar\omega_p = \sqrt{8 E_J E_C}.$$
 
 **Step 4: introduce ladder operators.** Writing $\hat\varphi = (2E_C/E_J)^{1/4}(a+a^\dagger)$ and $\hat n = \tfrac{i}{2}(E_J/2E_C)^{1/4}(a^\dagger-a)$ diagonalizes the harmonic part as $\hbar\omega_p(a^\dagger a + \tfrac12)$.
 
-**Step 5: treat the quartic term as a perturbation.** Here is the magic cancellation: $\hat\varphi^4 \sim (2E_C/E_J)(a+a^\dagger)^4$, so the prefactor $-E_J/24$ times $(2E_C/E_J)$ leaves a coefficient of order **$E_C$**, the $E_J$ cancels. First-order perturbation theory keeps the diagonal part of $(a+a^\dagger)^4$, which on level $m$ equals $6m^2+6m+3$.
+**Step 5: treat the quartic term as a perturbation.** Here is the magic cancellation: $\hat\varphi^4 \sim (2E_C/E_J)(a+a^\dagger)^4$, so the prefactor $-E_J/24$ times $(2E_C/E_J)$ leaves a coefficient of order **$E_C$**: the $E_J$ cancels. First-order perturbation theory keeps the diagonal part of $(a+a^\dagger)^4$, which on level $m$ equals $6m^2+6m+3$.
 
 **Step 6: collect.** Putting it together (Koch *et al.* 2007):
 
 $$\boxed{\;E_m \simeq -E_J + \sqrt{8 E_C E_J}\,\big(m+\tfrac12\big) - \frac{E_C}{12}\big(6m^2 + 6m + 3\big)\;}$$
 
-The three terms are exactly the three pieces of physics: $-E_J$ is the **potential minimum / constant offset** (the barrier to the neighboring maximum is $2E_J$), $\sqrt{8E_CE_J}(m+\tfrac12)$ is the **harmonic ladder**, and the quartic term makes the spacing **shrink with $m$**, the levels crowd together near the top, just as in a real pendulum.
+The three terms are exactly the three pieces of physics: $-E_J$ is the **potential minimum / constant offset** (the barrier to the neighboring maximum is $2E_J$), $\sqrt{8E_CE_J}(m+\tfrac12)$ is the **harmonic ladder**, and the quartic term makes the spacing **shrink with $m$**: the levels crowd together near the top, just as in a real pendulum.
 
 Now read off the observables:
 
@@ -83,23 +87,9 @@ $$\alpha_E \equiv E_{12}-E_{01} \simeq -E_C.$$
 
 Here is the energy ladder, with the crucial detail that $E_{12}$ is *smaller* than $E_{01}$ by $E_C$ to leading order:
 
-```
- energy
-   │
-   │   ┌──────────────  |3⟩
-   │   │   spacing ≈ √(8E_J E_C) - 3E_C   (smallest)
-   │   ├──────────────  |2⟩
-   │   │   E_12 = √(8E_J E_C) - 2E_C
-   │   ├──────────────  |1⟩      ── alpha_E = E_12 - E_01 = -E_C
-   │   │   E_01 = √(8E_J E_C) - E_C
-   │   └──────────────  |0⟩
-   │
-   │        \                              /
-   │         \      dashed parabola       /   ← harmonic / Duffing approx
-   │          \____________________ _____/
-   │            true -E_J cos φ well  (minimum -E_J; barrier 2E_J)
-   └────────────────────────────────────────►  φ
-```
+![The cosine potential of a transmon with E_C/h = 0.25 GHz and E_J/E_C = 60, drawn in GHz from the well minimum at minus 15 to the barrier top at plus 15, with the four lowest exact levels and arrows labeling f01 = 5.214 GHz, f12 = 4.931 GHz and f23 = 4.618 GHz next to the quartic-approximation values 5.227, 4.977 and 4.727 GHz](figures/04-transmon-levels.png)
+
+*The ladder for this chapter's worked example ($E_C/h=0.25$ GHz, $E_J/E_C=60$), computed exactly in the charge basis. Each rung is narrower than the one below. The quartic formulas above get $f_{01}$ right to 0.3%, but the exact anharmonicity is $-283$ MHz rather than $-E_C/h=-250$ MHz: the leading-order $\alpha$ is a good guide, not a design number. The levels sit far below the barrier top ($2E_J$ above the minimum), which is why tunnelling between wells, and hence charge dispersion, is so strongly suppressed.*
 
 **The central trade-off.** Distinguish the two anharmonicities carefully:
 
@@ -143,7 +133,7 @@ Two junctions in parallel give $-E_{J1}\cos\varphi_1 - E_{J2}\cos\varphi_2$ subj
 $$E_{J,\mathrm{eff}}(\Phi) = E_{J,\Sigma}\sqrt{\cos^2(\pi\Phi/\Phi_0)+d^2\sin^2(\pi\Phi/\Phi_0)},
 \qquad d=\frac{E_{J2}-E_{J1}}{E_{J1}+E_{J2}},$$
 
-with $\Phi_0=h/2e$, $E_{J,\Sigma}=E_{J1}+E_{J2}$, and **asymmetry** $d$. For $d=0$ this reduces to the symmetric $E_{J,\Sigma}|\cos(\pi\Phi/\Phi_0)|$. Substitute $E_{J,\mathrm{eff}}(\Phi)$ into $\hbar\omega_{01}(\Phi)\simeq\sqrt{8E_{J,\mathrm{eff}}(\Phi)E_C}-E_C$ and flux now tunes the frequency in real time, how we bring qubits in and out of resonance for two-qubit gates.
+with $\Phi_0=h/2e$, $E_{J,\Sigma}=E_{J1}+E_{J2}$, and **asymmetry** $d$. For $d=0$ this reduces to the symmetric $E_{J,\Sigma}|\cos(\pi\Phi/\Phi_0)|$. Substitute $E_{J,\mathrm{eff}}(\Phi)$ into $\hbar\omega_{01}(\Phi)\simeq\sqrt{8E_{J,\mathrm{eff}}(\Phi)E_C}-E_C$ and flux now tunes the frequency in real time, which is how we bring qubits in and out of resonance for two-qubit gates.
 
 **Why asymmetry on purpose?** Real junctions are never perfectly matched, so $d\neq0$ always. But designers often *deliberately* make $d$ large: a nonzero $d$ raises the minimum of $E_{J,\mathrm{eff}}$ (it no longer reaches zero), shrinking the tuning range but flattening the curve, which reduces flux-noise sensitivity over the operating band.
 
@@ -163,17 +153,17 @@ At a flux sweet spot, expanding gives $\delta\omega_q \sim \tfrac12(\partial^2\o
 
 ## Common pitfalls
 
-- **"It's a different circuit from the CPB."** No, same circuit, same Hamiltonian; only $E_J/E_C$ changes.
+- **"It's a different circuit from the CPB."** No: same circuit, same Hamiltonian; only $E_J/E_C$ changes.
 - **"Maximize $E_J/E_C$."** The useful ratio depends on the design constraints. Raising $E_J$ at fixed $E_C$ mainly reduces relative anharmonicity; lowering $E_C$ also reduces absolute anharmonicity and can slow selective gates.
-- **"$\alpha<0$ is a defect."** No, it just means upper levels are more closely spaced; the sign matters for choosing DRAG parameters.
-- **"$n_g$ vanishes."** No, only its *effect* on the frequency is exponentially suppressed.
-- **"These formulas are exact."** No, $\hbar\omega_{01}=\sqrt{8E_JE_C}-E_C$ and $\alpha_E=-E_C$ are leading-order teaching approximations; for design you diagonalize the full Hamiltonian (Mathieu functions / numerics).
+- **"$\alpha<0$ is a defect."** No: it just means upper levels are more closely spaced; the sign matters for choosing DRAG parameters.
+- **"$n_g$ vanishes."** No: only its *effect* on the frequency is exponentially suppressed.
+- **"These formulas are exact."** No: $\hbar\omega_{01}=\sqrt{8E_JE_C}-E_C$ and $\alpha_E=-E_C$ are leading-order teaching approximations; for design you diagonalize the full Hamiltonian (Mathieu functions / numerics).
 
 ## Key takeaways
 
-- The transmon is a Cooper-pair box run at large $E_J/E_C$ ($\gtrsim20$, commonly about 50 to 100), achieved with a big shunt capacitor, same circuit, one ratio changed.
+- The transmon is a Cooper-pair box run at large $E_J/E_C$ ($\gtrsim20$, commonly about 50 to 100), achieved with a big shunt capacitor: same circuit, one ratio changed.
 - One perturbative line, $E_m\simeq -E_J+\sqrt{8E_CE_J}(m+\tfrac12)-\tfrac{E_C}{12}(6m^2+6m+3)$, yields $\omega_{01}$, $\alpha_E$, and the level crowding.
-- Charge dispersion is suppressed **exponentially** as $e^{-\sqrt{8E_J/E_C}}$; anharmonicity falls only as a **power law** $\alpha_r=-(8E_J/E_C)^{-1/2}$, exponential beats power law, opening a wide usable window.
+- Charge dispersion is suppressed **exponentially** as $e^{-\sqrt{8E_J/E_C}}$; anharmonicity falls only as a **power law** $\alpha_r=-(8E_J/E_C)^{-1/2}$. Exponential beats power law, opening a wide usable window.
 - **Absolute** $\alpha_E\approx-E_C$ (set by the charging energy) differs from **relative** $\alpha_r$ (slowly shrinks with $E_J/E_C$). Finite anharmonicity limits leakage to $|2\rangle$ and motivates DRAG.
 - A SQUID makes $E_{J,\mathrm{eff}}(\Phi)$ flux-tunable; junction asymmetry $d$ trades tuning range for flux-noise robustness; operate at a sweet spot where $\partial\omega_q/\partial\Phi=0$ to suppress first-order flux-noise dephasing.
 

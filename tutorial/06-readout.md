@@ -14,7 +14,7 @@ $$
 H/\hbar = \omega_r\, a^\dagger a - \tfrac{1}{2}\omega_q\,Z + g\left(a^\dagger \sigma_- + a\,\sigma_+\right).
 $$
 
-Three pieces: a harmonic resonator ($a^\dagger a$), a two-level qubit ($Z$), and a coupling that swaps **one photon for one qubit excitation**. That coupling conserves total excitation number, it's the rotating-wave term you keep when $g \ll \omega_q,\omega_r$.
+Three pieces: a harmonic resonator ($a^\dagger a$), a two-level qubit ($Z$), and a coupling that swaps **one photon for one qubit excitation**. That coupling conserves total excitation number; it's the rotating-wave term you keep when $g \ll \omega_q,\omega_r$.
 
 We use the readout (quantum-information) convention $Z = |0\rangle\langle0| - |1\rangle\langle1|$, so $Z = +1$ on $|0\rangle$ and $-1$ on $|1\rangle$. With this convention the physical qubit Hamiltonian carries the minus sign above, placing $|0\rangle$ below $|1\rangle$. (Chapter 05 used $\hat\sigma_z$ with $|e\rangle=+1$; since $Z=-\hat\sigma_z$, the dispersive Hamiltonians below are the *same physics* as Chapter 05's, just with flipped signs, not a sign error.)
 
@@ -46,11 +46,11 @@ $$
 \boxed{\,H_{\mathrm{disp}}/\hbar \approx \left(\omega_r - \chi\,Z\right) a^\dagger a - \tfrac{1}{2}\!\left(\omega_q + \chi\right)Z\,}
 $$
 
-Two things fell out at once. The $-\chi\,Z\,a^\dagger a$ term is a **cross-Kerr** coupling, and the leftover $-\tfrac12\chi Z$ is a Lamb shift of the qubit. The expansion parameter was $g/\Delta$, keep it small.
+Two things fell out at once. The $-\chi\,Z\,a^\dagger a$ term is a **cross-Kerr** coupling, and the leftover $-\tfrac12\chi Z$ is a Lamb shift of the qubit. The expansion parameter was $g/\Delta$; keep it small.
 
 ## 2. One term, two pictures
 
-That single cross-Kerr term $-\chi\,Z\,a^\dagger a$ is symmetric, you can group the operators two ways, and each grouping is a physical "picture."
+That single cross-Kerr term $-\chi\,Z\,a^\dagger a$ is symmetric: you can group the operators two ways, and each grouping is a physical "picture."
 
 ```mermaid
 flowchart TD
@@ -78,7 +78,7 @@ For the common transmon-readout case used below, $\Delta<0$ and $\alpha<0$, so $
 
 ## 4. Where it breaks: the critical photon number
 
-The dispersive expansion isn't free, it assumed $g/\Delta \ll 1$. But the *effective* coupling of a coherent field with $\bar n$ photons grows as $\sqrt{n+1}\,g$. Demanding the expansion stays valid, $\sqrt{\bar n}\,g/\Delta \lesssim \tfrac12$, defines the **critical photon number**:
+The dispersive expansion isn't free: it assumed $g/\Delta \ll 1$. But the *effective* coupling of a coherent field with $\bar n$ photons grows as $\sqrt{n+1}\,g$. Demanding the expansion stays valid, $\sqrt{\bar n}\,g/\Delta \lesssim \tfrac12$, defines the **critical photon number**:
 
 $$
 \boxed{\;n_{\mathrm{crit}} = \frac{\Delta^2}{4g^2}\;}
@@ -89,6 +89,10 @@ This is a two-level perturbative scale, not a universal sharp boundary for **mea
 ## 5. Reading it out in the IQ plane
 
 We probe the resonator with a microwave tone near $\omega_r$ and measure the reflected/transmitted signal. The qubit state shifts the resonance, changing **both the amplitude and the phase** of the returned tone. Near $\omega_r$ the state information usually lies mostly along one rotated quadrature. In practice the receiver performs phase-coherent IQ homodyne or low-IF heterodyne demodulation to obtain $I(t)$ and $Q(t)$, then rotates and integrates the optimal quadrature; each single-shot lands as a point, and the two qubit states form two Gaussian clouds.
+
+![Block diagram of heterodyne readout. An AWG produces I and Q envelopes at an intermediate frequency, an IQ mixer driven by a local oscillator up-converts them to a pulse near the resonator frequency, the pulse passes attenuators and filters inside the refrigerator to the chip, the reflected signal is amplified by a TWPA and a HEMT, leaves the refrigerator, is amplified again, down-converted by a second IQ mixer driven by the same local oscillator, digitized, demodulated and integrated into one point in the IQ plane, where a threshold separates two clouds for the states 0 and 1](figures/06-readout-chain.png)
+
+*One readout shot, end to end. Sharing one local oscillator between up- and down-conversion makes the measured phase stable from shot to shot, so the qubit-dependent phase of the reflected pulse survives as a stable position in the IQ plane. The digital weight $w(t)$ is chosen to emphasize the times when the two pointer states are most different. Chapter 10 details the cryogenic part.*
 
 ![Simulated single-shot IQ readout: two Gaussian clouds for qubit states 0 and 1, separated along I, with the decision threshold drawn between them and a marginal histogram showing the small overlap error](figures/06-iq-blobs.png)
 
@@ -119,7 +123,7 @@ C = 1 - P(0|1) - P(1|0), \qquad
 \varepsilon_{\mathrm{overlap}} \approx \tfrac12\,\mathrm{erfc}\!\left(\frac{\mathrm{SNR}}{2}\right).
 $$
 
-Doubling SNR suppresses the overlap error *exponentially*. But there's a catch that SNR can't fix: during the readout, the qubit can decay via $T_1$, contributing an error $\sim T_{\mathrm{meas}}/(2T_1)$ that *grows* with $T$. So integrating forever is counterproductive, there's an optimal $T_{\mathrm{meas}}$.
+Doubling SNR suppresses the overlap error *exponentially*. But there's a catch that SNR can't fix: during the readout, the qubit can decay via $T_1$, contributing an error $\sim T_{\mathrm{meas}}/(2T_1)$ that *grows* with $T$. So integrating forever is counterproductive; there's an optimal $T_{\mathrm{meas}}$.
 
 ## 6. Back-action: measurement-induced dephasing
 
@@ -131,7 +135,7 @@ $$
 \boxed{\;\frac{8\chi^2}{\kappa}\,\bar n\;}
 $$
 
-This is **unavoidable**: in an ideal ($\eta=1$) measurement, a quantum-limited receiver extracts information with a rate tied to this dephasing. Numerical equality depends on the measurement-rate definition and on whether one or both quadratures are detected. That is the rigorous statement behind "measure the resonator, learn the qubit." QND does *not* mean "no back-action", it means the measured observable $Z$ is preserved while its conjugates are scrambled.
+This is **unavoidable**: in an ideal ($\eta=1$) measurement, a quantum-limited receiver extracts information with a rate tied to this dephasing. Numerical equality depends on the measurement-rate definition and on whether one or both quadratures are detected. That is the rigorous statement behind "measure the resonator, learn the qubit." QND does *not* mean "no back-action"; it means the measured observable $Z$ is preserved while its conjugates are scrambled.
 
 ## 7. Purcell decay and the Purcell filter
 
@@ -141,11 +145,11 @@ $$
 \Gamma_{\mathrm{Purcell}} = \kappa\left(\frac{g}{\Delta}\right)^2, \qquad T_1^{\mathrm{Purcell}} = 1/\Gamma_{\mathrm{Purcell}}.
 $$
 
-Note the same $g/\Delta$ that sets $\chi$ also sets this decay, so faster readout (bigger $\kappa$) directly threatens $T_1$. The fix is a **Purcell filter**: a frequency-selective impedance that allows strong coupling to the output continuum near $\omega_r$ while suppressing the dissipative admittance seen by the qubit near $\omega_q$ (the impedance description depends on circuit topology). It multiplies $\Gamma_{\mathrm{Purcell}}$ by the filter's out-of-band rejection $|H(\omega_q)|^2 \ll 1$, decoupling readout speed from $T_1$. It's not just "more bandwidth", it's a stop band at the qubit frequency.
+Note the same $g/\Delta$ that sets $\chi$ also sets this decay, so faster readout (bigger $\kappa$) directly threatens $T_1$. The fix is a **Purcell filter**: a frequency-selective impedance that allows strong coupling to the output continuum near $\omega_r$ while suppressing the dissipative admittance seen by the qubit near $\omega_q$ (the impedance description depends on circuit topology). It multiplies $\Gamma_{\mathrm{Purcell}}$ by the filter's out-of-band rejection $|H(\omega_q)|^2 \ll 1$, decoupling readout speed from $T_1$. It's not just "more bandwidth"; it's a stop band at the qubit frequency.
 
 ## 8. The amplifier chain and the quantum limit
 
-The returned signal is of order *one photon*. A semiconductor HEMT (the workhorse cryogenic amp at ~4 K) adds 10-20 noise photons, it would bury a single-photon signal. **Caves' theorem** says any phase-insensitive linear amplifier must add at least half a photon:
+The returned signal is of order *one photon*. A semiconductor HEMT (the workhorse cryogenic amplifier at ~4 K) adds roughly 5-20 noise photons at readout frequencies, enough to bury a single-photon signal. **Caves' theorem** says any phase-insensitive linear amplifier must add at least half a photon:
 
 $$
 n_{\mathrm{add}} \ge \tfrac12, \qquad T_{\mathrm{added}} \ge \frac{hf}{2k_B}\;(\approx 0.14\text{ K at 6 GHz}).
@@ -157,7 +161,7 @@ $$
 T_N^{\mathrm{sys}} = T_{N,1} + \frac{T_{N,2}}{G_1} + \dots
 $$
 
-A quantum-limited first stage with gain $G_1 \sim 100$ divides the HEMT's contribution by 100, to about $0.1$ to $0.2$ photons, so the first stage dominates. So we place a JPA or TWPA *first*, it sets the system noise near the quantum limit. Order matters more than individual quality.
+A quantum-limited first stage with gain $G_1 \sim 100$ divides the HEMT's contribution by 100, to about $0.05$ to $0.2$ photons, so the first stage dominates. So we place a JPA or TWPA *first*: it sets the system noise near the quantum limit. Order matters more than individual quality.
 
 ```mermaid
 flowchart TD
@@ -165,7 +169,7 @@ flowchart TD
     R -->|"kappa"| PF["Purcell filter"]
     PF --> ISO["Isolators /<br/>circulator"]
     ISO --> PA["TWPA or JPA<br/>~quantum limited<br/>(FIRST)"]
-    PA --> HEMT["HEMT ~4 K<br/>adds 10-20<br/>photons"]
+    PA --> HEMT["HEMT ~4 K<br/>adds ~5-20<br/>photons"]
     HEMT --> RT["Room-temp amp<br/>+ IQ demod"]
     RT --> ADC["Digitizer<br/>-> I, Q"]
 ```
@@ -174,17 +178,17 @@ flowchart TD
 |---|---|---|---|---|---|---|
 | JPA | Resonant Josephson | ~20 dB | ~tens of MHz | ~0.5-1 photon (near SQL) | low | narrowband first stage |
 | TWPA | Traveling-wave | ~20 dB | ~GHz | ~1-2 photons | higher | broadband multiplexed first stage |
-| HEMT | Semiconductor | ~40 dB | multi-GHz | ~10-20 photons (few K) | high | second stage at 4 K |
+| HEMT | Semiconductor | ~40 dB | multi-GHz | ~5-20 photons (2-5 K) | high | second stage at 4 K |
 
 \*All numbers illustrative.
 
 ## 9. Why $2|\chi| \sim \kappa$, and the trade space
 
-Maximize integrated SNR per unit time at fixed photon number. The SNR rate $\propto\kappa|\alpha_0-\alpha_1|^2$ (escape rate times pointer separation) is largest when the two Lorentzian responses (width $\kappa$, split by $2|\chi|$) are *just resolved*, too narrow a $\kappa$ imprints lots of phase but leaks slowly; too broad a $\kappa$ is fast but smears the phase contrast and worsens Purcell. A common design scale is $2|\chi|\sim\kappa$, but the exact optimum depends on drive frequency, photon number, integration time, filtering, and allowed measurement-induced transitions.
+Maximize integrated SNR per unit time at fixed photon number. The SNR rate $\propto\kappa|\alpha_0-\alpha_1|^2$ (escape rate times pointer separation) is largest when the two Lorentzian responses (width $\kappa$, split by $2|\chi|$) are *just resolved*: too narrow a $\kappa$ imprints lots of phase but leaks slowly; too broad a $\kappa$ is fast but smears the phase contrast and worsens Purcell. A common design scale is $2|\chi|\sim\kappa$, but the exact optimum depends on drive frequency, photon number, integration time, filtering, and allowed measurement-induced transitions.
 
 ![State-dependent resonator response for the worked example: two Lorentzian magnitude peaks of width kappa split by two chi, and the transmitted phase curves whose contrast is maximal for a probe at the midpoint of the two dressed resonator frequencies](figures/06-resonator-pull.png)
 
-*The worked example's resonator response for the qubit in $|0\rangle$ vs $|1\rangle$: two Lorentzians of width $\kappa/2\pi = 2$ MHz, centered at $\omega_r \mp \chi$ and split by $2|\chi|/2\pi = 1.3$ MHz. Probing at $\omega_r$ (dashed) picks up the maximal phase contrast between the two curves. Note that with our signed $\chi<0$, the $|0\rangle$ peak is the upper one, cartoons in many references silently assume $\chi>0$.*
+*The worked example's resonator response for the qubit in $|0\rangle$ vs $|1\rangle$: two Lorentzians of width $\kappa/2\pi = 2$ MHz, centered at $\omega_r \mp \chi$ and split by $2|\chi|/2\pi = 1.3$ MHz. Probing at $\omega_r$ (dashed) picks up the maximal phase contrast between the two curves. Note that with our signed $\chi<0$, the $|0\rangle$ peak is the upper one; cartoons in many references silently assume $\chi>0$.*
 
 | Knob | Increase helps | Increase hurts |
 |---|---|---|
@@ -212,19 +216,19 @@ This already sits around 99.6%, and note where the error actually lives: $T_1$ d
 
 ## Common pitfalls
 
-- **"Dispersive readout measures the qubit."** No, it measures the *resonator field*. The qubit's $Z$ is inferred through the dispersive interaction, which is why that observable is preserved in the ideal QND model.
+- **"Dispersive readout measures the qubit."** No: it measures the *resonator field*. The qubit's $Z$ is inferred through the dispersive interaction, which is why that observable is preserved in the ideal QND model.
 - **"More photons are always better."** Increasing photons eventually invalidates perturbation theory and can induce transitions; the actual onset depends on the multilevel spectrum.
 - **"QND means no back-action."** Only $Z$ is protected; $\sigma_x,\sigma_y$ dephase as the outgoing field carries state information.
 - **"$\chi = g^2/\Delta$ for a transmon."** The third level cancels part of it: $\chi = (g^2/\Delta)\,\alpha/(\Delta+\alpha)$.
-- **"Just buy a better HEMT."** Friis says the *first* stage sets system noise, a quantum-limited JPA/TWPA in front is what matters.
+- **"Just buy a better HEMT."** Friis says the *first* stage sets system noise; a quantum-limited JPA/TWPA in front is what matters.
 - **"Any amplifier reaches the quantum limit."** Caves forbids $n_{\mathrm{add}}<\tfrac12$ for phase-insensitive amps; only squeezing beats it, and only for one quadrature.
 
 ## Key takeaways
 
 - The cross-Kerr term $-\chi\,Z\,a^\dagger a$ gives two equivalent pictures: resonator pulls separated by $2|\chi|$ (what we read) and ac-Stark shift $2\chi\bar n$ (the back-action).
-- For a transmon, $\chi = \dfrac{g^2}{\Delta}\dfrac{\alpha}{\Delta+\alpha}$, the third level matters.
+- For a transmon, $\chi = \dfrac{g^2}{\Delta}\dfrac{\alpha}{\Delta+\alpha}$: the third level matters.
 - The two-level scale $n_{\mathrm{crit}} = \Delta^2/(4g^2)$ flags loss of perturbative validity; multilevel resonances can impose tighter limits.
-- $\mathrm{SNR}^2 \approx \eta\,(16\chi^2/\kappa)\,\bar n\,T$ (for $2|\chi|\ll\kappa$; a factor $\sim2$ high by $2|\chi|\sim\kappa$, use the exact form there), and $\varepsilon_{\mathrm{overlap}}\approx\tfrac12\mathrm{erfc}(\mathrm{SNR}/2)$, but $T_1$ decay caps the useful integration time.
+- $\mathrm{SNR}^2 \approx \eta\,(16\chi^2/\kappa)\,\bar n\,T$ (for $2|\chi|\ll\kappa$; it is a factor $\sim2$ too high by $2|\chi|\sim\kappa$, so use the exact form there), and $\varepsilon_{\mathrm{overlap}}\approx\tfrac12\mathrm{erfc}(\mathrm{SNR}/2)$, but $T_1$ decay caps the useful integration time.
 - Back-action is unavoidable: $\Gamma_\phi^{\mathrm{meas}} = 8\chi^2\bar n/\kappa$ (for $2|\chi|\ll\kappa$) sets the measurement back-action scale; information-rate conventions must be specified separately.
 - A **Purcell filter** decouples $\kappa$ from $T_1$; a **JPA/TWPA first** sets system noise near the Caves limit ($n_{\mathrm{add}}\ge\tfrac12$).
 - Operate near the appropriate $2|\chi|/\kappa$ design scale, with $\bar n\ll n_{\mathrm{crit}}$.
