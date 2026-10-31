@@ -6,7 +6,7 @@ We now have a transmon at frequency $\omega_q$, a dispersive readout (Ch. 6), an
 
 ## Calibration is a feedback loop, not a checklist
 
-Every gate depends on a handful of physical parameters, each found by a dedicated *sweep-and-fit* experiment. Crucially these parameters **drift**, frequencies wander with temperature and two-level-system noise on hour-to-day timescales, so the whole set is re-run periodically. Calibration and benchmarking are one closed cycle: you tune, you grade, and if the grade slips you tune again.
+Every gate depends on a handful of physical parameters, each found by a dedicated *sweep-and-fit* experiment. Crucially, these parameters **drift**: frequencies wander with temperature and two-level-system noise on hour-to-day timescales, so the whole set is re-run periodically. Calibration and benchmarking are one closed cycle: you tune, you grade, and if the grade slips you tune again.
 
 ```mermaid
 flowchart TD
@@ -26,8 +26,8 @@ The individual steps:
 - **Qubit frequency $\omega_q$: fine, plus $T_2^*$ (Ramsey).** Two $\pi/2$ pulses separated by a delay $\tau$ convert a small detuning into a beat. If the fitted beat is $\Delta f$ in Hz, then $\delta\omega=2\pi\Delta f$. This is kHz-level and is how you track drift.
 - **Pulse amplitude (Rabi).** Sweep drive amplitude (or duration), fit the Rabi oscillation, pick the amplitude giving exactly a $\pi$ rotation.
 - **DRAG & leakage.** A transmon is only weakly anharmonic ($\alpha/2\pi \sim -200$ MHz, illustrative), so a fast pulse has spectral weight at the $1\!\leftrightarrow\!2$ transition and *leaks* into $|2\rangle$. The **DRAG** technique adds a quadrature component proportional to the derivative of the main pulse to cancel that leakage and the associated phase error; the DRAG coefficient is itself a calibrated knob.
-- **AllXY fine-tuning.** A fixed sequence of 21 pulse pairs, each drawn from the identity and $\pi$ and $\pi/2$ rotations about the $X$ and $Y$ axes, whose ideal outcome is a known staircase. Different error types (amplitude, detuning, DRAG phase) deform the staircase in characteristic, distinguishable ways, a cheap, sensitive diagnostic for the residuals Rabi/Ramsey miss.
-- **Readout.** Calibrate $\chi$, choose the readout frequency and power that best separate the $|0\rangle$/$|1\rangle$ pointer states in the IQ plane, and fit the discrimination boundary. (More below, the full story is the *assignment matrix*.)
+- **AllXY fine-tuning.** A fixed sequence of 21 pulse pairs, each drawn from the identity and $\pi$ and $\pi/2$ rotations about the $X$ and $Y$ axes, whose ideal outcome is a known staircase. Different error types (amplitude, detuning, DRAG phase) deform the staircase in characteristic, distinguishable ways, which makes AllXY a cheap, sensitive diagnostic for the residuals Rabi/Ramsey miss.
+- **Readout.** Calibrate $\chi$, choose the readout frequency and power that best separate the $|0\rangle$/$|1\rangle$ pointer states in the IQ plane, and fit the discrimination boundary. (More below: the full story is the *assignment matrix*.)
 
 ### The engine underneath: error amplification
 
@@ -59,13 +59,17 @@ Step by step:
 
 ## Randomized benchmarking (RB)
 
-The naive way to grade a gate, run it, do tomography, compare to ideal, is contaminated by *state-preparation and measurement* (SPAM) errors, which can dwarf the gate error. RB sidesteps this.
+The naive way to grade a gate (run it, do tomography, compare to ideal) is contaminated by *state-preparation and measurement* (SPAM) errors, which can dwarf the gate error. RB sidesteps this.
 
 **The recipe.** Choose a set of sequence lengths $m$. For each $m$, draw $K$ random Clifford sequences; append the unique recovery Clifford that inverts the sequence (ideally returning to $|0\rangle$). Measure ground-state survival, average over the $K$ sequences, and fit
 
 $$ F(m) = A\,p^{\,m} + B. $$
 
 Here $A$ and $B$ absorb time-independent SPAM into *offset and amplitude*, so the **decay rate $p$ is SPAM-robust** under the RB model.
+
+![Two circuit diagrams on one qubit starting in |0>. Standard RB: random Clifford gates C1, C2, C3 through Cm followed by a green recovery Clifford and a measurement of survival probability. Interleaved RB: the same, with an orange gate G inserted after every random Clifford](figures/11-rb-sequence.png)
+
+*Randomized benchmarking in two lines. Because the recovery gate undoes the whole random sequence, an ideal device always returns to $|0\rangle$; errors make the survival probability decay with length $m$. Interleaving the gate $G$ under test makes the decay faster by exactly the amount $G$ contributes, which interleaved RB (below) extracts.*
 
 ### Why one number? The twirl
 
@@ -90,7 +94,7 @@ $$ r = \frac{(d-1)(1-p)}{d}, \qquad d = 2^{n}, \qquad F_{\text{avg}} = p + \frac
 
 ![Randomized benchmarking decay curves: two curves with identical decay constant but different SPAM offsets, plus a faster-decaying interleaved curve, showing that SPAM moves only the amplitude and offset while gate error alone sets the decay](figures/11-rb-decay.png)
 
-*Three RB decays. The solid and dashed curves have **the same $p$** (same gate error $r$), they differ only in SPAM, which rescales $A$ and shifts $B$ but cannot mimic a different decay rate. The dotted curve is an interleaved experiment (Section below): the extra per-step error of the interleaved gate shows up as a genuinely faster decay.*
+*Three RB decays. The solid and dashed curves have **the same $p$** (same gate error $r$); they differ only in SPAM, which rescales $A$ and shifts $B$ but cannot mimic a different decay rate. The dotted curve is an interleaved experiment (Section below): the extra per-step error of the interleaved gate shows up as a genuinely faster decay.*
 
 ### Interleaved RB (IRB): isolating one gate
 
@@ -126,27 +130,15 @@ $$ M_{ij} = \Pr(\text{measure } i \mid \text{prepared } j), \qquad \vec{p}_{\tex
 
 With raw measured $\vec p_{\text{meas}}=[0.55,\,0.45]$, inverting gives $\vec p_{\text{true}}=M^{-1}\vec p_{\text{meas}}\approx[0.538,\,0.462]$, and $F_a = 1-\tfrac12(0.03+0.06)=0.955$ (illustrative).
 
-> **Pitfall.** Naive $M^{-1}$ can return **negative probabilities** and amplifies statistical noise, and the full matrix is $2^n\times 2^n$, exponential to calibrate. Use constrained least-squares / iterative unfolding (keep counts $\ge 0$) and tensor-product or subset approximations. And note: $F_a$ is reported **separately**, RB deliberately cancels readout error from the gate number.
+> **Pitfall.** Naive $M^{-1}$ can return **negative probabilities** and amplifies statistical noise, and the full matrix is $2^n\times 2^n$, exponential to calibrate. Use constrained least-squares / iterative unfolding (keep counts $\ge 0$) and tensor-product or subset approximations. And note: $F_a$ is reported **separately**; RB deliberately removes readout error from the gate number.
 
 ## Coherent vs incoherent errors, the deepest trap
 
 Two gates with identical $r$ can behave completely differently in a deep circuit.
 
-```
-   INCOHERENT (depolarize)          COHERENT (over-rotation)
-        . - .                            . - .
-      / ↓ ↓ ↓ \                        /  ↻    \      rigid tilt
-     |  →• ← |  shrunk sphere         |  •-↗   |      by small angle
-      \ ↑ ↑ ↑ /                        \       /
-        ' - '                            ' - '
-   error ~ LINEAR in depth          error ~ QUADRATIC, worst-case large
+![Three panels. (a) A dashed unit circle with a smaller solid blue circle inside and inward arrows: a stochastic error shrinks the Bloch sphere. (b) A red unit circle with a state arrow tilted by an angle N epsilon from the vertical: a coherent error rotates the sphere rigidly. (c) Log-log plot of average infidelity versus number of gates for an error per gate of ten to the minus four: the depolarizing curve rises with slope one, the over-rotation curve with slope two, reaching about 0.6 after 100 gates](figures/11-coherent-vs-incoherent.png)
 
-   error |          coherent (curve)         The two have the SAME r
-    vs N  |        ,·'                        at small N but diverge:
-          |      ,·'                          coherent accumulates faster.
-          |   _,·'____ incoherent (line)
-          +----------------------------- N
-```
+*Same average error per gate, very different futures. A depolarizing error (a) loses a little information every time, and infidelity grows linearly with depth. A small systematic over-rotation (b) loses nothing, but its angles add coherently, so infidelity grows quadratically (c): after 100 gates at $r=10^{-4}$ the depolarizing qubit is at 1% infidelity while the over-rotated one is past 50%.*
 
 - **Incoherent** errors randomize rather than apply a fixed rotation. Depolarization shrinks the Bloch sphere uniformly; dephasing shrinks the transverse components. In average fidelity they add roughly **linearly** with depth.
 - **Coherent** (calibration/over-rotation) errors *rotate* the sphere rigidly; amplitudes can interfere constructively, so worst-case error can be much larger and accumulate **quadratically**. For a fixed average $r$, coherent errors are generally the more dangerous.
@@ -203,7 +195,7 @@ $$
 
 ## Common pitfalls
 
-- **"RB gives THE gate error."** No, an *average* over the Clifford group, not a single physical gate and not worst-case. Divide by the average native-gates-per-Clifford for a rough per-gate error.
+- **"RB gives THE gate error."** No: it is an *average* over the Clifford group, not a single physical gate and not worst-case. Divide by the average native-gates-per-Clifford for a rough per-gate error.
 - **"High fidelity = safe gate."** RB alone does not diagnose coherent accumulation; two gates with the same $r$ can diverge in deep circuits. Use unitarity RB and remember the diamond norm exists.
 - **"$p$ is just readout error."** In the standard RB model, static SPAM lives in $A$ and $B$, not in $p$. Drift, leakage, or model failure still need residual checks.
 - **"Readout fidelity is part of RB."** It is separate ($F_a$ / the assignment matrix).

@@ -2,7 +2,7 @@
 
 > **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
 
-Before we build a qubit, we need to understand the simplest quantum circuit: the humble LC oscillator. It's the "hydrogen atom" of superconducting hardware, simple enough to solve exactly, yet it teaches us the language (flux, charge, ladder operators, zero-point fluctuations, impedance) we'll use everywhere else. The punchline, which we'll arrive at by the end, is that this perfect oscillator is *almost* a qubit, but a fatal flaw forces us to add the Josephson junction in the next chapter.
+Before we build a qubit, we need to understand the simplest quantum circuit: the humble LC oscillator. It's the "hydrogen atom" of superconducting hardware: simple enough to solve exactly, yet rich enough to teach the language (flux, charge, ladder operators, zero-point fluctuations, impedance) we'll use everywhere else. The punchline, which we'll arrive at by the end, is that this perfect oscillator is *almost* a qubit, but a fatal flaw forces us to add the Josephson junction in the next chapter.
 
 Here's the whole arc of this chapter at a glance:
 
@@ -23,6 +23,10 @@ flowchart TD
 
 Picture an inductor $L$ and a capacitor $C$ wired in a loop. Classically, charge sloshes back and forth between them, with energy trading between the capacitor's electric field and the inductor's magnetic field, exactly like a mass on a spring trades kinetic and potential energy.
 
+![Left: an LC circuit with a capacitor and an inductor sharing one node, labeled node flux Phi, with plus and minus Q on the capacitor plates and a current arrow through the inductor. Right: a mass on a spring attached to a wall, with a dictionary mapping position to flux, momentum to charge, mass to capacitance, stiffness to inverse inductance, and the two commutators](figures/02-lc-circuit.png)
+
+*The LC circuit has a single dynamical node (a), so it has one degree of freedom, just like the mass on a spring (b). The rest of this chapter makes the dictionary on the right precise.*
+
 (A note on notation: we call the resonance $\omega_q$ throughout because this same circuit, once the junction bends its ladder, *becomes* the qubit; the linear readout resonators of Chapters 05-06 will get their own symbol $\omega_r$.)
 
 To quantize a circuit the way we quantize mechanics, we need a *coordinate* and its *conjugate momentum*, and the cleanest route is to write a Lagrangian first. The natural coordinate is the **node flux**
@@ -31,8 +35,8 @@ $$\Phi(t) = \int_{-\infty}^{t} V(t')\,dt',$$
 
 the time integral of the voltage at the node, so that $V = \dot\Phi$ (the node-flux coordinate; for an inductor branch it coincides with the usual magnetic flux variable). Two short steps build the Lagrangian:
 
-1. **Capacitive ("kinetic") energy.** The charge on the capacitor is $Q = CV = C\dot\Phi$, so its stored energy is $\tfrac{Q^2}{2C} = \tfrac{1}{2}C\dot\Phi^2$. This is quadratic in the *velocity* $\dot\Phi$, it behaves like kinetic energy.
-2. **Inductive ("potential") energy.** The energy stored in the inductor is $\tfrac{\Phi^2}{2L}$. This is quadratic in the *coordinate* $\Phi$ itself, it behaves like potential energy.
+1. **Capacitive ("kinetic") energy.** The charge on the capacitor is $Q = CV = C\dot\Phi$, so its stored energy is $\tfrac{Q^2}{2C} = \tfrac{1}{2}C\dot\Phi^2$. This is quadratic in the *velocity* $\dot\Phi$, so it behaves like kinetic energy.
+2. **Inductive ("potential") energy.** The energy stored in the inductor is $\tfrac{\Phi^2}{2L}$. This is quadratic in the *coordinate* $\Phi$ itself, so it behaves like potential energy.
 
 Subtracting potential from kinetic ($\mathcal{L}=T-U$) gives the circuit Lagrangian:
 
@@ -48,7 +52,7 @@ Now the payoff. In Lagrangian mechanics the momentum conjugate to a coordinate i
 
 $$Q = \frac{\partial \mathcal{L}}{\partial \dot{\Phi}} = C\dot{\Phi}.$$
 
-The canonical momentum conjugate to flux is *exactly the physical charge on the capacitor*, a very satisfying consistency check. This is the precise sense in which "flux and charge are conjugate": they are a coordinate-momentum pair, not just two circuit quantities that happen to be related.
+The canonical momentum conjugate to flux is *exactly the physical charge on the capacitor*: a satisfying consistency check. This is the precise sense in which "flux and charge are conjugate": they are a coordinate-momentum pair, not just two circuit quantities that happen to be related.
 
 A Legendre transform $H = Q\dot\Phi - \mathcal{L}$, with $\dot\Phi = Q/C$ substituted in, gives the Hamiltonian:
 
@@ -76,7 +80,7 @@ The crucial quantum step is to promote $\Phi$ and $Q$ to operators that **do not
 
 $$[\hat{\Phi}, \hat{Q}] = i\hbar.$$
 
-This is *not* an extra physical assumption about circuits, it is plain canonical quantization applied to a conjugate pair, the very same move as $[\hat x,\hat p]=i\hbar$. Everything quantum from here on (uncertainty, zero-point fluctuations, the discrete ladder) is a mathematical consequence of this one line. Immediately it implies a Heisenberg bound:
+This is *not* an extra physical assumption about circuits; it is plain canonical quantization applied to a conjugate pair, the very same move as $[\hat x,\hat p]=i\hbar$. Everything quantum from here on (uncertainty, zero-point fluctuations, the discrete ladder) is a mathematical consequence of this one line. Immediately it implies a Heisenberg bound:
 
 $$\Delta\Phi\,\Delta Q \ge \frac{\hbar}{2},$$
 
@@ -100,7 +104,7 @@ Substituting these into $H = Q^2/2C + \Phi^2/2L$ and using $\Phi_{\rm zpf}^2/L =
 
 $$\hat{H} = \hbar\omega_q\left(\hat{a}^\dagger\hat{a} + \tfrac{1}{2}\right), \qquad \omega_q = \frac{1}{\sqrt{LC}}.$$
 
-The number operator $\hat{a}^\dagger\hat{a}$ counts **excitations**, quanta of microwave energy, genuine *microwave photons* living in the circuit. The eigenstates are number states $|0\rangle, |1\rangle, |2\rangle,\dots$ with energies
+The number operator $\hat{a}^\dagger\hat{a}$ counts **excitations**: quanta of microwave energy, genuine *microwave photons* living in the circuit. The eigenstates are number states $|0\rangle, |1\rangle, |2\rangle,\dots$ with energies
 
 $$E_n = \hbar\omega_q\left(n + \tfrac{1}{2}\right).$$
 
@@ -118,7 +122,7 @@ $$\langle 0|\hat\Phi^2|0\rangle = \Phi_{\rm zpf}^2, \qquad \langle 0|\hat Q^2|0\
 
 $$\Phi_{\rm zpf} = \sqrt{\frac{\hbar Z}{2}}, \qquad Q_{\rm zpf} = \sqrt{\frac{\hbar}{2Z}}, \qquad \Phi_{\rm zpf}\,Q_{\rm zpf} = \frac{\hbar}{2}.$$
 
-Their product *saturates* the Heisenberg bound, the LC vacuum is a minimum-uncertainty state. Notice the role of impedance: a **large $Z$** gives big phase/flux fluctuations and small Cooper-pair-number fluctuations, while a **small $Z$** does the opposite. In dimensionless variables $\varphi=2\pi\Phi/\Phi_0$ and $n=Q/2e$,
+Their product *saturates* the Heisenberg bound: the LC vacuum is a minimum-uncertainty state. Notice the role of impedance: a **large $Z$** gives big phase/flux fluctuations and small Cooper-pair-number fluctuations, while a **small $Z$** does the opposite. In dimensionless variables $\varphi=2\pi\Phi/\Phi_0$ and $n=Q/2e$,
 
 $$\varphi_{\rm zpf}=\sqrt{\pi Z/R_Q},\qquad n_{\rm zpf}=\sqrt{R_Q/(4\pi Z)},\qquad R_Q=h/4e^2.$$
 
@@ -132,11 +136,11 @@ Excitations are real photons, so whether the circuit actually sits in $|0\rangle
 
 $$\bar n = \frac{1}{e^{\hbar\omega_q/k_B T} - 1}.$$
 
-If $\hbar\omega_q \gg k_B T$, then $\bar n \approx 0$ and the mode is frozen in its ground state; if not, thermal photons swamp the quantum behaviour. This is the quantitative reason superconducting circuits live at millikelvin temperatures, see the worked example below.
+If $\hbar\omega_q \gg k_B T$, then $\bar n \approx 0$ and the mode is frozen in its ground state; if not, thermal photons swamp the quantum behaviour. This is the quantitative reason superconducting circuits live at millikelvin temperatures (see the worked example below).
 
 ![Thermal occupation of a 5 gigahertz mode versus temperature on log-log axes, falling seven orders of magnitude between 300 millikelvin and 15 millikelvin, with the crossover temperature of 240 millikelvin marked](figures/02-thermal-occupation.png)
 
-*Why millikelvin: $\bar n$ for the worked example's 5 GHz mode vs. temperature. At 300 mK the mode holds $\bar n\approx0.8$ thermal photons, useless; at 15 mK it holds $\sim10^{-7}$, vacuum for all practical purposes. The cliff between them spans seven orders of magnitude, and the crossover sits at $\hbar\omega_q/k_B = 240$ mK.*
+*Why millikelvin: $\bar n$ for the worked example's 5 GHz mode vs. temperature. At 300 mK the mode holds $\bar n\approx0.8$ thermal photons, useless for quantum work; at 15 mK it holds $\sim10^{-7}$, vacuum for all practical purposes. The cliff between them spans seven orders of magnitude, and the crossover sits at $\hbar\omega_q/k_B = 240$ mK.*
 
 ## A worked example (illustrative numbers)
 
@@ -154,7 +158,7 @@ Take an LC resonator with **illustrative** values $L = 1.59~\text{nH}$ and $C = 
 | $\bar n$ at $15~\text{mK}$ | $\approx 1.1\times10^{-7}$ (ground state) |
 | $\bar n$ at $300~\text{mK}$ | $\approx 0.8$ (thermally excited) |
 
-Walking through it: (1) $\omega_q = 1/\sqrt{LC} = 3.14\times10^{10}~\text{rad/s}$, i.e. $f_q = 5.0~\text{GHz}$, squarely in the microwave band. (2) A single excitation costs $\hbar\omega_q \approx 3.3\times10^{-24}~\text{J}$. (3) Check the uncertainty product: $\Phi_{\rm zpf}Q_{\rm zpf} = 5.1\times10^{-17}\times1.03\times10^{-18} \approx 5.3\times10^{-35}~\text{J·s} = \hbar/2$ exactly, the vacuum saturates the bound. (4) Since $\hbar\omega_q/k_B = 240~\text{mK}$, a dilution fridge at $15~\text{mK}$ gives $\bar n \approx 10^{-7}$ (essentially $|0\rangle$), whereas at $300~\text{mK}$ the same mode has $\bar n \approx 0.8$ and is useless as a clean quantum system. That is millikelvin operation, justified in one inequality.
+Walking through it: (1) $\omega_q = 1/\sqrt{LC} = 3.14\times10^{10}~\text{rad/s}$, i.e. $f_q = 5.0~\text{GHz}$, squarely in the microwave band. (2) A single excitation costs $\hbar\omega_q \approx 3.3\times10^{-24}~\text{J}$. (3) Check the uncertainty product: $\Phi_{\rm zpf}Q_{\rm zpf} = 5.1\times10^{-17}\times1.03\times10^{-18} \approx 5.3\times10^{-35}~\text{J·s} = \hbar/2$: the vacuum saturates the bound. (4) Since $\hbar\omega_q/k_B = 240~\text{mK}$, a dilution fridge at $15~\text{mK}$ gives $\bar n \approx 10^{-7}$ (essentially $|0\rangle$), whereas at $300~\text{mK}$ the same mode has $\bar n \approx 0.8$ and is useless as a clean quantum system. That is millikelvin operation, justified in one inequality.
 
 ## Why a uniform ladder can't be a qubit
 
@@ -165,25 +169,17 @@ $$\alpha \equiv \omega_{12}-\omega_{01}
 
 vanishes exactly. A pulse resonant with $0\to1$ is *equally* resonant with $1\to2$, $2\to3$, … so population leaks straight up the ladder. No pulse shape can fix this; with $\alpha=0$ there is literally no spectrum that isolates two levels.
 
-```
-   Harmonic (α = 0)                 Anharmonic (α < 0)
-   ───── |3⟩                        ──── |3⟩
-     ↑ omega_q (leak!)                 ↑ omega_01 + 2 alpha  (off-resonant)
-   ───── |2⟩                        ──── |2⟩
-     ↑ omega_q (leak!)                 ↑ omega_01 + alpha   (smaller gap)
-   ───── |1⟩                        ──── |1⟩
-     ↑ omega_q drive omega_q           ↑ omega_01       drive here
-   ───── |0⟩                        ──── |0⟩
-   one drive climbs ALL rungs       drive at omega_01 misses 1->2
-```
+![Side-by-side energy ladders: equally spaced levels in a parabola, all rungs resonant with one drive, versus a cosine well whose rungs shrink so that only the lowest transition is resonant](figures/01-energy-ladders.png)
 
-To make a qubit we must *bend the ladder* so $0\to1$ and $1\to2$ sit at different frequencies. For scale, a real transmon deliberately introduces **(illustrative)** $\alpha/2\pi \approx -200$ to $-300~\text{MHz}$, a few percent of $f_q=\omega_q/2\pi$, so the $1\to2$ transition is detuned enough that suitably slow or shaped pulses keep leakage small (Chapter 03).
+*Harmonic versus anharmonic ladder (repeated from Chapter 01). Left: the LC oscillator of this chapter. Right: what the Josephson junction of Chapter 03 does to it.*
+
+To make a qubit we must *bend the ladder* so $0\to1$ and $1\to2$ sit at different frequencies. For scale, a real transmon deliberately introduces **(illustrative)** $\alpha/2\pi \approx -200$ to $-300~\text{MHz}$, a few percent of $f_q=\omega_q/2\pi$, so the $1\to2$ transition is detuned enough that suitably slow or shaped pulses keep leakage small (Chapter 03 builds the nonlinearity; Chapter 07 shapes the pulses).
 
 Crucially, the nonlinear element must be (a) **non-dissipative** and Hamiltonian, because a resistor couples the mode to a lossy bath and broadens or thermalizes levels instead of producing a coherent anharmonic ladder, and (b) **functional at millikelvin**. The standard circuit element meeting both requirements is the **Josephson junction**, whose nonlinear inductance is the entire subject of the next chapter.
 
 ## Key takeaways
 
-- A Lagrangian in the node flux $\Phi$ ($\mathcal{L}=\tfrac12 C\dot\Phi^2 - \Phi^2/2L$) makes charge the conjugate momentum, $Q=C\dot\Phi$, that's *why* flux and charge are conjugate.
+- A Lagrangian in the node flux $\Phi$ ($\mathcal{L}=\tfrac12 C\dot\Phi^2 - \Phi^2/2L$) makes charge the conjugate momentum, $Q=C\dot\Phi$: that is *why* flux and charge are conjugate.
 - One postulate, $[\hat\Phi,\hat Q]=i\hbar$, delivers uncertainty, the ladder, and zero-point fluctuations; it's just $[\hat x,\hat p]=i\hbar$ in disguise.
 - Diagonalizing gives $E_n=\hbar\omega_q(n+\tfrac12)$ with $\omega_q=1/\sqrt{LC}$, built from $\hat a,\hat a^\dagger$ weighted by $Z=\sqrt{L/C}$.
 - The vacuum genuinely fluctuates: $\Phi_{\rm zpf}=\sqrt{\hbar Z/2}$, $Q_{\rm zpf}=\sqrt{\hbar/(2Z)}$, product $\hbar/2$. Impedance vs. $R_Q\approx6.45~\text{k}\Omega$ sets flux-like vs. charge-like.

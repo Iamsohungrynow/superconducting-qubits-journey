@@ -2,9 +2,9 @@
 
 > **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
 
-A superconducting qubit is, electrically, just a few-GHz microwave circuit. To read it out and control it, we send microwave tones down a wire to the chip and bring the reflected signal back up to a room-temperature amplifier and digitizer. The catch: the qubit lives near its ground state, with a transition energy $\hbar\omega_q$ that corresponds to a temperature of only $\hbar\omega_q/k_B \approx 0.24\,$K for a 5 GHz qubit. Room-temperature wires carry **thermal photons**, blackbody noise, that would scramble the qubit instantly. The entire cryogenic and microwave chain exists to deliver clean control signals while ruthlessly blocking that noise. This chapter is about how the plumbing achieves that, and why each piece is forced on us by physics rather than chosen for convenience.
+A superconducting qubit is, electrically, just a few-GHz microwave circuit. To read it out and control it, we send microwave tones down a wire to the chip and bring the reflected signal back up to a room-temperature amplifier and digitizer. The catch: the qubit lives near its ground state, with a transition energy $\hbar\omega_q$ that corresponds to a temperature of only $\hbar\omega_q/k_B \approx 0.24\,$K for a 5 GHz qubit. Room-temperature wires carry **thermal photons** (blackbody noise) that would scramble the qubit instantly. The entire cryogenic and microwave chain exists to deliver clean control signals while ruthlessly blocking that noise. This chapter is about how the plumbing achieves that, and why each piece is forced on us by physics rather than chosen for convenience.
 
-The single master figure of merit is the **mean thermal photon occupation** of a mode at frequency $\omega$ and temperature $T$. Everything else, attenuators, filters, isolators, amplifiers, is in service of driving this number, *referred to the chip*, down to $\sim 10^{-2}$ or below at the qubit frequency.
+The single master figure of merit is the **mean thermal photon occupation** of a mode at frequency $\omega$ and temperature $T$. Everything else (attenuators, filters, isolators, amplifiers) is in service of driving this number, *referred to the chip*, down to $\sim 10^{-2}$ or below at the qubit frequency.
 
 ## The master equation: Bose-Einstein occupation
 
@@ -34,11 +34,15 @@ The chain's job, in one line: turn the **~1250 photons** arriving from room temp
 
 *The one curve the whole chain serves: $\bar n$(5 GHz, $T$). Above the crossover $\hbar\omega/k_B=0.24$ K it follows the classical Rayleigh-Jeans line $k_BT/\hbar\omega$ (dashed); below it, occupation collapses exponentially. The dots are the fridge stages from the table, spanning ~14 orders of magnitude.*
 
-> **Intuition aside.** $\bar n$ is not "how cold the metal is", it is "how many junk photons share the qubit's mode." A 10 mK plate is wonderful, but a single warm wire dumping photons into the mode ruins it. We are managing *photons in a mode*, not just temperature of matter.
+> **Intuition aside.** $\bar n$ is not "how cold the metal is"; it is "how many junk photons share the qubit's mode." A 10 mK plate is wonderful, but a single warm wire dumping photons into the mode ruins it. We are managing *photons in a mode*, not just temperature of matter.
 
 ## The fridge and its thermal budget
 
 A dilution refrigerator gives you a ladder of plates, each colder than the last, and each with a cooling power that collapses by orders of magnitude toward the bottom. The golden rule follows immediately: **dissipate heat as high (warm) on the chain as you can**, because the bottom plate can barely remove any.
+
+![Schematic of a dilution refrigerator: six horizontal temperature stages from room temperature through 50 K, 4 K, still, cold plate and mixing chamber, with their cooling powers, and three vertical lines down to a shielded chip. The drive and readout input line has 20 dB attenuators at 4 K, the cold plate and the mixing chamber and a low-pass plus infrared filter, with the thermal photon number at 7 GHz falling from 892 to 20, 0.24 and 0.0024. The flux line has one attenuator and low-pass and infrared filters. The output line rises through circulators, a TWPA, an isolator, superconducting coax, a HEMT at 4 K and a room-temperature amplifier](figures/10-fridge-wiring.png)
+
+*The whole chapter in one picture, for a single qubit. Input lines are attenuated in stages and filtered so that the photon occupation reaching the chip is $\ll1$; the flux line needs low-frequency bandwidth, so it is filtered rather than heavily attenuated; the output line is protected by circulators and amplified first by a near-quantum-limited parametric amplifier. Every component is heat-sunk to its plate. Real systems repeat this for tens to thousands of lines, which is the scaling problem in a nutshell.*
 
 | Stage | Temp (illustrative) | Cooling power (order, illustrative) | Input-line attenuation here | Output-line component | Coax material |
 |---|---|---|---|---|---|
@@ -62,9 +66,9 @@ This is why cold-stage coax is **thin, long, and made of low-conductivity metal*
 
 ## Input lines: attenuate, then filter (two different jobs)
 
-A perfect lossless cable would be a disaster, it would faithfully deliver all ~1250 room-temperature photons to the qubit. **We want controlled, well-thermalized loss.** The workhorse is the **attenuator**, and the key insight is that it is a *cold thermal load*: a resistive attenuator scales the signal down by $1/A$ **and** re-emits Johnson-Nyquist noise at its own physical temperature.
+A perfect lossless cable would be a disaster: it would faithfully deliver all ~1250 room-temperature photons to the qubit. **We want controlled, well-thermalized loss.** The workhorse is the **attenuator**, and the key insight is that it is a *cold thermal load*: a resistive attenuator scales the signal down by $1/A$ **and** re-emits Johnson-Nyquist noise at its own physical temperature.
 
-Model a matched attenuator of power-attenuation factor $A$ (so 20 dB $\Rightarrow A = 100$) at temperature $T_i$. By the fluctuation-dissipation theorem, whatever quanta it removes from the signal it must replace with its own thermal emission. Fraction $1/A$ of the input is transmitted; the complementary fraction $(1-1/A)$ is replaced by the attenuator's bath:
+Model a matched attenuator of power-attenuation factor $A$ (so 20 dB $\Rightarrow A = 100$) at temperature $T_i$. By the fluctuation-dissipation theorem, whatever quanta it removes from the signal it must replace with its own thermal emission. Fraction $1/A$ of the input is transmitted; the complementary fraction $(1-1/A)$ is replaced by the attenuator's bath.
 
 If we use a Rayleigh-Jeans-equivalent noise temperature $T_{\rm RJ}\equiv(\hbar\omega/k_B)\bar n$, then
 $$T_{{\rm RJ},\text{out}} = \frac{T_{{\rm RJ},\text{in}}}{A_i} + \left(1 - \frac{1}{A_i}\right)T_{\rm RJ}(T_i), \qquad
@@ -74,21 +78,16 @@ $$\bar n_{\text{out}} = \frac{\bar n_{\text{in}}}{A_i} + \left(1 - \frac{1}{A_i}
 
 This is the **rigorous version** of the heuristic $\bar n_{\text{eff}} \approx \sum_i \bar n(\omega,T_i)/A_i^{\text{cum}}$. Cascade it: feed each stage's **full** output (not just its transmitted fraction) into the next, colder attenuator. Each attenuator re-emits at its own temperature, while any warmer residual is suppressed only by the product of the attenuations that *follow* it, so enough total cold attenuation drives the occupation down toward the base-temperature floor.
 
-```
-input noise ~16 photons (from 4 K)
-        │
-   ┌────▼────┐        ┌─────────┐        ┌─────────┐
-   │ATT 20dB │        │ATT 10dB │        │ATT 20dB │
-   │  @4 K   │──────▶│ @100 mK │──────▶│ @10 mK  │────▶ to chip
-   └─────────┘        └─────────┘        └─────────┘
- n = 16/100           n = 16/10           n = 1.7/100
-   + 0.99·16            + 0.9·0.10           + 0.99·4e-11
-   ≈ 0.16 + 16          ≈ 1.6 + 0.09         ≈ 0.017 + 4e-11
-   ≈ 16                 ≈ 1.7                ≈ 0.017
- (resets to 4 K)      (4 K leak through     (4 K leak through the
-                       only 10 dB dominates) last 20 dB still dominates)
-```
-*Each attenuator re-emits at its own temperature, but the surviving 4 K residual is suppressed only by the attenuation downstream of it. Here 50 dB total still leaves $\sim 0.017$ photon, set by residual 4 K leakage rather than the 10 mK stage's own $\sim 4\times10^{-11}$ emission, which is exactly why real input lines pile on about 60 dB. Numbers illustrative.*
+Here is the cascade evaluated at a 7 GHz readout frequency, starting from room temperature (no attenuation at 50 K, for simplicity), for two choices of the middle attenuator:
+
+| After the attenuator at | Its own $\bar n(7\text{ GHz},T)$ | Line $\bar n$: 20/10/20 dB | Line $\bar n$: 20/20/20 dB |
+|---|---|---|---|
+| (input, 300 K) | 892 | 892 | 892 |
+| 4 K, 20 dB | 11.4 | $892/100+0.99\times11.4\approx20.2$ | 20.2 |
+| 100 mK, 10 or 20 dB | 0.036 | $20.2/10+0.9\times0.036\approx2.05$ | $20.2/100+0.99\times0.036\approx0.24$ |
+| 10 mK, 20 dB | $3\times10^{-15}$ | $\approx0.021$ | $\approx0.0024$ |
+
+Two lessons hide in this table. After the 4 K attenuator the line sits *above* the 4 K value of 11.4, because the room-temperature residue that leaks through 20 dB is comparable to the attenuator's own emission. And at the end, the 10 mK attenuator's own emission ($\sim10^{-15}$) is irrelevant: the floor is set entirely by warm residue leaking through the attenuation downstream of it, which is why the middle stage matters so much and why real input lines pile on about 60 dB. [Lab 12](../hands-on/12-microwave-chain/) computes exactly these numbers.
 
 ![Staircase plot of the photon occupation propagating through the input attenuator chain for the 20-10-20 dB and 20-20-20 dB configurations, showing each attenuator resetting the line toward its own stage temperature and the warm residual setting the final floor](figures/10-attenuation-cascade.png)
 
@@ -113,7 +112,7 @@ The readout signal coming *back* from the chip is a handful of microwave photons
 
 **Isolators / circulators.** A circulator routes signals one way around a nonreciprocal 3-port junction; terminating a port into a cold load makes it an isolator. Their quantum-information role is not merely to protect equipment: they **dump the backward-propagating amplifier noise into a cold termination** before it can reach the readout resonator (linewidth $\kappa$). Without them, amplifier noise would measurement-broaden the qubit and inject back-action.
 
-**The standard quantum limit.** Why can't we just build a noiseless amplifier? Because a phase-insensitive linear amplifier must add at least half a photon of noise, the **Haus-Caves limit**. The argument is short and beautiful:
+**The standard quantum limit.** Why can't we just build a noiseless amplifier? Because a phase-insensitive linear amplifier must add at least half a photon of noise: the **Haus-Caves limit**. The argument is short and beautiful:
 
 1. The output mode must obey bosonic commutation, $[\hat b, \hat b^\dagger] = 1$, exactly like the input mode $\hat a$.
 2. Naively setting $\hat b = \sqrt{G}\,\hat a$ gives $[\hat b,\hat b^\dagger] = G \neq 1$, illegal for $G>1$.
@@ -124,7 +123,7 @@ The readout signal coming *back* from the chip is a handful of microwave photons
 
 $$\boxed{\;T_{\text{add}}^{\min} = \frac{\hbar\omega}{2 k_B}\qquad\Longleftrightarrow\qquad n_{\text{add}}^{\min} = \tfrac{1}{2}\;}$$
 
-For a 7 GHz readout, $\hbar\omega/2k_B \approx 0.17\,$K. This is a *fundamental quantum limit*, not an engineering shortfall, **only a phase-sensitive amplifier (squeezing) can beat it, and only on one quadrature**, at the cost of the other.
+For a 7 GHz readout, $\hbar\omega/2k_B \approx 0.17\,$K. This is a *fundamental quantum limit*, not an engineering shortfall: **only a phase-sensitive amplifier (squeezing) can beat it, and only on one quadrature**, at the cost of the other.
 
 **The amplifier cascade.** First a near-quantum-limited Josephson parametric amplifier at the MXC: a **JPA** for narrowband readout, a **JPC** for nondegenerate phase-preserving gain, or a **TWPA** for broadband/multiplexed readout; then a **HEMT** at 4 K (high gain, but $\sim 2$-$5$ K noise temperature, more once line loss is included); then room-temperature amps. The order is decided by **Friis's formula**, which refers each stage's added noise back to the input:
 
@@ -149,29 +148,7 @@ flowchart TD
   A3 -.->|"~7.5e-5 K"| R
 ```
 
-### Full chain, end to end
-
-```mermaid
-flowchart TD
-  subgraph IN["Input line:<br/>block thermal noise"]
-    direction TB
-    SRC["AWG / source<br/>@300 K<br/>n_avg ~ 1250"] --> A50["ATT @50 K"]
-    A50 --> A4["ATT 20 dB<br/>@4 K"]
-    A4 --> AST["ATT @Still<br/>0.8 K"]
-    AST --> AC["ATT @Cold<br/>0.1 K"]
-    AC --> AM["ATT 20 dB<br/>@10 mK"]
-    AM --> LP["Low-pass +<br/>IR/Eccosorb<br/>filter"]
-  end
-  LP --> CHIP["CHIP @10 mK<br/>qubit w_q +<br/>resonator kappa"]
-  subgraph OUT["Output line:<br/>SNR built up"]
-    direction TB
-    ISO["Isolator /<br/>Circulator<br/>@10 mK"] --> TWPA["TWPA @10 mK"]
-    TWPA --> HEMT["HEMT @4 K<br/>(~5 K)"]
-    HEMT --> RT["RT amp @300 K"]
-    RT --> DIG["Digitizer"]
-  end
-  CHIP --> ISO
-```
+The fridge-wiring figure near the top of this chapter shows this output chain in place: circulators and the parametric amplifier on the mixing chamber, superconducting coax up to the HEMT at 4 K, then room-temperature electronics.
 
 ## Worked example: why the first amplifier dominates
 
@@ -191,16 +168,16 @@ Here $\eta_{\rm vac}=1/(1+2n_{\rm add})$ is normalized to vacuum quadrature nois
 
 ## Wiring discipline as a coherence budget
 
-The chain only works if you respect it. Heat-sink every cable and attenuator firmly to its plate (so the conductivity integral splits stage by stage); use superconducting NbTi coax between cold stages (lossless yet thermally resistive); add magnetic and IR shielding around the chip; avoid ground loops. These are not cosmetic, sloppy thermalization or a missing IR filter shows up *directly* as reduced $T_1$, $T_2$, and degraded readout SNR. The resonator linewidth $\kappa$ and dispersive shift $\chi$ of the readout chapter set how fast the signal builds; the chain here sets how much noise it must outrun.
+The chain only works if you respect it. Heat-sink every cable and attenuator firmly to its plate (so the conductivity integral splits stage by stage); use superconducting NbTi coax between cold stages (lossless yet thermally resistive); add magnetic and IR shielding around the chip; avoid ground loops. These are not cosmetic: sloppy thermalization or a missing IR filter shows up *directly* as reduced $T_1$, $T_2$, and degraded readout SNR. The resonator linewidth $\kappa$ and dispersive shift $\chi$ of the readout chapter set how fast the signal builds; the chain here sets how much noise it must outrun.
 
 ## Common pitfalls
 
-- **"A lossless cable is ideal."** No, it delivers 300 K noise to the qubit. You *want* controlled, well-thermalized cold loss on the input.
+- **"A lossless cable is ideal."** No: it delivers 300 K noise to the qubit. You *want* controlled, well-thermalized cold loss on the input.
 - **"Attenuators only weaken the signal."** They also *emit* Johnson-Nyquist noise at their own temperature; a poorly heat-sunk attenuator is a warm noise source.
 - **"Put all attenuation at one stage."** The output occupation can never fall below the *coldest, last* attenuator's own $\bar n(T)$, and each plate has a cooling-power budget, hence staging.
 - **"GHz attenuators are enough."** High-frequency photons above the superconducting gap break Cooper pairs; you need separate IR/Eccosorb filtering.
 - **"The half-photon limit is a hardware flaw."** It is the fundamental Haus-Caves limit; only phase-sensitive squeezing beats it, on one quadrature.
-- **"The 5 K HEMT limits readout."** With a quantum-limited first stage, Friis divides the HEMT noise by $G_1$, the first amplifier dominates.
+- **"The 5 K HEMT limits readout."** With a quantum-limited first stage, Friis divides the HEMT noise by $G_1$, so the first amplifier dominates.
 - **"Noise temperature = physical temperature."** Noise temperature is an equivalent-input bookkeeping quantity; a 10 mK TWPA can have a sub-kelvin *noise* temperature set by quantum noise.
 
 ## Key takeaways

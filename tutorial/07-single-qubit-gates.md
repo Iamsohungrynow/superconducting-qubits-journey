@@ -2,7 +2,7 @@
 
 > **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
 
-So far we have a transmon sitting at frequency $\omega_q$ with a weak anharmonicity $\alpha$. It is (almost) a quantum two-level system, but a static qubit is useless, we need to *rotate* its state on demand. This chapter is about how a microwave pulse turns into a gate: how driving produces Rabi oscillations, why we think in a rotating frame on the Bloch sphere, what happens *off* resonance, and the two tricks (DRAG and virtual-Z) plus the calibration loop that make real gates fast and clean.
+So far we have a transmon sitting at frequency $\omega_q$ with a weak anharmonicity $\alpha$. It is (almost) a quantum two-level system, but a static qubit is useless: we need to *rotate* its state on demand. This chapter is about how a microwave pulse turns into a gate: how driving produces Rabi oscillations, why we think in a rotating frame on the Bloch sphere, what happens *off* resonance, and the two tricks (DRAG and virtual-Z) plus the calibration loop that make real gates fast and clean.
 
 Here is the whole pipeline at a glance:
 
@@ -27,7 +27,7 @@ $$ H_\text{lab}(t) = -\frac{\omega_q}{2}\,\hat\sigma_z + \Omega(t)\cos(\omega_d 
 
 The first term is the static energy splitting; the second is a tiny *transverse* oscillating field, with slow envelope $\Omega(t)$, carrier frequency $\omega_d$, and phase $\phi$.
 
-> **Intuition: the swing.** Think of a child on a swing. Pushing at random does nothing; a gentle push delivered once per period, *in phase* with the motion, builds a large swing from a small force. The drive is the push; resonance is matching the swing's natural frequency $\omega_q$. Only a near-resonant drive accumulates coherently, off-resonant pushes alternately add and subtract and average away. This is the physical origin of Rabi oscillations.
+> **Intuition: the swing.** Think of a child on a swing. Pushing at random does nothing; a gentle push delivered once per period, *in phase* with the motion, builds a large swing from a small force. The drive is the push; resonance is matching the swing's natural frequency $\omega_q$. Only a near-resonant drive accumulates coherently; off-resonant pushes alternately add and subtract and average away. This is the physical origin of Rabi oscillations.
 
 ## The rotating frame and the RWA, step by step
 
@@ -40,7 +40,7 @@ Step by step:
 1. **Free term.** $U$ commutes with $\hat\sigma_z$, so $U\,(-\tfrac{\omega_q}{2}\hat\sigma_z)\,U^\dagger = -\tfrac{\omega_q}{2}\hat\sigma_z$. The generator term contributes $i\dot U U^\dagger = \tfrac{\omega_d}{2}\hat\sigma_z$. Together they give $\tfrac{\Delta}{2}\hat\sigma_z$ with **detuning** $\Delta = \omega_d - \omega_q$.
 2. **Split the cosine.** Define energy raising/lowering operators for this convention as $\hat\sigma_+ = |1\rangle\langle0| = (\hat\sigma_x-i\hat\sigma_y)/2$ and $\hat\sigma_- = |0\rangle\langle1| = (\hat\sigma_x+i\hat\sigma_y)/2$, so $\hat\sigma_x=\hat\sigma_+ + \hat\sigma_-$. Then write $\cos(\omega_d t-\phi)=\tfrac12\big[e^{i(\omega_d t-\phi)}+e^{-i(\omega_d t-\phi)}\big]$.
 3. **Conjugate the ladder operators.** $U\hat\sigma_+ U^\dagger = e^{i\omega_d t}\hat\sigma_+$ (and the conjugate for $\hat\sigma_-$). Multiplying the four cross terms, two are *time-independent* (co-rotating: $e^{i\omega_d t}\cdot e^{-i\omega_d t}$) and two oscillate at $\pm 2\omega_d$ (counter-rotating).
-4. **RWA.** Because $\Omega \ll \omega_q \approx \omega_d$, the $2\omega_d$ terms average to zero over one drive period and are dropped. (This is an *approximation*, not exact, it leaves small Bloch-Siegert-type shifts that precise calibration absorbs.)
+4. **RWA.** Because $\Omega \ll \omega_q \approx \omega_d$, the $2\omega_d$ terms average to zero over one drive period and are dropped. (This is an *approximation*: it leaves small Bloch-Siegert-type shifts that precise calibration absorbs.)
 
 Collecting survivors gives the workhorse equation:
 
@@ -65,18 +65,9 @@ The rotation **angle is the pulse *area*** $\theta$; the **axis is the phase** $
 | DRAG coeff | $\beta\approx1$ in $\Omega_y=-\beta\dot\Omega_x/\alpha$ | leakage/phase cancel | tuned | clean fast gate |
 | Virtual-Z | $\theta_z$ | $z$-rotation via phase | any | $Z(\theta_z)$ |
 
-```text
-        |0> (north)
-         |        X90: 90 degree rotation about +x
-   .-----|             takes |0> -> equator (-y)
-  /      |
- v       |
- *-------+-------> +y     * = |0> after X90 (on the -y axis)
--y      /|
-       / |
-     +x  |
-        |1> (south)
-```
+![Two Bloch spheres with the ground state at the north pole. Left: a resonant drive along +x rotates the state from the north pole down the great circle to minus y after a pi/2 pulse, and on to the south pole after a pi pulse. Right: a drive detuned by Delta equal to Omega has a field vector tilted 45 degrees above the x axis, and the state circles around it on a cone that only reaches the equator, so the excited-state population never exceeds one half](figures/07-bloch-rotation.png)
+
+*Single-qubit control is geometry. (a) On resonance the field vector lies in the equator, the drive phase picks its direction, and the pulse area picks the rotation angle: $X_{90}$ takes $|0\rangle$ to the $-y$ axis in this convention. (b) A detuned drive tilts the rotation axis toward the pole, so the state circles on a cone and the contrast drops to $\Omega^2/\Omega_R^2$. This picture is the generalized Rabi formula below.*
 
 ## Off resonance: the generalized Rabi formula
 
@@ -86,7 +77,7 @@ $$ P_1(t) = \frac{\Omega^2}{\Omega_R^2}\,\sin^2\!\Big(\frac{\Omega_R t}{2}\Big),
 
 Geometrically: rotate the Bloch vector about $\mathbf b$ and project onto $z$, giving $z(t)=1-2\tfrac{\Omega^2}{\Omega_R^2}\sin^2(\Omega_R t/2)$, hence $P_1=(1-z)/2$. Set $\Delta=0$ to recover the textbook $\sin^2(\Omega t/2)$, which reaches 1.
 
-Off resonance two things change: oscillations are **faster** (rate $\Omega_R>\Omega$) and the **contrast** $\Omega^2/\Omega_R^2<1$, the qubit *never* reaches $|1\rangle$. A low-amplitude, fast-oscillating Rabi signal is the textbook fingerprint of a *detuned drive*, not a weak pulse.
+Off resonance two things change: oscillations are **faster** (rate $\Omega_R>\Omega$) and the **contrast** $\Omega^2/\Omega_R^2<1$: the qubit *never* reaches $|1\rangle$. A low-amplitude, fast-oscillating Rabi signal is the textbook fingerprint of a *detuned drive*, not a weak pulse.
 
 ![Rabi chevron: excited-state population as a color map versus pulse duration and detuning, with full-contrast slow oscillations on resonance and faster, low-contrast oscillations off resonance; line cuts at zero detuning and at detuning equal to the Rabi rate are shown alongside](figures/07-chevron.png)
 
@@ -94,13 +85,7 @@ Off resonance two things change: oscillations are **faster** (rate $\Omega_R>\Om
 
 ## The transmon is multilevel: leakage
 
-Now the transmon's weakness bites. It is **not** a true two-level system. With $\alpha<0$ (typically a couple hundred MHz, illustrative), the $|1\rangle\!\to\!|2\rangle$ transition sits *below* the qubit transition:
-
-```mermaid
-flowchart TD
-    L2["state |2>"] --- E12["1->2 transition<br/>w_q + alpha<br/>(leakage)"] --- L1["state |1>"]
-    L1 --- E01["0->1 transition<br/>w_q<br/>(computational)"] --- L0["state |0>"]
-```
+Now the transmon's weakness bites. It is **not** a true two-level system. With $\alpha<0$ (typically a couple hundred MHz, illustrative), the $|1\rangle\!\to\!|2\rangle$ transition sits *below* the qubit transition (compare the exact ladder in [Chapter 04](04-transmon.md)):
 
 | Transition | Frequency (illustrative) | Note |
 |---|---|---|
@@ -108,7 +93,7 @@ flowchart TD
 | $\vert 1\rangle\!\to\!\vert 2\rangle$ | $(\omega_q+\alpha)/2\pi = 4.75$ GHz ($\alpha/2\pi=-250$ MHz) | leakage target |
 | Drive bandwidth | $\sim 1/t_g \approx 50$ MHz at $t_g=20$ ns | overlaps $\vert 1\rangle\!\to\!\vert 2\rangle$ when $\vert\alpha\vert$ small or $t_g$ short |
 
-A short pulse has broad bandwidth $\sim 1/t_g$; its spectral weight near $\omega_q+\alpha$ drives population out of the computational subspace. Faster gates and smaller $|\alpha|$ leak more, a fundamental speed/leakage trade-off.
+A short pulse has broad bandwidth $\sim 1/t_g$; its spectral weight near $\omega_q+\alpha$ drives population out of the computational subspace. Faster gates and smaller $|\alpha|$ leak more: a fundamental speed/leakage trade-off.
 
 ## DRAG: suppressing leakage
 
@@ -123,7 +108,7 @@ Sketch of why: in the rotating frame $|2\rangle$ sits at detuning $\alpha$, givi
 
 ![DRAG pulse: left panel shows the Gaussian in-phase envelope and the much smaller antisymmetric derivative quadrature; right panel shows the leakage population versus time on a log scale, with DRAG ending about two orders of magnitude lower](figures/07-drag.png)
 
-*Left: the in-phase Gaussian envelope $\Omega_x(t)$ and the DRAG quadrature $\Omega_y = -\dot\Omega_x/\alpha$, an antisymmetric two-lobed pulse much smaller than the main envelope (worked-example numbers: $t_g=10$ ns, $\alpha/2\pi=-250$ MHz). Right: simulated leakage $P_2$ during the pulse with and without DRAG, the suppression is strongest at the end of the pulse. [Lab 05](../hands-on/05-drag-leakage/) explores the same mechanism with different defaults (20 ns and -200 MHz); the exact chapter plot comes from `python tutorial/figures/make_figures.py`.*
+*Left: the in-phase Gaussian envelope $\Omega_x(t)$ and the DRAG quadrature $\Omega_y = -\dot\Omega_x/\alpha$, an antisymmetric two-lobed pulse much smaller than the main envelope (worked-example numbers: $t_g=10$ ns, $\alpha/2\pi=-250$ MHz). Right: simulated leakage $P_2$ during the pulse with and without DRAG. Both curves reach a few percent mid-pulse, population that follows the drive adiabatically and comes back; what matters is the residue at the end, about $3\times10^{-4}$ without DRAG and $4\times10^{-6}$ with it. [Lab 05](../hands-on/05-drag-leakage/) explores the same mechanism with different defaults (20 ns and -200 MHz); the exact chapter plot comes from `python tutorial/figures/make_figures.py`.*
 
 ## Virtual-Z gates
 
@@ -131,7 +116,7 @@ What about $z$-rotations? Often you need *no pulse at all*. Since every drive ax
 
 $$ Z(\theta_z):\ \phi \to \phi-\theta_z \ \text{ for every later pulse.} $$
 
-Commuting a $Z(\theta_z)$ through later gates is exactly this subtraction of $\theta_z$ from each later pulse phase, so the $Z$ is never physically applied, it is absorbed into the final measurement basis. It is a **relabeling**: zero duration, *exact*, no calibration or coherence cost. (A physical alternative exists, built by conjugating a $Y$-rotation with two $X90$ pulses: $R_z(\theta_z)=R_x(\pi/2)\,R_y(\theta_z)\,R_x(-\pi/2)$, but why pay for three real pulses?)
+Commuting a $Z(\theta_z)$ through later gates is exactly this subtraction of $\theta_z$ from each later pulse phase, so the $Z$ is never physically applied; it is absorbed into the final measurement basis. It is a **relabeling**: zero duration, *exact*, no calibration or coherence cost. (A physical alternative exists, built by conjugating a $Y$-rotation with two $X90$ pulses: $R_z(\theta_z)=R_x(\pi/2)\,R_y(\theta_z)\,R_x(-\pi/2)$, but why pay for three real pulses?)
 
 Combined with two physical X90 pulses, virtual-Z's synthesize any single-qubit unitary via Euler angles:
 
@@ -166,18 +151,18 @@ Numbers illustrative. Standard Clifford randomized benchmarking reports the aver
 
 Qubit $\omega_q/2\pi = 5.000$ GHz, $\alpha/2\pi = -250$ MHz (so $|1\rangle\!\to\!|2\rangle$ at 4.750 GHz). Goal: an X gate ($\pi$ about $x$).
 
-1. **$\pi$-pulse time.** Pick $\Omega/2\pi=25$ MHz on resonance. For a square envelope $t_\pi=\pi/\Omega = 1/(2\cdot 25\,\text{MHz})=20$ ns. RWA check: $\Omega/\omega_q = 25/5000 = 0.005 \ll 1$, dropping the $2\omega_d$ terms is well justified.
+1. **$\pi$-pulse time.** Pick $\Omega/2\pi=25$ MHz on resonance. For a square envelope $t_\pi=\pi/\Omega = 1/(2\cdot 25\,\text{MHz})=20$ ns. RWA check: $\Omega/\omega_q = 25/5000 = 0.005 \ll 1$, so dropping the $2\omega_d$ terms is well justified.
 2. **Off-resonance contrast.** Mistune by $|\Delta|/2\pi=25$ MHz, i.e. $|\Delta|=\Omega$. Then $\Omega_R=\sqrt2\,\Omega$, equivalently $\Omega_R/2\pi=\sqrt2\cdot25\,\text{MHz}\approx35.4\,\text{MHz}$, and max population $=\Omega^2/\Omega_R^2 = 1/2$: the qubit only reaches halfway, and the nominal 20 ns $\pi$ pulse, a $\sqrt2\,\pi$ rotation about a tilted axis, leaves only $P_1=\tfrac12\sin^2(\pi/\sqrt2)\approx0.32$. That is the cue to re-tune $\omega_d$.
 3. **Axis from phase.** Keep the 20 ns $\pi$ pulse but set $\phi=\pi/2$ → a Y gate, same amplitude and duration.
 4. **Hadamard.** Virtual $Z(\pi)$ (zero ns) then Y90, one 10 ns half-pulse total.
-5. **Leakage & DRAG.** Speed up: $t_g=10$ ns -> $\Omega/2\pi=50$ MHz, bandwidth $\sim 100$ MHz, an appreciable fraction of $|\alpha|=250$ MHz. Leakage scales as $(\Omega/\alpha)^2 \approx (50/250)^2 = 0.04$, a few percent, far too large. DRAG adds $\Omega_y=-\dot\Omega_x/\alpha$ (antisymmetric two-lobed) plus a small frame correction with scale $|\Omega^2/(2\alpha)|/2\pi = (50)^2/(2\cdot250) = 5$ MHz, suppressing leakage and its phase error by orders of magnitude, a candidate for a calibrated 10 ns X gate; leakage suppression alone does not establish gate fidelity. (Exact suppression is a calibration result; the point is the *scaling*.)
+5. **Leakage & DRAG.** Speed up: $t_g=10$ ns -> $\Omega/2\pi=50$ MHz for a square pulse (a Gaussian of the same area peaks near 93 MHz), with bandwidth $\sim 100$ MHz, an appreciable fraction of $|\alpha|=250$ MHz. *During* the pulse the $|2\rangle$ population is of order $(\Omega/\alpha)^2 \approx (50/250)^2 = 0.04$; the three-level simulation in the DRAG figure peaks at about 5%. Most of it follows the drive adiabatically and returns, so a plain Gaussian *ends* with $P_2\approx3\times10^{-4}$, which becomes significant once it accumulates over the thousands of gates of an error-corrected circuit, plus an AC-Stark phase error of scale $|\Omega^2/(2\alpha)|/2\pi = (50)^2/(2\cdot250) = 5$ MHz. The DRAG quadrature $\Omega_y=-\dot\Omega_x/\alpha$ (antisymmetric, two-lobed) cuts the final leakage about 75-fold in the same simulation, to $\approx4\times10^{-6}$, and a small frame or detuning correction removes the Stark phase. That makes a calibrated 10 ns X gate plausible, but leakage suppression alone does not establish gate fidelity; the exact numbers are a calibration result, and the point here is the *scaling*.
 
 ## Common pitfalls
 
 - A $\pi$ pulse does **not** always reach $|1\rangle$: off resonance the max is $\Omega^2/\Omega_R^2<1$. Reduced contrast means *detuned*, not *weak*.
 - Don't confuse $\Omega$ (bare Rabi, the on-resonance rotation rate) with $\Omega_R=\sqrt{\Omega^2+\Delta^2}$.
 - For a resonant two-level drive with fixed phase under the RWA, the ideal rotation angle depends only on pulse **area**, not shape. Shape matters for *leakage/bandwidth*, and detuning, DRAG quadrature, Stark shifts, or time-dependent axes break the simple area rule.
-- The RWA is **not** exact, it drops $2\omega_d$ terms and leaves Bloch-Siegert shifts for calibration to absorb.
+- The RWA is **not** exact: it drops $2\omega_d$ terms and leaves Bloch-Siegert shifts for calibration to absorb.
 - Don't conflate detuning $\Delta$ (qubit-vs-drive, sets axis) with anharmonicity $\alpha$ (offset of the $|1\rangle\!\to\!|2\rangle$ transition from $\omega_q$, sets leakage). With $\alpha<0$, $|2\rangle$ is *below* $2\omega_q$.
 - Virtual-Z gates are exact and free, but only act on *subsequent* pulses and the final measurement basis.
 

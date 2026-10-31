@@ -2,7 +2,7 @@
 
 > **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
 
-A qubit is just a quantum two-level system: something with two distinguishable states, $|0\rangle$ and $|1\rangle$, that you can put into superpositions and entangle with its neighbors. Nature gives us plenty of two-level systems for free, the spin of an electron, the polarization of a photon, two energy levels of a trapped ion. So why would anyone build a qubit out of a *circuit*, a lithographically patterned aluminum device on a millimeter-to-centimeter-scale chip cooled to about ten millikelvin?
+A qubit is just a quantum two-level system: something with two distinguishable states, $|0\rangle$ and $|1\rangle$, that you can put into superpositions and entangle with its neighbors. Nature gives us plenty of two-level systems for free: the spin of an electron, the polarization of a photon, two energy levels of a trapped ion. So why would anyone build a qubit out of a *circuit*, a lithographically patterned aluminum device on a millimeter-to-centimeter-scale chip cooled to about ten millikelvin?
 
 The short answer: because we get to design it. This chapter sets up the rest of the tutorial by explaining what makes superconducting circuits a compelling qubit platform, what makes them genuinely hard, and how to navigate the chapters that follow. We'll keep one question in the back of our minds the whole time: *which physical system do we pick, and what do we trade away to get it?*
 
@@ -20,7 +20,7 @@ Every "strength" and every "hard problem" below maps onto one of these. Keep the
 
 ## The landscape of platforms
 
-Roughly, the main contenders are trapped ions, neutral atoms, photonics, semiconductor spin qubits, and superconducting circuits. The deep trade-off across all of them is **coherence versus controllability**. Systems that nature hands you (atoms, ions) are pristine and identical, long coherence, but you control them with lasers and optics, which makes gates slow and the apparatus hard to multiply. Systems you build (circuits) are fast and easy to wire together but carry the scars of fabrication: lithographic disorder and coupling to a sea of microscopic loss.
+Roughly, the main contenders are trapped ions, neutral atoms, photonics, semiconductor spin qubits, and superconducting circuits. The deep trade-off across all of them is **coherence versus controllability**. Systems that nature hands you (atoms, ions) are pristine, identical, and long-lived, but you control them with lasers and optics, which makes gates slow and the apparatus hard to multiply. Systems you build (circuits) are fast and easy to wire together but carry the scars of fabrication: lithographic disorder and coupling to a sea of microscopic loss.
 
 | Platform | Qubit encoding | Gate time | $T_2$ | Key strength | Key challenge |
 |---|---|---|---|---|---|
@@ -28,11 +28,11 @@ Roughly, the main contenders are trapped ions, neutral atoms, photonics, semicon
 | Neutral atoms | Ground hyperfine/clock states; transient Rydberg excitation for gates | $\sim$0.1-1 µs | $\sim$seconds for storage | Reconfigurable arrays | Rydberg lifetime/gate fidelity, atom loss |
 | Photonics | Polarization/path (flying) | $\sim$ns | transmission-limited | Natural for networking | Weak interactions, probabilistic gates |
 | Spin qubits (Si) | Electron/nuclear spin | $\sim$ns-µs | µs-ms | CMOS-compatible, tiny | Individual control, uniformity |
-| Superconducting | Transmon (charge/flux) | $\sim$10-500 ns | $\sim$100 µs | Engineerable, fast, lithographic | Coherence, wiring/heat |
+| Superconducting | Circuit eigenstates (transmon, fluxonium) | $\sim$10-500 ns | $\sim$100 µs | Engineerable, fast, lithographic | Coherence, wiring/heat |
 
 *All numbers illustrative, order-of-magnitude, 2020s-era.*
 
-Superconducting qubits sit in a distinctive spot: not the most coherent, but uniquely **engineerable and fast**. They are *artificial atoms*, macroscopic electrical circuits whose collective degrees of freedom (charge on a capacitor, flux through a loop) are quantized when you cool them below the superconducting transition. You don't find them in a periodic table, you draw them in a CAD tool and pattern them with the same lithography that makes classical chips.
+Superconducting qubits sit in a distinctive spot: not the most coherent, but uniquely **engineerable and fast**. They are *artificial atoms*, macroscopic electrical circuits whose collective degrees of freedom (charge on a capacitor, flux through a loop) are quantized when you cool them below the superconducting transition. You don't find them in a periodic table; you draw them in a CAD tool and pattern them with the same lithography that makes classical chips.
 
 > **Intuition aside: two different temperatures.** Aluminum superconducts already at $T_c \approx 1.2$ K, so why bother with a dilution fridge at $\sim$10 mK? Because of criteria 2 and 3. The qubit transition is typically $\omega_q/2\pi \sim 5$ GHz, and we need its environment quiet enough that it sits in its ground state: $k_B T \ll \hbar\omega_q$. The thermal photon occupation of a 5 GHz mode is $\bar n = 1/(e^{\hbar\omega_q/k_BT}-1)$, which is $\sim 4\times10^{-11}$ at 10 mK but a sizeable $\sim 0.1$ already at 100 mK. Superconductivity is necessary; *cold* is what initializes the qubit and keeps it from being thermally scrambled.
 
@@ -40,19 +40,9 @@ Superconducting qubits sit in a distinctive spot: not the most coherent, but uni
 
 Start with the simplest superconducting circuit: an inductor and a capacitor, an $LC$ oscillator. Quantum-mechanically it's a harmonic oscillator with **equally spaced** levels. That equal spacing is fatal. A microwave pulse tuned to the $0\to1$ transition is *exactly* resonant with $1\to2$, $2\to3$, and so on, drive the qubit and you immediately leak population up the ladder. You cannot isolate a clean two-level subspace.
 
-```
-  LC oscillator (harmonic)            Transmon (anharmonic)
-  ───────────────── |3⟩               ───────────────── |3⟩
-        ↕ ħω                                ↕ ħ(ω₀₁ + 2α)
-  ───────────────── |2⟩               ───────────────── |2⟩
-        ↕ ħω                                ↕ ħ(ω₀₁ + α)   (smaller, α<0)
-  ───────────────── |1⟩               ───────────────── |1⟩
-        ↕ ħω                                ↕ ħω₀₁
-  ───────────────── |0⟩               ───────────────── |0⟩
+![Side-by-side energy ladders. Left: a parabolic LC potential with four equally spaced levels, every rung marked h-bar omega in red to show that one drive frequency climbs the whole ladder. Right: a cosine Josephson potential with four exactly computed levels whose spacing shrinks by the anharmonicity at each rung, so a drive at omega zero-one is resonant only with the lowest transition](figures/01-energy-ladders.png)
 
-  drive at ω₀₁ ALSO drives 1→2        drive at ω₀₁ is off-resonant for
-  ✗ cannot isolate a qubit            1→2 by |α| ⇒ clean two-level qubit
-```
+*The whole reason superconducting qubits need a Josephson junction. (a) A linear LC circuit is a harmonic oscillator: every transition sits at the same $\omega$, so a drive cannot stop at $|1\rangle$. (b) The junction's cosine potential is flatter than a parabola away from the bottom, so each rung is narrower than the last by $|\alpha|$. Panel (b) is an exact diagonalization at $E_J/E_C=20$, where $\alpha$ is large enough to see; real transmons sit at $E_J/E_C\approx50$-100 with $|\alpha|$ a few percent of $\omega_{01}$.*
 
 The fix is to make the inductor **nonlinear**, so the levels are no longer evenly spaced. The Josephson junction is the standard strongly nonlinear, nearly non-dissipative element in superconducting qubit circuits; dissipative elements such as resistors would add loss rather than a coherent nonlinearity. We quantify the unevenness with the **anharmonicity**
 
@@ -68,19 +58,13 @@ $$H = 4E_C(\hat n - n_g)^2 - E_J\cos\hat\varphi.$$
 
 Let's earn each term. The capacitor stores charge $Q = 2en$, where $n$ is the signed Cooper-pair number in our circuit-coordinate convention ($e>0$ is the elementary charge). Its electrostatic energy is $Q^2/2C = 4E_C n^2$ with the **charging energy** $E_C = e^2/2C$. A stray offset charge $n_g$ from the environment shifts this to $4E_C(\hat n - n_g)^2$. The second term is the **Josephson energy**: a tunnel junction stores energy $-E_J\cos\hat\varphi$ in the gauge-invariant phase difference $\hat\varphi$, with $E_J = I_c\Phi_0/2\pi$ ($I_c$ the critical current, $\Phi_0 = h/2e$ the flux quantum). Promoting $\hat n$ and $\hat\varphi$ to conjugate operators, $[\hat\varphi,\hat n]=i$, quantizes the circuit. This describes the isolated Cooper-pair box and transmon; coupling to resonators, drives, baths, or an inductive shunt requires additional terms.
 
-The picture to hold in your head is a particle in a cosine (washboard) well:
+The picture to hold in your head is a particle in a cosine well:
 
-```
- U(φ) = -E_J cos φ
-   \                                   /
-    \      ___ |2⟩  (levels bend       /
-     \    /   \    closer near the    /
-      \  /─ |1⟩\   flatter edges)    /
-       \/── |0⟩ \___________________/
-        ·····  ← dashed parabola = (E_J/2)φ²  (the LC approximation)
-```
+![The cosine Josephson potential with its harmonic parabola approximation dashed on top, and the lowest four exact energy levels drawn inside the well with visibly shrinking spacings](figures/03-cosine-well.png)
 
-Near the bottom the cosine looks like a parabola $(E_J/2)\varphi^2$, that's the harmonic $LC$ oscillator, giving the level spacing. But the cosine *flattens* near the well edges (the $-\varphi^4$ correction), bending the higher levels closer together. That bending **is** the anharmonicity.
+*A particle in the potential $-E_J\cos\varphi$ (solid) and its parabolic approximation (dashed), with exactly computed levels for $E_J/E_C=50$. Chapter 03 derives this picture step by step.*
+
+Near the bottom the cosine looks like a parabola, $(E_J/2)\varphi^2$: that is the harmonic $LC$ oscillator, and it sets the overall level spacing. But the cosine *flattens* toward the well edges (the $-\varphi^4$ correction), bending the higher levels closer together. That bending **is** the anharmonicity.
 
 ## Two energy scales, two regimes
 
@@ -118,7 +102,7 @@ The punchline is the exponential $e^{-\sqrt{8E_J/E_C}}$. As you raise $E_J/E_C$:
 - charge-noise sensitivity falls **exponentially** in $\sqrt{8E_J/E_C}$, while
 - relative anharmonicity falls only as a **weak power law**, $\alpha/\omega_q \sim -(8E_J/E_C)^{-1/2}$, while the absolute $\alpha\approx -E_C/\hbar$ is mainly set by $E_C$.
 
-That asymmetry is the *entire justification* for the transmon: you pay a small, polynomial price in anharmonicity to buy exponential immunity to charge noise. (This also retroactively justifies dropping $n_g$ above, deep in the transmon regime the qubit's dependence on it is exponentially suppressed, though not zero.) A common design window lives around $E_J/E_C \sim 50$-$100$.
+That asymmetry is the *entire justification* for the transmon: you pay a small, polynomial price in anharmonicity to buy exponential immunity to charge noise. (This also retroactively justifies dropping $n_g$ above: deep in the transmon regime the qubit's dependence on it is exponentially suppressed, though not zero.) A common design window lives around $E_J/E_C \sim 50$-$100$.
 
 ![Semilog plot versus the ratio of Josephson to charging energy: the exponential factor of the charge dispersion plunges over many decades while the relative anharmonicity declines only gently as a power law, with the common design window shaded and the worked example at 39 marked](figures/01-tradeoff.png)
 
@@ -129,7 +113,7 @@ That asymmetry is the *entire justification* for the transmon: you pay a small, 
 > 1. **$E_C$ from $\alpha$.** Since $\alpha/2\pi \approx -E_C/h$, we need $E_C/h = 300$ MHz.
 > 2. **The capacitor.** $E_C = e^2/2C \Rightarrow C = e^2/2E_C = (1.602\times10^{-19})^2 / (2\cdot 6.626\times10^{-34}\cdot 3.0\times10^{8}) \approx 65$ fF, a realistic shunt capacitance.
 > 3. **$E_J$ from $\omega_q$.** Invert $\sqrt{8E_JE_C} = h(5.0+0.30)$ GHz $\Rightarrow E_J = (5.30)^2/(8\cdot0.30)\,h$ GHz $\approx h\cdot 11.7$ GHz.
-> 4. **Check the regime.** $E_J/E_C = 11.7/0.30 \approx 39 \gg 1$, the perturbative formulas are self-consistent. (39 sits a bit below the quoted 50-100 window, and step 6 shows the dispersion is still $\sim$100 kHz; lowering $E_C$ would buy more margin at the cost of anharmonicity.)
+> 4. **Check the regime.** $E_J/E_C = 11.7/0.30 \approx 39 \gg 1$, so the perturbative formulas are self-consistent. (39 sits a bit below the quoted 50-100 window, and step 6 shows the dispersion is still $\sim$100 kHz; lowering $E_C$ would buy more margin at the cost of anharmonicity.)
 > 5. **Relative anharmonicity.** $-300/5000 = -6\%$, matching $-(8\cdot39)^{-1/2}\approx-5.7\%$.
 > 6. **Charge-noise check.** The exponential alone is $e^{-\sqrt{8\cdot39}}\approx2\times10^{-8}$, but Koch's prefactor matters. The same asymptotic formula gives $\epsilon_0/E_C\sim5\times10^{-6}$ and $\epsilon_1/E_C\sim-3.6\times10^{-4}$, so the $0\to1$ charge dispersion is of order $10^5$ Hz for $E_C/h=300$ MHz: small next to a 5 GHz qubit but large next to the kHz-scale linewidth of a $T_2\sim100~\mu$s qubit, and not the bare exponential by itself.
 > 7. **The junction.** $E_J = I_c\Phi_0/2\pi \Rightarrow I_c = 2\pi(h\cdot11.7\times10^9)/(2.07\times10^{-15}) \approx 24$ nA, a typical Al/AlOₓ junction.
@@ -138,7 +122,7 @@ That asymmetry is the *entire justification* for the transmon: you pay a small, 
 
 ## Reading the qubit: circuit QED
 
-You measure a transmon without touching it directly. (This section name-drops several concepts, Schrieffer-Wolff, Jaynes-Cummings, QND, Purcell, that Chapters 05-06 unpack properly; here you only need the punchlines.) Couple the qubit to a microwave resonator (coupling strength $g$). In the **dispersive limit**, the resonator is far detuned from both the $0\to1$ and nearby $1\to2$ transitions, e.g. $|g/\Delta|\ll1$ and $|g/(\Delta+\alpha)|\ll1$ with $\Delta = \omega_{01}-\omega_r$. A Schrieffer-Wolff transformation of the Jaynes-Cummings Hamiltonian removes the direct photon exchange and leaves a state-dependent cavity pull. Here $g,\Delta,\alpha,\chi,\kappa$ are angular-frequency quantities. For a *two-level* system this would be $\chi_0 = g^2/\Delta$, but a transmon has a $|2\rangle$ state nearby, and including it gives the correct multilevel shift:
+You measure a transmon without touching it directly. (This section name-drops several concepts that Chapters 05-06 unpack properly, namely Schrieffer-Wolff, Jaynes-Cummings, QND, and Purcell; here you only need the punchlines.) Couple the qubit to a microwave resonator with coupling strength $g$ (the circuit is drawn in [Chapter 05](05-circuit-qed.md)). In the **dispersive limit**, the resonator is far detuned from both the $0\to1$ and nearby $1\to2$ transitions, e.g. $|g/\Delta|\ll1$ and $|g/(\Delta+\alpha)|\ll1$ with $\Delta = \omega_{01}-\omega_r$. A Schrieffer-Wolff transformation of the Jaynes-Cummings Hamiltonian removes the direct photon exchange and leaves a state-dependent cavity pull. Here $g,\Delta,\alpha,\chi,\kappa$ are angular-frequency quantities. For a *two-level* system this would be $\chi_0 = g^2/\Delta$, but a transmon has a $|2\rangle$ state nearby, and including it gives the correct multilevel shift:
 
 $$\chi \approx \frac{g^2\,\alpha}{\Delta(\Delta+\alpha)}.$$
 
@@ -162,17 +146,9 @@ Here $T_1$ is energy relaxation ($|1\rangle\to|0\rangle$), $T_\phi$ is *pure* de
 
 Beyond coherence, **scaling is engineering physics**, not a solved consequence of lithography. Each qubit needs microwave control connectivity; many architectures also need flux-bias connectivity, and readout resonators are commonly multiplexed onto shared feedlines running from room temperature to $\sim$10 mK. Every coax carries both a passive heat leak and active heat from attenuating drive power. Cooling power at the mixing chamber is tiny: the usual spec is $\sim$hundreds of microwatts *at 100 mK*, which shrinks to mere tens of microwatts at the $\sim$20 mK operating point (illustrative), so wiring is a genuine bottleneck. Add **frequency crowding** (collisions between similar-frequency qubits) and **crosstalk**, and you see why "more qubits" is hard.
 
-```mermaid
-flowchart TD
-  RT["Room temp ~300 K<br/>AWGs, mw sources"] --> A["4 K plate<br/>HEMT amplifier"]
-  A --> B["Still plate<br/>~0.9 K"]
-  B --> C["Mixing chamber<br/>~10 mK<br/>attenuators, chip"]
-  C -->|"readout signal"| A
-  C --> N1["Per qubit: drive +<br/>flux + readout line"]
-  N1 --> N2["Passive + active<br/>heat per coax"]
-  N2 --> N3["Cooling power at chip plate<br/>~tens of uW at ~20 mK"]
-  N3 --> N4["-> wiring bottleneck"]
-```
+![Schematic of a dilution refrigerator with six temperature stages from room temperature to the mixing chamber, showing one qubit's attenuated input line, filtered flux line, and amplified output line with circulators, a parametric amplifier, a HEMT and a room-temperature amplifier](figures/10-fridge-wiring.png)
+
+*Preview of Chapter 10: the wiring for **one** qubit. Every line in this picture crosses five temperature stages, each with less cooling power than the last, which is why wiring and heat load become a scaling bottleneck long before lithography does.*
 
 ### How superconducting circuits score on the rubric
 
@@ -189,7 +165,7 @@ flowchart TD
 - **"A transmon is a perfect two-level system."** It's a weakly anharmonic *multilevel* oscillator; the $1\to2$ transition is only $\sim$5-6% away from $0\to1$, so leakage is real and pulses must be shaped (e.g. DRAG).
 - **"Bigger anharmonicity is always better."** Lowering $E_J/E_C$ to increase relative anharmonicity raises charge sensitivity; changing absolute anharmonicity alone does not specify that trade-off. The transmon deliberately trades anharmonicity for charge-noise immunity.
 - **"$T_2 = 2T_1$ always."** Only when $T_\phi\to\infty$. Real noise makes $T_\phi$ finite, so $T_2 < 2T_1$, and $T_2^* \le T_2$.
-- **"You read the qubit by absorbing its photon."** Dispersive readout is QND, you measure the cavity pull $\pm\chi$, not the qubit. That's the whole point of cQED.
+- **"You read the qubit by absorbing its photon."** Dispersive readout is QND: you measure the cavity pull $\pm\chi$, not the qubit. That's the whole point of cQED.
 - **"The dispersive shift is just $g^2/\Delta$."** For a transmon the higher levels matter: $\chi = g^2\alpha/[\Delta(\Delta+\alpha)]$.
 - **"Scaling is solved because it's lithographic."** Frequency targeting, heat load, and crosstalk remain open problems.
 

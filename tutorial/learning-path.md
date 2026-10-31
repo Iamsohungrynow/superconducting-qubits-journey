@@ -12,7 +12,7 @@ recommended learning order is deliberately different.
 | Chapter | By the end you should be able to… | Run and investigate |
 |---|---|---|
 | [01](01-introduction.md) | Explain why nonlinearity and refrigeration solve different problems | `python hands-on/12-microwave-chain/chain.py`; compare 10 and 100 mK |
-| [02](02-quantum-lc-oscillator.md) | Quantize an LC mode and calculate its zero-point scales | `python tutorial/figures/make_figures.py`; inspect the two chapter-02 figures |
+| [02](02-quantum-lc-oscillator.md) | Quantize an LC mode and calculate its zero-point scales | `python tutorial/figures/make_figures.py`; inspect the computed chapter-02 figures |
 | [03](03-josephson-junction.md) | Build the charge-basis matrix from the cosine | `python hands-on/09-transmon-spectrum/transmon.py`; compare charge cutoffs |
 | [04](04-transmon.md) | Distinguish exact spectrum, quartic approximation, and asymptotic dispersion | Lab 09 again; sweep EJ at fixed EC |
 | [05](05-circuit-qed.md) | Connect a spectral splitting to an excitation-swap time | `python hands-on/10-jaynes-cummings/jaynes_cummings.py` |

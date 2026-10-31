@@ -6,7 +6,7 @@
 
 ## 👋 Hey there
 
-I'm a PhD student working on superconducting qubits, and this repo is my attempt to write the introduction I wish I'd had when I started. It's a tutorial built **from scratch**, no assumed background beyond undergraduate physics and a little linear algebra, meant for anyone who wants to pick up the field and actually understand *why* the hardware looks the way it does.
+I'm a PhD student working on superconducting qubits, and this repo is my attempt to write the introduction I wish I'd had when I started. It's a tutorial built **from scratch**, assuming nothing beyond undergraduate physics and a little linear algebra, for anyone who wants to pick up the field and actually understand *why* the hardware looks the way it does.
 
 I wrote every explanation in my own words, teaching standard, publicly known physics. Where it helps, I point you to the canonical reviews and textbooks so you can go deeper. My goal is simple: take you from "what is a qubit?" all the way to a first look at quantum error correction, one chapter at a time.
 
@@ -37,6 +37,23 @@ Start with the index, then work through the chapters in order. Each one builds o
 | 11 | [Calibration & Benchmarking](tutorial/11-benchmarking.md) |
 | 12 | [A First Look at Quantum Error Correction](tutorial/12-error-correction.md) |
 
+### A look inside
+
+Every chapter mixes derivations with pictures: 19 schematic diagrams (circuits, level ladders, Bloch spheres, pulse sequences, wiring, code layouts) and 22 plots computed from the same physics and parameters as the worked examples. All of them are original and regenerate from two scripts in [`tutorial/figures/`](tutorial/figures/).
+
+<table>
+<tr>
+<td align="center" width="33%"><a href="tutorial/01-introduction.md"><img src="tutorial/figures/01-energy-ladders.png" alt="Harmonic versus anharmonic energy ladders"></a><br><sub>Why a qubit needs a Josephson junction (ch01)</sub></td>
+<td align="center" width="33%"><a href="tutorial/04-transmon.md"><img src="tutorial/figures/04-transmon-circuits.png" alt="Cooper-pair box, transmon and tunable transmon circuits"></a><br><sub>From Cooper-pair box to transmon (ch04)</sub></td>
+<td align="center" width="33%"><a href="tutorial/05-circuit-qed.md"><img src="tutorial/figures/05-jc-ladder.png" alt="Jaynes-Cummings ladder of bare and dressed states"></a><br><sub>The Jaynes-Cummings ladder (ch05)</sub></td>
+</tr>
+<tr>
+<td align="center"><a href="tutorial/07-single-qubit-gates.md"><img src="tutorial/figures/07-bloch-rotation.png" alt="Resonant and detuned rotations on the Bloch sphere"></a><br><sub>Gates as rotations (ch07)</sub></td>
+<td align="center"><a href="tutorial/10-measurement-chain.md"><img src="tutorial/figures/10-fridge-wiring.png" alt="Dilution refrigerator wiring for one qubit"></a><br><sub>Wiring a dilution refrigerator (ch10)</sub></td>
+<td align="center"><a href="tutorial/12-error-correction.md"><img src="tutorial/figures/12-surface-code.png" alt="Rotated surface code layouts at distance 3 and 5"></a><br><sub>The rotated surface code (ch12)</sub></td>
+</tr>
+</table>
+
 ---
 
 ## 🧪 Hands-on labs
@@ -60,7 +77,24 @@ Follow the [environment setup](hands-on/README.md), then run all twelve labs wit
 
 ```bash
 python -m pip install -r hands-on/requirements.txt
+```
+
+```bash
 python hands-on/run_labs.py --all --check
+```
+
+To regenerate every figure in the tutorial and check all local links:
+
+```bash
+python tutorial/figures/make_figures.py
+```
+
+```bash
+python tutorial/figures/make_diagrams.py
+```
+
+```bash
+python tools/check_repo.py
 ```
 
 The [review notes](REVIEW.md) record corrections, validation, and scope limits. Running on real hardware with Qiskit and Qibocal is on the roadmap.
@@ -91,9 +125,9 @@ You do **not** need prior quantum-hardware experience. Comfort with basic quantu
 ## 🧭 How to use it
 
 - **Read in order.** Each chapter assumes the previous ones.
-- **Keep the two reviews open** alongside the tutorial, the chapters are meant to make those papers easier to read, not to replace them.
+- **Keep the two reviews open** alongside the tutorial; the chapters are meant to make those papers easier to read, not to replace them.
 - **Follow the references** at the end of each chapter when you want depth.
-- **Treat all numbers as illustrative.** Any figures I quote are generic, order-of-magnitude values to build intuition, real devices vary widely, so always check current literature for specifics.
+- **Treat all numbers as illustrative.** Any figures I quote are generic, order-of-magnitude values to build intuition; real devices vary widely, so always check current literature for specifics.
 
 ---
 
@@ -109,7 +143,7 @@ Contributions should stay original and cite only public sources (arXiv, textbook
 
 ## 📜 License
 
-Everything in this repo (the tutorial writing, reading-list annotations, and the example code) is released under [**Creative Commons Attribution 4.0 (CC BY 4.0)**](https://creativecommons.org/licenses/by/4.0/). Reuse and adapt freely, just credit back. See [`LICENSE`](LICENSE).
+Everything in this repo (the tutorial writing, diagrams and figures, reading-list annotations, and the example code) is released under [**Creative Commons Attribution 4.0 (CC BY 4.0)**](https://creativecommons.org/licenses/by/4.0/). Reuse and adapt freely; just credit back. See [`LICENSE`](LICENSE).
 
 **Linked papers** remain under the copyright of their respective authors and publishers; they are referenced here, not redistributed.
 

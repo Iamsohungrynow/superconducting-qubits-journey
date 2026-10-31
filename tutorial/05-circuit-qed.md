@@ -2,13 +2,19 @@
 
 > **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
 
-A qubit sitting alone is useless, you need to talk to it (read out its state) and connect it to other qubits (entangle them). Circuit quantum electrodynamics (circuit QED) is how we do both, using a single, beautifully reusable trick: couple the qubit to a microwave **resonator** (an on-chip LC circuit, see Chapter 02). The resonator becomes your microphone for readout and your wire for coupling. The remarkable thing is that *one* coupling rate $g$ underlies **both** jobs. This chapter builds the physics from the dipole coupling up, derives the two regimes, resonant and dispersive, step by step, and ends with a fully worked numerical example.
+A qubit sitting alone is useless: you need to talk to it (read out its state) and connect it to other qubits (entangle them). Circuit quantum electrodynamics (circuit QED) is how we do both, using a single, beautifully reusable trick: couple the qubit to a microwave **resonator** (an on-chip LC circuit, see Chapter 02). The resonator becomes your microphone for readout and your wire for coupling. The remarkable thing is that *one* coupling rate $g$ underlies **both** jobs. This chapter builds the physics from the dipole coupling up, derives the two regimes, resonant and dispersive, step by step, and ends with a fully worked numerical example.
 
-> **Conventions in this chapter.** Here $\hat\sigma_z=|e\rangle\langle e|-|g\rangle\langle g|=-Z$, where $Z=\mathrm{diag}(1,-1)$ is the computational Pauli operator used in Chapters 06 to 07 and all labs. Energy lowering is $\sigma_-=|g\rangle\langle e|=\texttt{destroy(2)}$. See the [notation guide](00-notation.md). We write the qubit term as $\frac{\hbar\omega_q}{2}\hat\sigma_z$ (not $\hbar\omega_q\hat\sigma_z$), define the detuning $\Delta = \omega_q - \omega_r$, and take the anharmonicity $\alpha = \omega_{ef}-\omega_{ge} < 0$. With these choices $\chi = g^2/\Delta$ for a two-level system. Sign and factor-of-2 conventions differ across textbooks, mixing them is the #1 source of spurious errors, so translate $\sigma_z=-Z$ when moving from this chapter to the code.
+> **Conventions in this chapter.** Here $\hat\sigma_z=|e\rangle\langle e|-|g\rangle\langle g|=-Z$, where $Z=\mathrm{diag}(1,-1)$ is the computational Pauli operator used in Chapters 06 to 07 and all labs. Energy lowering is $\sigma_-=|g\rangle\langle e|=\texttt{destroy(2)}$. See the [notation guide](00-notation.md). We write the qubit term as $\frac{\hbar\omega_q}{2}\hat\sigma_z$ (not $\hbar\omega_q\hat\sigma_z$), define the detuning $\Delta = \omega_q - \omega_r$, and take the anharmonicity $\alpha = \omega_{ef}-\omega_{ge} < 0$. With these choices $\chi = g^2/\Delta$ for a two-level system. Sign and factor-of-2 conventions differ across textbooks; mixing them is the most common source of spurious errors, so translate $\sigma_z=-Z$ when moving from this chapter to the code.
 
 ## From dipole coupling to Jaynes-Cummings
 
-A superconducting qubit has an electric dipole; the resonator stores a microwave field whose **zero-point voltage fluctuations** are nonzero even in vacuum. Capacitively coupling them gives a dipole interaction proportional to (qubit dipole) $\times$ (resonator voltage). In operator form the *full* coupling is
+A superconducting qubit has an electric dipole; the resonator stores a microwave field whose **zero-point voltage fluctuations** are nonzero even in vacuum. Capacitively coupling them gives a dipole interaction proportional to (qubit dipole) $\times$ (resonator voltage).
+
+![Circuit diagram: a transmon (Josephson junction in parallel with its capacitance) connects through a green coupling capacitor C_g to a readout resonator (capacitor C_r in parallel with inductor L_r), which connects through an orange capacitor C_kappa to a 50-ohm feedline carrying a probe tone in and the signal out to the amplifiers](figures/05-cqed-circuit.png)
+
+*The minimal circuit-QED circuit. The coupling capacitor $C_g$ sets $g$ (how strongly qubit and resonator exchange energy); the output capacitor $C_\kappa$ sets $\kappa$ (how fast photons leak to the measurement line). Every result in this chapter is a statement about these two rates and the detuning $\Delta=\omega_q-\omega_r$.*
+
+In operator form the *full* coupling is
 
 $$H_\text{int} = \hbar g\,(\hat a + \hat a^\dagger)(\hat\sigma_+ + \hat\sigma_-).$$
 
@@ -29,13 +35,13 @@ What survives is the **Jaynes-Cummings (JC) Hamiltonian**:
 
 $$H_\text{JC} = \hbar\omega_r\,\hat a^\dagger\hat a + \frac{\hbar\omega_q}{2}\hat\sigma_z + \hbar g\left(\hat a^\dagger\hat\sigma_- + \hat a\,\hat\sigma_+\right).$$
 
-> **Intuition aside.** The RWA is just energy bookkeeping: creating a photon *and* exciting the qubit costs $\hbar(\omega_q+\omega_r)$ out of nowhere, so it can only happen virtually, for a fleeting time $\sim 1/(\omega_q+\omega_r)$. The slow terms instead *trade* one quantum for another, that exchange is real and is the whole story below.
+> **Intuition aside.** The RWA is just energy bookkeeping: creating a photon *and* exciting the qubit costs $\hbar(\omega_q+\omega_r)$ out of nowhere, so it can only happen virtually, for a fleeting time $\sim 1/(\omega_q+\omega_r)$. The slow terms instead *trade* one quantum for another; that exchange is real and is the whole story below.
 
 When $g/\omega_r$ approaches $\sim 0.1$ (**ultrastrong coupling**), the counter-rotating terms are no longer negligible (they produce a Bloch-Siegert shift) and JC breaks down. Standard transmon designs sit far from this, so JC is an excellent model.
 
 ## The Jaynes-Cummings ladder and dressed states
 
-Because $H_\text{JC}$ conserves $N$, it block-diagonalizes into $2\times2$ blocks spanning $\{|g,n+1\rangle,\,|e,n\rangle\}$. Within a block the off-diagonal coupling is $\hbar g\sqrt{n+1}$, the $\sqrt{n+1}$ comes straight from $\hat a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle$. Diagonalizing the $2\times2$ matrix gives the **exact eigenenergies**
+Because $H_\text{JC}$ conserves $N$, it block-diagonalizes into $2\times2$ blocks spanning $\{|g,n+1\rangle,\,|e,n\rangle\}$. Within a block the off-diagonal coupling is $\hbar g\sqrt{n+1}$; the $\sqrt{n+1}$ comes straight from $\hat a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle$. Diagonalizing the $2\times2$ matrix gives the **exact eigenenergies**
 
 $$E_{\pm,n} = \hbar\omega_r\!\left(n+\tfrac12\right) \pm \frac{\hbar}{2}\sqrt{\Delta^2 + 4g^2(n+1)}.$$
 
@@ -45,31 +51,9 @@ $$|n,\pm\rangle = \frac{|e,n\rangle \pm |g,n+1\rangle}{\sqrt2}, \qquad \text{spl
 
 The $n=0$ rung splits by $2g$, the **vacuum-Rabi splitting**. Higher rungs split by $2g\sqrt2,\,2g\sqrt3,\dots$: the ladder is **anharmonic in photon number**. That $\sqrt{n+1}$ rung dependence, or $\sqrt{N}$ when indexed by total excitation number $N$, is exactly what distinguishes a true two-level emitter from a linear oscillator.
 
-```mermaid
-flowchart TD
-    G["|g,0> (ground)"]
-    subgraph N1["N = 1 manifold"]
-      direction LR
-      B1a["bare |e,0>"]:::bare
-      B1b["bare |g,1>"]:::bare
-      D1m["|0,-> dressed"]:::dressed
-      D1p["|0,+> dressed"]:::dressed
-    end
-    subgraph N2["N = 2 manifold"]
-      direction LR
-      B2a["bare |e,1>"]:::bare
-      B2b["bare |g,2>"]:::bare
-      D2m["|1,-> dressed"]:::dressed
-      D2p["|1,+> dressed"]:::dressed
-    end
-    G --> N1 --> N2
-    B1a -. "couple g" .- B1b
-    D1m == "split 2g" === D1p
-    B2a -. "couple sqrt2 g" .- B2b
-    D2m == "split 2g sqrt2" === D2p
-    classDef bare fill:#eee,stroke:#999,stroke-dasharray:4;
-    classDef dressed fill:#cde,stroke:#369;
-```
+![Energy-level diagram on resonance. Left column: degenerate pairs of bare states |e,n-1> and |g,n> at energies N times h-bar omega_r for N = 1, 2, 3, plus the ground state |g,0>. Right column: each pair splits into dressed states |n,+> and |n,-> separated by 2g, 2 root 2 g and 2 root 3 g. Purple arrows from the ground state to the two N = 1 dressed states mark the vacuum-Rabi doublet at omega_r plus and minus g](figures/05-jc-ladder.png)
+
+*The Jaynes-Cummings ladder at $\Delta=0$, with $g$ exaggerated for visibility. Each two-state manifold splits by $2g\sqrt{N}$, so the dressed spectrum is not evenly spaced: probing it with one photon, two photons, and so on reveals the $\sqrt{N}$ that only a nonlinear emitter can produce. The two arrows are the spectroscopic signature of strong coupling, the vacuum-Rabi doublet.*
 
 ## Resonant regime: vacuum-Rabi oscillations
 
@@ -79,7 +63,7 @@ $$P_e(t) = \cos^2(g t), \qquad T_\text{swap} = \frac{\pi}{2g}.$$
 
 At $t=T_\text{swap}=\pi/(2g)$, half a population-oscillation period, the qubit excitation is fully converted into a single photon. This is a **vacuum-Rabi oscillation**, the *time-domain* face of the same physics whose *frequency-domain* face is the $2g$ vacuum-Rabi splitting (an avoided crossing in spectroscopy). Same $g$, two different measurements; mind the factor-of-2 convention (some texts call $2g$ "the Rabi frequency").
 
-Fast state transfer is great, but on resonance the qubit is half-photon, so it leaks out the resonator port at half the cavity rate, $\kappa/2$, bad for storing or reading a state. For readout we go the other way.
+Fast state transfer is great, but on resonance the qubit is half-photon, so it leaks out the resonator port at half the cavity rate, $\kappa/2$, which is bad for storing or reading a state. For readout we go the other way.
 
 ## Dispersive regime: Schrieffer-Wolff and $\chi$
 
@@ -100,12 +84,12 @@ $$H_\text{disp} \approx \hbar\!\left(\omega_r + \chi\,\hat\sigma_z\right)\hat a^
 Three physical effects fall out:
 
 1. **Qubit-state-dependent cavity pull.** From the $\chi\hat\sigma_z\hat a^\dagger\hat a$ term (with $\hat\sigma_z|e\rangle=+|e\rangle$), the resonator sits at $\omega_r+\chi$ for $|e\rangle$ and $\omega_r-\chi$ for $|g\rangle$. Probe near $\omega_r$, read the reflected phase, learn the state.
-2. **Lamb shift.** The qubit frequency is statically renormalized by $\chi$ (the $+\chi$ in the $\hat\sigma_z$ term), vacuum fluctuations dressing the qubit.
-3. **AC-Stark / photon-number shift.** Rewriting the first term, the qubit frequency shifts by $2\chi\,\langle\hat a^\dagger\hat a\rangle$, each measurement photon pushes $\omega_q$ by $2\chi$. This is the seed of measurement-induced dephasing, so you don't want infinitely many photons.
+2. **Lamb shift.** The qubit frequency is statically renormalized by $\chi$ (the $+\chi$ in the $\hat\sigma_z$ term): vacuum fluctuations dressing the qubit.
+3. **AC-Stark / photon-number shift.** Rewriting the first term, the qubit frequency shifts by $2\chi\,\langle\hat a^\dagger\hat a\rangle$: each measurement photon pushes $\omega_q$ by $2\chi$. This is the seed of measurement-induced dephasing, so you don't want infinitely many photons.
 
 Crucially, within this effective dispersive model, $H_\text{disp}$ commutes with $\hat\sigma_z$: the cavity measurement does not itself drive qubit flips. This is the basis of **quantum non-demolition (QND)** readout, repeatable and projective in the ideal limit. In real devices, finite $T_1$, Purcell decay, critical-photon-number physics, and measurement-induced transitions limit the QND fidelity.
 
-> **Intuition aside.** Think of the resonator as a tuning fork and the qubit as a tiny weight you clip on. You never let them ring together, the weight just barely shifts the fork's pitch. Listen to the pitch and you know whether the weight is "on" ($|e\rangle$) or "off" ($|g\rangle$), without ever stopping the fork.
+> **Intuition aside.** Think of the resonator as a tuning fork and the qubit as a tiny weight you clip on. You never let them ring together; the weight just barely shifts the fork's pitch. Listen to the pitch and you know whether the weight is "on" ($|e\rangle$) or "off" ($|g\rangle$), without ever stopping the fork.
 
 ![Dressed single-excitation frequencies vs qubit frequency: the bare qubit and cavity lines cross, the coupled branches avoid each other with a minimum gap of 2g at resonance, and far from resonance the cavity-like branch is pulled by g squared over the detuning](figures/05-avoided-crossing.png)
 
@@ -181,13 +165,13 @@ All values chosen for teaching, not from any device.
 
 **Step 2: two-level shift.** $\chi_\text{2lvl}/2\pi = g^2/\Delta = (0.1)^2/(-2.0) = -0.005$ GHz $= -5.0$ MHz. Naively the two cavity peaks differ by $2|\chi|=10$ MHz.
 
-**Step 3: transmon correction.** Factor $\alpha/(\Delta+\alpha) = -0.3/(-2.3) = 0.130$. So $\chi_\text{transmon}/2\pi = -5.0\times0.130 = -0.65$ MHz, about **8x smaller** than the two-level estimate. (Had $\alpha/2\pi=-2.0$ GHz, the factor would be $0.5$ and $\chi=-2.5$ MHz, the result is *very* sensitive to $\alpha/\Delta$.)
+**Step 3: transmon correction.** Factor $\alpha/(\Delta+\alpha) = -0.3/(-2.3) = 0.130$. So $\chi_\text{transmon}/2\pi = -5.0\times0.130 = -0.65$ MHz, about **8x smaller** than the two-level estimate. (Had $\alpha/2\pi=-2.0$ GHz, the factor would be $0.5$ and $\chi=-2.5$ MHz; the result is *very* sensitive to $\alpha/\Delta$.)
 
-**Step 4: readout matching.** $2|\chi_\text{transmon}|/2\pi = 1.3$ MHz vs $\kappa/2\pi=5$ MHz. Here $2|\chi|<\kappa$: the peaks sit inside one linewidth and are only marginally resolvable, a $\kappa$-limited corner. Fixes: raise $g$, reduce $|\Delta|$, or reduce $\kappa$ toward $2|\chi|\sim\kappa$. (Trusting the two-level $|\chi|=5$ MHz you'd wrongly conclude $2|\chi|=10\text{ MHz}=2\kappa$, comfortable readout, which is *false*. This is why the multilevel formula matters.)
+**Step 4: readout matching.** $2|\chi_\text{transmon}|/2\pi = 1.3$ MHz vs $\kappa/2\pi=5$ MHz. Here $2|\chi|<\kappa$: the peaks sit inside one linewidth and are only marginally resolvable, a $\kappa$-limited corner. Fixes: raise $g$, reduce $|\Delta|$, or reduce $\kappa$ toward $2|\chi|\sim\kappa$. (Trusting the two-level $|\chi|=5$ MHz, you would wrongly conclude $2|\chi|=10\text{ MHz}=2\kappa$ and comfortable readout, which is *false*. This is why the multilevel formula matters.)
 
 **Step 5: Purcell decay.** $\Gamma_\text{Purcell} = \kappa(g/\Delta)^2 = (2\pi\times5\text{ MHz})(0.05)^2 = 2\pi\times12.5$ kHz. As a $T_1$ ceiling, $T_1^\text{Purcell}=1/\Gamma_\text{Purcell}\approx12.7\ \mu$s, short enough to matter, which is exactly why a Purcell filter is added to push it toward the millisecond scale.
 
-**Step 6: resonant contrast.** If instead $\omega_q=\omega_r$ ($\Delta=0$), a full swap takes $T_\text{swap}=\pi/(2g)=\pi/(2\cdot2\pi\cdot100\text{ MHz})=2.5$ ns, fast, but now the qubit decays at $\kappa/2$ (it is half photon, for $g\gg\kappa$).
+**Step 6: resonant contrast.** If instead $\omega_q=\omega_r$ ($\Delta=0$), a full swap takes $T_\text{swap}=\pi/(2g)=\pi/(2\cdot2\pi\cdot100\text{ MHz})=2.5$ ns: fast, but now the qubit decays at $\kappa/2$ (it is half photon, for $g\gg\kappa$).
 
 **Takeaway:** the *same* $g=100$ MHz gives a $\sim2.5$ ns swap on resonance but only a $5$ MHz two-level dispersive pull at $2$ GHz detuning, which the transmon factor cuts $\sim8\times$ to a sub-MHz $0.65$ MHz.
 
@@ -205,13 +189,13 @@ All values chosen for teaching, not from any device.
 
 ## Common pitfalls
 
-- **"$\chi=g^2/\Delta$ for transmons."** No, that's the two-level result. Use $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$; the factor can shrink $\chi$ several-fold (8x above).
+- **"$\chi=g^2/\Delta$ for transmons."** No: that's the two-level result. Use $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$; the factor can shrink $\chi$ several-fold (8x above).
 - **"A linear resonator could be read out dispersively too."** Not as a qubit-state-dependent dispersive readout: for a harmonic mode the adjacent-transition contributions cancel and $\chi=0$, although state-independent normal-mode shifts remain. Anharmonicity is essential.
 - **"The RWA is always fine."** Only for $g\ll\omega_q,\omega_r$. Near $g/\omega_r\sim0.1$ (ultrastrong) counter-rotating terms matter.
 - **"In the dispersive regime the cavity exchanges energy / stores the bus photon."** Real exchange is suppressed; shifts are virtual. The bus resonator stays in its ground state.
 - **"Bigger $\chi$ is always better."** Compare $2|\chi|$ with $\kappa$: $2|\chi|\sim\kappa$ is a common design point, but the optimum is measurement-chain and drive dependent.
 - **"Vacuum-Rabi splitting = coupling $g$."** The spectroscopic splitting is $2g$, and the time-domain population $P_e=\cos^2(gt)$ oscillates at that same angular frequency $2g$; $g$ itself is the amplitude (swap) rate. Watch the factor-of-2.
-- **"A Purcell filter kills readout too."** It blocks $\omega_q$ while passing $\omega_r$, it protects $T_1$ and keeps readout.
+- **"A Purcell filter kills readout too."** It blocks $\omega_q$ while passing $\omega_r$, so it protects $T_1$ and keeps readout.
 
 ## Key takeaways
 
@@ -219,7 +203,7 @@ All values chosen for teaching, not from any device.
 - The JC ladder is **anharmonic**: doublets split by $2g\sqrt{n+1}$; the $n=0$ rung is the $2g$ vacuum-Rabi splitting.
 - **Resonant** ($\Delta\approx0$): excitations swap at rate $g$ ($T_\text{swap}=\pi/2g$); fast but lossy.
 - **Dispersive** ($|\Delta|\gg g$): Schrieffer-Wolff gives $\chi$; the cavity pulls by $\pm\chi$, plus Lamb and AC-Stark shifts, enabling QND readout.
-- For transmons, $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$, anharmonicity makes readout possible.
+- For transmons, $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$: anharmonicity makes readout possible.
 - One $g$ does double duty: readout (set by $2|\chi|$ relative to $\kappa$) and a virtual-photon **bus** $J\approx\tfrac{g_1g_2}{2}(1/\Delta_1+1/\Delta_2)$. Tame $\Gamma_\text{Purcell}=\kappa(g/\Delta)^2$ with a Purcell filter.
 
 ## Go deeper

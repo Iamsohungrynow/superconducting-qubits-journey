@@ -2,13 +2,13 @@
 
 > **Study companion:** [what to run and chapter checkpoints](learning-path.md) · [notation](00-notation.md) · [paper map](paper-map.md)
 
-By now you've met the transmon, learned how it decoheres with timescales $T_1$ and $T_2$, and seen how we read it out dispersively. Here's the uncomfortable truth: even good superconducting qubits typically hold quantum information for only tens-to-hundreds of microseconds (illustrative; record devices now exceed a millisecond), and gate errors sit around $10^{-3}$ (illustrative). A useful algorithm needs *billions* of reliable operations, $10^{9}$ or more. We're off by orders of magnitude. Quantum error correction (QEC) is how we bridge that gap, not by building better qubits, but by building a *better-behaved logical qubit* out of many imperfect physical ones.
+By now you've met the transmon, learned how it decoheres with timescales $T_1$ and $T_2$, and seen how we read it out dispersively. Here's the uncomfortable truth: even good superconducting qubits typically hold quantum information for only tens-to-hundreds of microseconds (illustrative; record devices now exceed a millisecond), and gate errors sit around $10^{-3}$ (illustrative). A useful algorithm needs *billions* of reliable operations, $10^{9}$ or more. We're off by orders of magnitude. Quantum error correction (QEC) is how we bridge that gap: not by building better qubits, but by building a *better-behaved logical qubit* out of many imperfect physical ones.
 
 ## Why you can't just copy a qubit
 
 Classical computers fight errors by redundancy: store a bit three times, take a majority vote. Quantum mechanics forbids the naive version of this for two independent reasons:
 
-1. **No-cloning theorem.** There is no unitary that maps $|\psi\rangle|0\rangle \to |\psi\rangle|\psi\rangle$ for an *arbitrary unknown* $|\psi\rangle$. (Linearity of $U$ is incompatible with cloning a general superposition, try it on $|0\rangle$ and $|1\rangle$, then on $\tfrac{1}{\sqrt2}(|0\rangle+|1\rangle)$, and the two predictions disagree.)
+1. **No-cloning theorem.** There is no unitary that maps $|\psi\rangle|0\rangle \to |\psi\rangle|\psi\rangle$ for an *arbitrary unknown* $|\psi\rangle$. (Linearity of $U$ is incompatible with cloning a general superposition: try it on $|0\rangle$ and $|1\rangle$, then on $\tfrac{1}{\sqrt2}(|0\rangle+|1\rangle)$, and the two predictions disagree.)
 2. **Measurement back-action.** Even if you *could* copy, directly *measuring* a qubit to check it collapses its superposition and destroys the amplitude information you were trying to protect.
 
 The escape: encode one **logical** qubit across many physical qubits, and measure only *correlations between qubits*, never the qubits themselves. The Pauli correlation operators are **stabilizers**; their measured eigenvalues are the **syndrome**.
@@ -27,14 +27,9 @@ Read that last expression carefully: it is a *single entangled state*, **not** t
 - **Apply** $\mathrm{CNOT}(1{\to}3)$: we obtain $\alpha|000\rangle + \beta|111\rangle$.
 - **Check.** The output is entangled, not a product $|\psi\rangle^{\otimes 3}$, so no cloning occurred. We "copied" only basis labels, never the amplitudes.
 
-```mermaid
-flowchart TD
-    A["q1: alpha|0><br/>+ beta|1>"] -->|"CNOT 1->2"| B(("CNOT"))
-    Z2["q2: |0>"] --> B
-    B -->|"CNOT 1->3"| C(("CNOT"))
-    Z3["q3: |0>"] --> C
-    C --> OUT["alpha|000><br/>+ beta|111><br/>entangled, no clone"]
-```
+![Quantum circuit with three data qubits and two ancillas. Two CNOTs from data qubit 1 onto data qubits 2 and 3 encode alpha|0> + beta|1> into alpha|000> + beta|111>. A dashed red box marks possible single bit flips. Four CNOTs then copy the parities Z1Z2 and Z2Z3 onto the two ancillas, which are measured; a lookup decoder uses the two outcomes to apply a corrective X to one data qubit](figures/12-repetition-circuit.png)
+
+*The complete three-qubit bit-flip code as a circuit: the encoder derived above, a window in which one bit flip may occur, syndrome extraction of $Z_1Z_2$ and $Z_2Z_3$ onto two ancillas, and the classical lookup of the table below. Superconducting processors run this same pattern, scaled up and repeated round after round, in their repetition-code experiments.*
 
 ### Stabilizers: asking "did an error happen?" without asking "what's the state?"
 
@@ -56,13 +51,13 @@ Why these work, step by step:
 | $X_2$ | $-1$ | $-1$ | flip q2 |
 | $X_3$ | $+1$ | $-1$ | flip q3 |
 
-*Footnote:* the syndrome columns never depend on $\alpha,\beta$, the encoded amplitudes are untouched. The logical operators here are $Z_L = Z_1$ and $X_L = X_1X_2X_3$; both commute with $S_1,S_2$, so correction never disturbs the stored information.
+*Footnote:* the syndrome columns never depend on $\alpha,\beta$; the encoded amplitudes are untouched. The logical operators here are $Z_L = Z_1$ and $X_L = X_1X_2X_3$; both commute with $S_1,S_2$, so correction never disturbs the stored information.
 
-And does the encoding actually *help*? Quantitatively: if each qubit flips independently with probability $p$, correction fails only when **two or more** qubits flip, with probability $3p^2 - 2p^3$. That beats the bare, unencoded error $p$ whenever $p < \tfrac12$, and at small $p$ the suppression is *quadratic*: at $p = 1\%$, the logical error is $\approx 3\times10^{-4}$, thirty times better. That quadratic kill is the entire point of redundancy.
+And does the encoding actually *help*? Quantitatively: if each qubit flips independently with probability $p$, correction fails only when **two or more** qubits flip, with probability $3p^2 - 2p^3$. That beats the bare, unencoded error $p$ whenever $p < \tfrac12$, and at small $p$ the suppression is *quadratic*: at $p = 1\%$, the logical error is $\approx 3\times10^{-4}$, about thirty times better. That quadratic kill is the entire point of redundancy.
 
 ![Failure probability of the three-qubit code versus the physical flip probability: the curve 3 p squared minus 2 p cubed sits below the bare error line for p below one half, crossing it at the break-even point, with a log-log inset showing the quadratic slope](figures/12-repetition-breakeven.png)
 
-*The three-qubit code's failure probability $3p^2-2p^3$ vs. the unencoded error $p$. Below the break-even point $p=\tfrac12$ encoding wins, quadratically so at small $p$ (log-log inset: slope 2). Above break-even, redundancy actively hurts, majority vote amplifies bad hardware. ([Lab 08](../hands-on/08-repetition-code/) simulates exactly this, out to distance 7.)*
+*The three-qubit code's failure probability $3p^2-2p^3$ vs. the unencoded error $p$. Below the break-even point $p=\tfrac12$ encoding wins, quadratically so at small $p$ (log-log inset: slope 2). Above break-even, redundancy actively hurts: majority vote amplifies bad hardware. ([Lab 08](../hands-on/08-repetition-code/) simulates exactly this, out to distance 7.)*
 
 > **Intuition aside.** Stabilizers are like the parity bits on a Sudoku grid. You never reveal the hidden numbers; you only check "does this row still add up?" A violated check localizes the mistake without exposing the solution. QEC is continuous, gentle Sudoku-checking on your quantum data.
 
@@ -93,7 +88,7 @@ That bracket notation $[[n,k,d]]$ is worth pinning down: **$n$** physical qubits
 
 $$t = \left\lfloor \tfrac{d-1}{2} \right\rfloor$$
 
-arbitrary errors, the quantum analogue of classical sphere-packing: errors of weight $\le t$ live in disjoint "syndrome spheres." So $d=3$ corrects one error, $d=5$ corrects two, $d=7$ corrects three.
+arbitrary errors. This is the quantum analogue of classical sphere-packing: errors of weight $\le t$ live in disjoint "syndrome spheres." So $d=3$ corrects one error, $d=5$ corrects two, $d=7$ corrects three.
 
 | Code | Formal quantum distance | Stabilizers | Corrects | Hardware note |
 |------|:---:|---|---|---|
@@ -118,22 +113,9 @@ Why do these commute (so their eigenvalues can be extracted in the same QEC roun
 - Sliding $S_X$ past $S_Z$ gives $(-1)^{\text{shared}} = (-1)^{\text{even}} = +1$, so $[S_X,S_Z]=0$.
 - Commuting stabilizers share an eigenbasis → a well-defined code space; hardware still schedules the shared-qubit gates inside each round.
 
-```
-               X
-      D --- D --- D  · · · ·  logical Z  (a horizontal row of D's, length d)
-  Z   |  X  |  Z  |
-      D --- D --- D
-      |  Z  |  X  |   Z
-      D --- D --- D
-         X        :
-                  :  logical X  (a vertical column of D's, length d)
+![Two rotated surface-code layouts. Left, distance 3: a three-by-three grid of white data qubits with four square plaquettes coloured in a checkerboard of orange X checks and blue Z checks, two orange half-discs on the top and bottom edges and two blue half-discs on the left and right edges, each check with a black measure qubit at its centre; a blue band marks logical Z along the top row and a red band marks logical X down the right column. Right, distance 5: the same pattern on a five-by-five grid with sixteen square checks and eight boundary checks](figures/12-surface-code.png)
 
-  D = data qubit (drawn for d = 3: 9 data qubits, 8 checks)
-  X = X-type check: X on the D's around it (4 in the bulk, 2 on the top/bottom edges)
-  Z = Z-type check: Z on the D's around it (4 in the bulk, 2 on the left/right edges)
-```
-
-*A distance-3 rotated surface code. Bulk checks alternate $X$ and $Z$ like a checkerboard, so any $X$-check and $Z$-check share 0 or 2 data qubits. The two-body $X$ checks sit on the top and bottom edges and the two-body $Z$ checks on the left and right edges. A logical $Z$ (any full row) therefore commutes with every $X$ check, and a logical $X$ (any full column) with every $Z$ check.*
+*Rotated surface codes at distance 3 and 5. Bulk checks alternate $X$ and $Z$ like a checkerboard, so any $X$-check and $Z$-check share 0 or 2 data qubits. Two-body $X$ checks sit on the top and bottom edges and two-body $Z$ checks on the left and right edges. A logical $Z$ (any full row) therefore commutes with every $X$ check, and a logical $X$ (any full column) with every $Z$ check, while the two anticommute with each other. Going from $d=3$ to $d=5$ costs 49 instead of 17 qubits and makes the shortest logical operator 5 long instead of 3.*
 
 A **logical operator** is a chain of single-qubit Paulis stretching all the way *across* the lattice; the shortest such chain has length $d$. Corrupting the logical qubit therefore requires errors that, *together with the decoder's correction*, form a string spanning the full distance (as few as $(d+1)/2$ faults can do it if the decoder completes the chain the wrong way), and, provided the physical error rate is below threshold (see the threshold theorem below), the probability of that falls exponentially as $d$ grows.
 
@@ -153,13 +135,9 @@ flowchart TD
 
 In repeated syndrome extraction, a **defect** or detection event is a change in a check outcome between adjacent rounds, not merely a single $-1$ stabilizer value. A data error usually creates a space-like pair of detection events; a measurement error creates a time-like pair on the same check in neighboring rounds; a boundary can absorb one endpoint. The decoder, classically **minimum-weight perfect matching (MWPM)**, increasingly correlated or neural decoders, infers the most likely chain and applies (or just bookkeeps) a correction. Decoder throughput must keep up with incoming syndrome rounds; latency is a separate quantity and can span several rounds when corrections are tracked in a Pauli frame. For example, [Acharya et al.](https://arxiv.org/abs/2408.13687) report 1.1 us cycles and 63 us average decoding latency at distance 5.
 
-```
-defect pair (harmless, local):     spanning chain (logical FAILURE):
-  o-o-*-e-*-o-o                       *-e-e-e-e-e-e-*
-        ↑ one data error              chain terminates on the two boundaries
-   two flipped checks bracket it      (* = virtual boundary nodes), so NO check
-                                      fires anywhere: weight-d error crosses undetected
-```
+![Two spacetime grids of check outcomes, checks along the horizontal axis and syndrome rounds along the vertical axis, with virtual boundary nodes at both ends of each row. Left: a data-qubit flip produces two red detection events on neighbouring checks in the same round, joined by a horizontal edge, and a faulty measurement produces two detection events on the same check in consecutive rounds, joined by a vertical edge. Right: a row of flips on every data qubit stretches from one boundary to the other, and no detection event appears anywhere](figures/12-detection-events.png)
+
+*What a decoder sees, in a repetition-code slice of the spacetime volume. (a) Local faults create detection events in pairs: space-like for a data error, time-like for a measurement error. MWPM pairs them up (or with a boundary) along the most likely paths. (b) A chain of errors that runs from boundary to boundary fires no check at all: it is a logical operator, and the code cannot see it. Larger distance makes such chains longer and therefore exponentially rarer below threshold.*
 
 ## The threshold theorem, why this is allowed to work
 
@@ -187,7 +165,7 @@ Numbers chosen for clean arithmetic, **not** measured values. Take $p_{\text{th}
 
 - **Step 3: read off $\Lambda$.** $\Lambda = p_{\text{th}}/p = 0.01/0.001 = 10 > 1$ → below threshold; scaling wins.
 - **Step 4: qubit cost.** Reaching $p_L \sim 10^{-5}$ costs $\sim81$ rotated-layout data qubits plus $\sim80$ measure ancillas before leakage/helper qubits. In the larger unrotated planar count the data-qubit number would be $d^2+(d-1)^2=145$.
-- **Step 5: contrast above threshold.** If instead $p = 2\% > p_{\text{th}}$, the below-threshold scaling no longer gives a valid probability; its formal growth signals that larger distance no longer provides exponential suppression, so logical errors approach order-one rather than improving. Adding qubits now makes things **worse**, the qualitative meaning of being above threshold.
+- **Step 5: contrast above threshold.** If instead $p = 2\% > p_{\text{th}}$, the below-threshold scaling no longer gives a valid probability; its formal growth signals that larger distance no longer provides exponential suppression, so logical errors approach order-one rather than improving. Adding qubits now makes things **worse**: that is the qualitative meaning of being above threshold.
 
 ![Logical error rate versus physical error rate on log-log axes for code distances 3, 5, 7, and 9: curves stop at the one-percent threshold, with the above-threshold region, where the scaling model is invalid, shaded](figures/12-threshold.png)
 
@@ -197,7 +175,7 @@ The same scaling picture explains why below-threshold operation wins exponential
 
 ## From memory to computation
 
-A **logical qubit** is the protected two-level subspace, manipulated *only* through logical and stabilizer-respecting operations, you never touch the bare physical state. Everything above protects a quantum *memory*. Computing needs **logical gates**, and they don't come for free:
+A **logical qubit** is the protected two-level subspace, manipulated *only* through logical and stabilizer-respecting operations; you never touch the bare physical state. Everything above protects a quantum *memory*. Computing needs **logical gates**, and they don't come for free:
 
 - **Transversal gates** act qubit by qubit, for example the same single-qubit gate on every physical qubit or CNOTs between matching qubits of two code blocks, giving some Clifford operations cheaply and fault-tolerantly.
 - **Lattice surgery** merges and splits surface-code patches to realize two-qubit logical operations (e.g. logical $\mathrm{CNOT}$) using only the same nearest-neighbour checks.
@@ -207,7 +185,7 @@ A **logical qubit** is the protected two-level subspace, manipulated *only* thro
 
 ## Common pitfalls
 
-- **"QEC copies the qubit three times."** No, $\alpha|000\rangle+\beta|111\rangle$ is one entangled state; the redundancy lives in correlations, not copies.
+- **"QEC copies the qubit three times."** No: $\alpha|000\rangle+\beta|111\rangle$ is one entangled state; the redundancy lives in correlations, not copies.
 - **"The stabilizer measurement reveals the logical state."** It returns only parities, independent of $\alpha,\beta$.
 - **"Continuous errors need infinitely many corrections."** The syndrome measurement *digitizes* them onto $\{X,Y,Z\}$.
 - **"More qubits always means more errors."** Only *above* threshold; below $p_{\text{th}}$, exponential suppression wins.

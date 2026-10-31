@@ -4,7 +4,7 @@
 
 Single-qubit gates are "easy": drive one qubit with a shaped microwave pulse and you can rotate it anywhere on the Bloch sphere. But a quantum computer needs qubits to *talk* to each other. To create entanglement you need a gate whose action on one qubit depends on the state of another, and that requires a physical interaction between them. Engineering that interaction, turning it on cleanly, and turning it *off* again, is where most of the hard work in superconducting hardware lives. This chapter is about how we get two transmons to interact on purpose.
 
-A theme that runs through everything below: **the same coupling $g$ that lets you build a gate also produces an always-on error.** The same exchange Hamiltonian that gives idle $ZZ$ also creates the avoided crossings used for CZ, but the idle shift and the pulsed gate phase are not the same measured quantity. Different two-qubit gates are mostly different answers to one question, *which* resonance do I bring into play, and *when*?
+A theme that runs through everything below: **the same coupling $g$ that lets you build a gate also produces an always-on error.** The same exchange Hamiltonian that gives idle $ZZ$ also creates the avoided crossings used for CZ, but the idle shift and the pulsed gate phase are not the same measured quantity. Different two-qubit gates are mostly different answers to one question: *which* resonance do I bring into play, and *when*?
 
 ## Coupling: where $g$ comes from
 
@@ -17,18 +17,26 @@ The simplest way to couple two transmons is to wire them together with a capacit
 
 $$\boxed{\frac{H_\text{int}}{\hbar} = g\left(\sigma_+^{(1)}\sigma_-^{(2)} + \sigma_-^{(1)}\sigma_+^{(2)}\right)}, \qquad g \approx \tfrac{1}{2}\,\frac{C_g}{\sqrt{C_1 C_2}}\sqrt{\omega_1 \omega_2}.$$
 
-This is the **exchange** (or "flip-flop") interaction: qubit 1 hands an excitation to qubit 2 and vice versa. The boxed formula matters because it says $g$ is **not a free parameter**, it is set by geometry ($C_g$ relative to the qubit capacitances) and by the frequencies. This is the same Jaynes-Cummings physics as the qubit-resonator $g$ from earlier chapters; here the "cavity" is just a second qubit.
+This is the **exchange** (or "flip-flop") interaction: qubit 1 hands an excitation to qubit 2 and vice versa. The boxed formula matters because it says $g$ is **not a free parameter**; it is set by geometry ($C_g$ relative to the qubit capacitances) and by the frequencies. This is the same Jaynes-Cummings physics as the qubit-resonator $g$ from earlier chapters; here the "cavity" is just a second qubit.
 
-> **Intuition.** Two pendulums on a shared springy beam swap their swinging, that is exchange coupling. The stiffer the shared spring ($C_g$), the faster they trade energy.
+> **Intuition.** Two pendulums on a shared springy beam swap their swinging: that is exchange coupling. The stiffer the shared spring ($C_g$), the faster they trade energy.
 
 The catch: direct capacitive coupling is *always on*. You engineer gates around an interaction you cannot switch off, typically by parking qubits at different frequencies (detuning them) so exchange is suppressed, then acting only when you want a gate.
+
+![Two circuit diagrams. (a) Two transmons, each a junction in parallel with a capacitor, joined at their top nodes by a green coupling capacitor C_g. (b) The same two transmons coupled through a third, flux-tunable transmon (a SQUID loop threaded by flux Phi_c in parallel with C_c) via capacitors C_1c and C_2c, with an additional purple direct capacitor C_12 arching over the coupler](figures/08-coupling-circuits.png)
+
+*Two ways to couple transmons. (a) A single capacitor gives a fixed, always-on $g$. (b) A tunable coupler adds a second, indirect path whose sign and size depend on the coupler flux $\Phi_c$; at the right flux it cancels the direct path through $C_{12}$ (see "Tunable couplers" below).*
 
 ## Two regimes: resonant vs. dispersive
 
 Let $\Delta = \omega_1 - \omega_2$ be the qubit-qubit detuning. The exchange term behaves completely differently depending on $\Delta$ versus $g$:
 
-- **Resonant ($|\Delta| \lesssim g$):** energy is exchanged on resonance, the singly-excited states $|01\rangle$ and $|10\rangle$ swap. This is the iSWAP regime (it lives near $\Delta \approx 0$). The CZ gate uses a *different* resonance, the $|11\rangle$-$|02\rangle$ avoided crossing at $\Delta \approx \alpha_2$ (set by the anharmonicity, $|\alpha| \gg g$), covered below, so do not conflate it with this $\Delta \approx 0$ point.
+- **Resonant ($|\Delta| \lesssim g$):** energy is exchanged on resonance: the singly-excited states $|01\rangle$ and $|10\rangle$ swap. This is the iSWAP regime (it lives near $\Delta \approx 0$). The CZ gate uses a *different* resonance, the $|11\rangle$-$|02\rangle$ avoided crossing at $\Delta \approx \alpha_2$ (set by the anharmonicity, $|\alpha| \gg g$), covered below, so do not conflate it with this $\Delta \approx 0$ point.
 - **Dispersive ($|\Delta| \gg g$):** direct energy exchange is suppressed; coupling acts only at second order through *virtual* excitations. What survives is a static **residual $ZZ$ shift**, a conditional phase that accrues even while you do nothing.
+
+![Two panels. (a) Schematic energy levels of two coupled transmons grouped by excitation number, at two operating points: at the iSWAP point the states |01> and |10> are degenerate and coupled by g; at the CZ point the states |11> and |02> are degenerate and coupled by root 2 g. (b) Populations of |01> and |10> versus dwell angle g t at the iSWAP point, oscillating as cosine squared and sine squared, with square-root-of-iSWAP marked at pi over 4 and iSWAP at pi over 2](figures/08-exchange-levels.png)
+
+*The same exchange coupling, two different resonances. (a) Tuning $\omega_1=\omega_2$ brings $|01\rangle$ and $|10\rangle$ together (iSWAP family); tuning $\omega_1=\omega_2+\alpha_2$ brings $|11\rangle$ and $|02\rangle$ together instead (CZ). Levels are schematic, with $|\alpha|$ exaggerated. (b) What happens at the iSWAP point, discussed in "The iSWAP family" below.*
 
 ## Residual $ZZ$, the gate resource *and* the dominant idle error
 
@@ -46,7 +54,7 @@ Derivation in words:
    $$\delta \omega_{11}= \frac{2g^2}{\Delta-\alpha_2}-\frac{2g^2}{\Delta+\alpha_1}.$$
    The single-excitation shifts cancel from $\zeta$, leaving the signed conditional shift.
 4. **Combine.** The two signed contributions give the compact form with $(\alpha_1+\alpha_2)$ on top.
-5. **The crucial limit.** As $\alpha \to \infty$ (ideal two-level systems), $\zeta \to 0$. **$ZZ$ is a transmon effect**, it exists precisely *because* transmons are weakly anharmonic. Anharmonicity is essential, not incidental.
+5. **The crucial limit.** As $|\alpha_{1,2}| \to \infty$ (ideal two-level systems), $\zeta \to 0$. **$ZZ$ is a transmon effect**: it exists precisely *because* transmons are weakly anharmonic. Anharmonicity is essential, not incidental.
 
 ![Residual ZZ shift versus qubit-qubit detuning on a symmetric log scale: small far from the poles, diverging at the two avoided crossings where 11 meets 02 and 20, the same curve that is an idle error far away and the CZ resource at the pole](figures/08-zz-vs-detuning.png)
 
@@ -100,7 +108,7 @@ The dwell estimate is perturbative: the isolated two-state block instead gives $
 
 ## Tunable couplers, making $g$ switchable
 
-Insert a third element (a tunable transmon/SQUID) between the qubits. Now there are **two coupling paths**, direct, and indirect via a virtual coupler excitation, that *interfere*:
+Insert a third element (a tunable transmon/SQUID) between the qubits. Now there are **two coupling paths** that *interfere*, the direct one and an indirect one through a virtual coupler excitation (circuit (b) in the coupling figure above):
 
 $$g_\text{eff} = g_\text{direct} + \frac{g_1 g_2}{2}\!\left(\frac{1}{\Delta_1} + \frac{1}{\Delta_2}\right).$$
 
@@ -125,13 +133,13 @@ Crucially, $g_\text{eff}=0$ and $\zeta_{ZZ}=0$ occur at generally *different but
 
 ## Cross-resonance: all-microwave entanglement
 
-Tunable approaches need flux lines. The **cross-resonance (CR)** gate avoids them: keep two *fixed-frequency* qubits statically coupled (strength $J$), and drive the **control** qubit at the **target's** frequency. The static coupling transmits a weak resonant tone to the target whose sign depends on the control's state, a $ZX$ interaction:
+Tunable approaches need flux lines. The **cross-resonance (CR)** gate avoids them: keep two *fixed-frequency* qubits statically coupled (strength $J$), and drive the **control** qubit at the **target's** frequency. The static coupling transmits a weak resonant tone to the target whose sign depends on the control's state: a $ZX$ interaction.
 
 $$H_\text{CR} \approx \underbrace{\Omega_d\,\frac{J\alpha_c}{\Delta(\Delta+\alpha_c)}}_{\mu_{ZX}}\frac{ZX}{2} \;+\; \nu\, IX \;+\;\text{(IY, ZI, ZZ terms)}.$$
 
 Derivation sketch: drive the control off-resonantly; it barely moves, but the dispersive coupling makes the target see a control-state-dependent X drive. Schrieffer-Wolff expansion in $J/\Delta$ and $\Omega_d/\Delta$ gives the leading $ZX$ rate up to sign and frame conventions, where $\alpha_c$ is the driven control qubit's anharmonicity and, in this formula, $\Delta = \omega_\text{control}-\omega_\text{target}$ (the labeling matters: the pole sits at the *control's* $|1\rangle\!\to\!|2\rangle$ collision). The perturbative formula fails near the collision $\Delta+\alpha_c\approx0$.
 
-The raw gate is **not** a clean $ZX$, calibration must remove spurious terms:
+The raw gate is **not** a clean $ZX$; calibration must remove spurious terms:
 
 | Term | Origin | Useful? | How handled |
 |---|---|---|---|
@@ -140,7 +148,7 @@ The raw gate is **not** a clean $ZX$, calibration must remove spurious terms:
 | $ZI/IZ$ | Stark shifts | no | frame change / calibration |
 | $ZZ$ | higher levels | no | echo / tunable detuning |
 
-**Echoed-CR**: insert a control $\pi$-pulse and flip the drive phase halfway. The echo cancels selected single-qubit and drive-odd terms by combining control pi pulses with drive phase reversal; the desired ZX term is retained after choosing the calibrated frame. Because the rate is $\propto J\Omega_d/\Delta$ with all factors small, CR is intrinsically **slower** (hundreds of ns). And the $\alpha_c/(\alpha_c+\Delta)$ structure means certain frequency combinations kill or blow up the rate, the **frequency-collision** problem that makes fixed-frequency CR processors demand careful frequency targeting.
+**Echoed-CR**: insert a control $\pi$-pulse and flip the drive phase halfway. The echo cancels selected single-qubit and drive-odd terms by combining control pi pulses with drive phase reversal; the desired ZX term is retained after choosing the calibrated frame. Because the rate is $\propto J\Omega_d/\Delta$ with all factors small, CR is intrinsically **slower** (hundreds of ns). And the $\alpha_c/(\alpha_c+\Delta)$ structure means certain frequency combinations kill or blow up the rate: this is the **frequency-collision** problem that makes fixed-frequency CR processors demand careful frequency targeting.
 
 A calibrated echoed-CR pulse usually realizes $ZX_{\pi/2}=\exp[-i(\pi/4)Z\otimes X]$ up to echoed terms and frame phases; single-qubit rotations then compile it to CNOT. Likewise, $\mathrm{CNOT}=(I\otimes H)\,\mathrm{CZ}\,(I\otimes H)$.
 
@@ -150,25 +158,12 @@ Instead of routing through $|02\rangle$, bring $|01\rangle$ and $|10\rangle$ ont
 
 $$U_\text{exch}(t)=\exp\!\big[-i g t\,(\sigma_+^{(1)}\sigma_-^{(2)}+\text{h.c.})\big],\quad |01\rangle \to \cos(gt)\,|01\rangle - i\sin(gt)\,|10\rangle.$$
 
-The only knob is dwell time $\theta = gt$:
-
-```
- pop |  o: |01> = cos^2(gt)      x: |10> = sin^2(gt)
- 1.0 |oooooooo                 xxxxxxxx
-     |        oooooo     xxxxxx
- 0.5 |              XXXXX
-     |        xxxxxx     oooooo
- 0.0 |xxxxxxxx                 oooooooo
-     +----------------+---------------+-> gt
-      0             pi/4            pi/2
-                 sqrt(iSWAP)        iSWAP
-              (max entangling)  (full swap, -i phase)
-```
+The only knob is the dwell angle $\theta = gt$, plotted in panel (b) of the two-resonance figure above:
 
 - $gt=\pi/2$: full swap, the `-i` version of iSWAP for the positive-$g$ Hamiltonian above: $|01\rangle\to -i|10\rangle,\;|10\rangle\to -i|01\rangle$. The sign convention for $g$ and single-qubit phases determines whether this is written as iSWAP or iSWAP$^\dagger$.
 - $gt=\pi/4$: $\sqrt{\text{iSWAP}}$, maximally entangling, a common native gate on tunable-coupler chips.
 
-This is the **same** $g$ as the CZ avoided crossing. iSWAP and CZ are two corners of one physics, iSWAP uses the $|01\rangle$-$|10\rangle$ resonance, CZ uses $|11\rangle$-$|02\rangle$, and the **fSim** (fermionic-simulation) family continuously interpolates swap angle $\theta$ and conditional phase $\phi$ on tunable-coupler hardware.
+This is the **same** $g$ as the CZ avoided crossing. iSWAP and CZ are two corners of one physics: iSWAP uses the $|01\rangle$-$|10\rangle$ resonance, CZ uses $|11\rangle$-$|02\rangle$, and the **fSim** (fermionic-simulation) family continuously interpolates swap angle $\theta$ and conditional phase $\phi$ on tunable-coupler hardware.
 
 ## Why entangling gates are the hard part
 
@@ -203,7 +198,7 @@ The leading prefactor (here $1/2$) is an order-unity number that depends on the 
 - **"This residual-$ZZ$ and avoided-crossing CZ mechanism would survive in ideal two-level qubits."** No: this transmon mechanism vanishes as the noncomputational levels are pushed away. Exchange-coupled two-level qubits can still make iSWAP-like entanglers, and CZ can then be synthesized from two iSWAP-family entanglers plus one-qubit rotations, or generated directly by a true longitudinal coupling.
 - **"The avoided-crossing gap is $2g$."** It is $2\sqrt 2\,g$; the $\sqrt 2$ is the $\langle 2|a^\dagger|1\rangle$ bosonic factor.
 - **"Cross-resonance gives a clean $ZX$."** Raw CR also produces $IX$, $ZI/IZ$, and $ZZ$; a usable CNOT needs an echo and calibration.
-- **"Faster is always better."** Speed fights adiabaticity, go too fast and you leak into $|02\rangle$. The optimum is a *shaped* trajectory.
+- **"Faster is always better."** Speed fights adiabaticity: go too fast and you leak into $|02\rangle$. The optimum is a *shaped* trajectory.
 - **"A tunable coupler turns $g$ fully off everywhere."** It nulls transverse $g_\text{eff}$ at one flux; the residual-$ZZ$ null is nearby but not identical.
 
 ## Key takeaways
