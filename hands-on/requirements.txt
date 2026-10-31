@@ -1,9 +1,12 @@
 # Dependencies for the hands-on QuTiP simulation labs.
 # Verified with qutip 5.3 / numpy 2.4.4 / scipy 1.17.1 / matplotlib 3.11.0
-# on Python 3.12.10. NumPy 2+ supplies np.trapezoid. Other combinations
+# on Python 3.12.10, and qutip 5.3.1 / numpy 2.5.3 / scipy 1.18.1 /
+# matplotlib 3.11.2 / schemdraw 0.23 on Python 3.13.18. NumPy 2+ supplies np.trapezoid. Other combinations
 # within these API bounds should be checked using run_labs.py --all --check.
 #   pip install -r hands-on/requirements.txt
 qutip>=5.0.3
 numpy>=2.0
 scipy>=1.13
 matplotlib>=3.8.4
+# Figure generation only (tutorial/figures/make_diagrams.py circuit symbols):
+schemdraw>=0.19

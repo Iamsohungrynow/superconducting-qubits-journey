@@ -4,7 +4,7 @@ These labs let you simulate and run the physics from the tutorial chapters on yo
 
 ## Setup (from the repository root)
 
-Use Python 3.12. Create an isolated environment once:
+Use Python 3.12 or newer. Create an isolated environment once:
 
 ```bash
 python -m venv .venv
@@ -28,8 +28,10 @@ returns a nonzero exit status if any lab fails. Omit `--check` to open plots;
 close each plot to proceed to the next lab. Running a script directly works too.
 The runner can be invoked by absolute path from another working directory.
 
-Verified environment: Python 3.12.10, NumPy 2.4.4, SciPy 1.17.1,
-Matplotlib 3.11.0, QuTiP 5.3.0. NumPy 2+ is required for `np.trapezoid`.
+Verified environments: Python 3.12.10, NumPy 2.4.4, SciPy 1.17.1,
+Matplotlib 3.11.0, QuTiP 5.3.0 (Windows); and Python 3.13.18, NumPy 2.5.3,
+SciPy 1.18.1, Matplotlib 3.11.2, QuTiP 5.3.1, schemdraw 0.23 (Linux).
+NumPy 2+ is required for `np.trapezoid`.
 The requirements specify supported API bounds, not a claim that every version
 combination has been tested. The automated checks target the default teaching
 parameters; restore defaults after experiments.
@@ -61,8 +63,17 @@ before translating equations into code.
 python tutorial/figures/make_figures.py
 ```
 
-This regenerates the chapter figures headlessly. Lab figures are regenerated
-when their script runs. Figures are teaching models, not measured device data.
+```bash
+python tutorial/figures/make_diagrams.py
+```
+
+The first script regenerates the 22 computed chapter plots; the second redraws
+the 19 schematic diagrams (circuits, level ladders, Bloch spheres, pulse
+sequences, fridge wiring, code layouts) and needs `schemdraw`, which is included
+in the requirements. Pass chapter numbers, for example
+`python tutorial/figures/make_diagrams.py 05 10`, to redraw only those chapters.
+Both run headlessly. Lab figures are regenerated when their script runs. Figures
+are teaching models, not measured device data.
 
 ## Roadmap
 
